@@ -1,0 +1,145 @@
+:root {
+    --genHeight: 50px;
+}
+html {
+    font-family: arial;
+    color: whitesmoke;
+    font-size: 20px;
+    margin-left: 10px;
+    user-select: none;
+}
+body {
+    background-color: rgb(39, 7, 51);
+    padding: 10px 10px;
+}
+h4 {
+    font-style: italic;
+    font-weight: 100;
+    font-size: 15px;
+}
+.generatorBar {
+    transition-duration: 0.1s;
+}
+.progressBar {
+    transition-duration: 0.1s;
+}
+#isDone {
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 30px;
+}
+button,
+input[type="submit"],
+input[type="reset"] {
+    background: lightgray;
+    color: black;
+    border: solid;
+    border-width: 2px;
+    border-color: grey;
+    padding: 5px 25px;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    margin: 10px 3px;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+button:hover,
+.toggle {
+    background-color: grey;
+    cursor: pointer;
+    color: whitesmoke;
+}
+.bought {
+    background-color: grey;
+    color: whitesmoke;
+}
+p:hover,
+h1:hover {
+    cursor: default;
+}
+.hidden {
+    display: none;
+}
+.bought:hover {
+    cursor: default;
+    background-color: grey;
+}
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h1 {
+    font-size: 40px;
+}
+.barContainer {
+    border: solid;
+    border-color: whitesmoke;
+    background-color: whitesmoke;
+    height: var(--genHeight);
+    margin: 30px 20px;
+    display: flex;
+    align-items: center;
+}
+#alphaBar {
+    background-color: lightcoral;
+}
+#betaBar {
+    background-color: rgb(2, 179, 2);
+}
+#gammaBar {
+    background-color: rgb(253, 94, 36);
+}
+#rhoBar {
+    background-color: rgb(73, 73, 255);
+}
+.generatorBar {
+    height: var(--genHeight);
+    text-align: center;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.generatorsText {
+    color: white;
+    margin-left: 20px;
+    font-size: 40px;
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+.tabButton {
+    padding: 7px 20px;
+    margin-top: 5px;
+}
+#theGame {
+    display: flex;
+    width: 100%;
+}
+#desc {
+    margin: 0px 15px;
+    width: 50%;
+}
+.game {
+    width: 50%;
+}
+#generators {
+    width: 100%;
+}
+
+@media (min-width: 1000px) {
+    #generators {
+        width: 960px;
+    }
+    #isDone {
+        width: 960px;
+    }
+    #theGame {
+        width: 960px;
+    }
+}

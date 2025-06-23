@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<head>
+    <title>numberless</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+    <header>
+    <div id="title">
+        <h1>numberless</h1>
+    </div>
+    <div id="topTabs" class="tabs">
+        <button id="buttonTree" class="tabButton">the tree</button>
+        <button id="buttonGenerators" class="tabButton hidden alpha">generators</button>
+        <button id="buttonUpgrades" class="tabButton hidden">&alpha;-upgrades</button>
+        <button id="buttonSkills" class="tabButton hidden">&beta;-skills</button>
+        <button id="buttonGroup" class="tabButton hidden">&gamma;-group</button>
+    </div>
+    <div id="isDone" class="hidden">
+        <p class="isDone">&mdash;</p>
+        <p id="alphaIsDone" class="isDone hidden">&alpha;</p>
+        <p id="betaIsDone" class="isDone hidden">&beta;</p>
+        <p id="gammaIsDone" class="isDone hidden">&gamma;</p>
+        <p id="rhoIsDone" class="isDone hidden">&rho;</p>
+        <p class="isDone">&mdash;</p>
+    </div>
+    </header>
+    <div id="tabGenerators" class="hidden page">
+        <div id="generators" class="gameElement">
+            <div id="alpha" class="generator alpha hidden">
+                <div class="barContainer">
+                    <div id="alphaBar" class="generatorBar">
+                        <p class="generatorsText">&alpha;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="beta" class="generator beta hidden">
+                <div class="barContainer">
+                    <div id="betaBar" class="generatorBar beta">
+                        <p class="generatorsText">&beta;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="gamma" class="generator gamma hidden">
+                <div class="barContainer">
+                    <div id="gammaBar" class="generatorBar gamma">
+                        <p class="generatorsText">&gamma;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="rho" class="generator rho hidden">
+                <div class="barContainer">
+                    <div id="rhoBar" class="generatorBar rho">
+                        <p class="generatorsText">&rho;</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="theGame">
+        <div id="tabTree" class="game page">
+            <div class="container">
+                <div id="nothingTree" class="tree">
+                    <button id="alphaUnlock" class="treeUpgrade upgradable">
+                        &alpha;
+                    </button>
+                    <button id="isDoneUnlock" class="treeUpgrade alpha hidden upgradable">
+                        completion
+                    </button>
+                </div>
+                <div id="alphaTree" class="tree">
+                    <button id="betaUnlock" class="treeUpgrade alpha hidden upgradable">
+                        &beta;
+                    </button>
+                    <button id="upgradesUnlock" class="treeUpgrade alpha hidden upgradable">
+                        &alpha;-upgrades
+                    </button>
+                </div>
+                <div id="betaTree" class="beta tree">
+                    <button id="gammaUnlock" class="treeUpgrade upgradable">
+                        &gamma;
+                    </button>
+                    <button id="skillsUnlock" class="treeUpgrade upgradable">
+                        &beta;-skills
+                    </button>
+                </div>
+                <div id="gammaTree" class="gamma tree">
+                    <button id="groupUnlock" class="treeUpgrade upgradable">
+                        &gamma;-group
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="desc">
+            <div id="descProgress" class="generator hidden">
+                <div class="barContainer">
+                    <div id="descBar" class="generatorBar">
+                    </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="script.js"></script>
+</body>
