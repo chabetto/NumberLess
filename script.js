@@ -23,12 +23,13 @@ const OGUPGRADES = {
             showClass("alpha");
             player.UNLOCKED[0] = true;
             resources['alpha'].unlocked = true;
+            player.favourability['alpha']++;
         },
         text:{
-            title:"Unlock &alpha;",
-            effect:"Unlock the generators tab and the &alpha; generator, unlock more buttons in the tree",
-            costDesc:"Free ;)",
-            lore:"Start the game..."
+            title:"unlock &alpha;",
+            effect:"unlock the generators tab and the &alpha; generator, unlock more buttons in the tree",
+            costDesc:"free ;)",
+            lore:"start the game..."
         }
     },
     betaUnlock: {id:"betaUnlock",
@@ -39,12 +40,14 @@ const OGUPGRADES = {
             showClass("beta")
             player.UNLOCKED[1] = true;
             resources['beta'].unlocked = true;
+            player.favourability['beta']++;
+            player.choices['buy beta first'] = Boolean(upgrades['upgradesUnlock'].amountBought == 0);
         },
         text:{
-            title:"Unlock &beta;",
-            effect:"Unlock the &beta; generator, and more buttons in the tree",
-            costDesc:"Restart &alpha;",
-            lore:"Meet the betas. Funny, short little fellows. Always seem to be behind you. Misjudged, sometimes misguided."
+            title:"unlock &beta;",
+            effect:"unlock the &beta; generator, and more buttons in the tree",
+            costDesc:"restart &alpha;",
+            lore:"meet the betas. funny, short little fellows. always seem to be behind you. misjudged, sometimes misguided."
         }
     },
     gammaUnlock: {id:"gammaUnlock",
@@ -55,12 +58,14 @@ const OGUPGRADES = {
             showClass("gamma")
             player.UNLOCKED[1] = true;
             resources['gamma'].unlocked = true;
+            player.favourability['gamma']++;
+            player.choices['buy gamma first'] = Boolean(upgrades['skillsUnlock'].amountBought == 0);
         },
         text:{
-            title:"Unlock &gamma;",
-            effect:"Unlock the &gamma; generator, unlock a button in the tree",
-            costDesc:"Restart &beta;",
-            lore:"Supposedly the last we are going to meet."
+            title:"unlock &gamma;",
+            effect:"unlock the &gamma; generator, unlock a button in the tree",
+            costDesc:"restart &beta;",
+            lore:"supposedly the last we are going to meet."
         }
     },
     isDoneUnlock: {id:"isDoneUnlock",
@@ -71,6 +76,12 @@ const OGUPGRADES = {
             showID("isDone");
             let isDone = document.querySelector(`#isDone`);
             isDone.style.display = "flex";
+        },
+        text:{
+            title:"is done?",
+            effect:"unlock a bar below the tab buttons that show if any generators are full",
+            costDesc:"restart &alpha;",
+            lore:"makes it easier to know when the generators are done. hopefully the quality of life will improve the further we go on."
         }
     },
     upgradesUnlock: {id:"upgradesUnlock",
@@ -79,6 +90,14 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: () => {
             showID("buttonUpgrades");
+            player.favourability['alpha']++;
+            player.choices['buy upgrades first'] = Boolean(resources['beta'].unlocked == false); 
+        },
+        text:{
+            title:"upgrade tab",
+            effect:"unlock the upgrade tab, and various upgrades depending on how many generators are unlocked",
+            costDesc:"restart &alpha;",
+            lore:"we can discuss with the alphas on their turf. upgrades are powerful and reliable."
         }
     },
     skillsUnlock: {id:"skillsUnlock",
@@ -87,6 +106,13 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: () => {
             showID("buttonSkills");
+            player.choices['buy skills first'] = Boolean(resources['gamma'].unlocked == false);
+        },
+        text:{
+            title:"skills tab",
+            effect:"unlock the skills tab, and various skills depending on how many generators are unlocked",
+            costDesc:"restart &beta;",
+            lore:"we can talk to the betas there. skills are weak but expansive."
         }
     },
     groupUnlock: {id:"groupUnlock",
@@ -95,6 +121,12 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: () => {
             showID("buttonGroup");
+        },
+        text:{
+            title:"&gamma;-group tab",
+            effect:"unlock the &gamma;-group tab",
+            costDesc:"restart &gamma;",
+            lore:"we can have a meeting with the gammas here. the &gamma;-group offer insanely strong boosts for a price."
         }
     },
 };
@@ -115,6 +147,8 @@ const ogPlayer = {
     upgrades: {},
     update: 0.05,
     stopTime: false,
+    favourability: {'alpha':0, 'beta':0, 'gamma':0},
+    choices: {}
 };
 
 // save
@@ -387,7 +421,7 @@ function showTab(id) {
 window.onload = function () {
     //loadPlayer();
     fromStart();
-    cheating();
+    //cheating();
     addButtonListeners();
     addButtonHover();
     createResources();

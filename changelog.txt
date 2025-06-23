@@ -2,3 +2,6 @@
 tab functionality, the tree/unlocks work
 created a more generic framework for upgrades
 will work out in more detail how to reset them properly
+added more descriptions
+added some tracking of choices throughout the tree
+started tracking if you buy upgrades that affect the different bars
