@@ -5,3 +5,9 @@ will work out in more detail how to reset them properly
 added more descriptions
 added some tracking of choices throughout the tree
 started tracking if you buy upgrades that affect the different bars
+
+0.02
+added first couple of upgrades
+fixed double counting of amount of upgrades bought
+(increased it in the object and in the variable storing the object... whoops)
+added the unreality button/tab

@@ -11,6 +11,7 @@
     <div id="topTabs" class="tabs">
         <button id="buttonTree" class="tabButton">the tree</button>
         <button id="buttonGenerators" class="tabButton hidden alpha">generators</button>
+        <button id="buttonUnreality" class="tabButton hidden">unreality</button>
         <button id="buttonUpgrades" class="tabButton hidden">&alpha;-upgrades</button>
         <button id="buttonSkills" class="tabButton hidden">&beta;-skills</button>
         <button id="buttonGroup" class="tabButton hidden">&gamma;-group</button>
@@ -56,6 +57,21 @@
             </div>
         </div>
     </div>
+    <div id="tabUnreality" class="hidden">
+        <div id="alphaBeta" class="hidden">
+            <div class="barContainer">
+                <div id="alphaBetaBar" class="generatorBar">
+                    <p class="generatorsText">&alpha;&beta;</p>
+                </div>
+            </div>
+            <button id="alphaSacAlphaBeta">
+                &alpha;
+            </button>
+            <button id="betaSacAlphaBeta">
+                &beta;
+            </button>
+        </div>        
+    </div>
     <div id="theGame">
         <div id="tabTree" class="game page">
             <div class="container">
@@ -86,6 +102,21 @@
                 <div id="gammaTree" class="gamma tree">
                     <button id="groupUnlock" class="treeUpgrade upgradable">
                         &gamma;-group
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="tabUpgrades" class="game page hidden">
+            <div class="container">
+                <div id="timeUpgrades" class="upgrades">
+                    <button id="alphaTimeUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;Tu
+                    </button>
+                    <button id="betaTimeUpgrade" class="alphaUpgrade upgradable hidden beta">
+                        &beta;Tu
+                    </button>
+                    <button id="gammaTimeUpgrade" class="alphaUpgrade upgradable hidden gamma">
+                        &gamma;Tu
                     </button>
                 </div>
             </div>

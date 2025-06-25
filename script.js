@@ -1,9 +1,14 @@
+/*
+some notes:
+functionality is applied BEFORE the amount bought
+*/
+
 /* generic upgrade:
 id: {id:"id",
     cost:"cost",
     amountBought: 0,
     amountCanBuy: 1,
-    func: does = () => {
+    functionality: function() {
         // do something
     },
     text:{
@@ -11,7 +16,8 @@ id: {id:"id",
     effect:"",
     costDesc:"",
     lore:""
-    }
+    },
+    tab:"",
 },
 */
 const OGUPGRADES = {
@@ -19,7 +25,7 @@ const OGUPGRADES = {
         cost: "none",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showClass("alpha");
             player.UNLOCKED[0] = true;
             resources['alpha'].unlocked = true;
@@ -30,13 +36,14 @@ const OGUPGRADES = {
             effect:"unlock the generators tab and the &alpha; generator, unlock more buttons in the tree",
             costDesc:"free ;)",
             lore:"start the game..."
-        }
+        },
+        tab:"tree",
     },
     betaUnlock: {id:"betaUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showClass("beta")
             player.UNLOCKED[1] = true;
             resources['beta'].unlocked = true;
@@ -48,13 +55,14 @@ const OGUPGRADES = {
             effect:"unlock the &beta; generator, and more buttons in the tree",
             costDesc:"restart &alpha;",
             lore:"meet the betas. funny, short little fellows. always seem to be behind you. misjudged, sometimes misguided."
-        }
+        },
+        tab:"tree",
     },
     gammaUnlock: {id:"gammaUnlock",
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showClass("gamma")
             player.UNLOCKED[1] = true;
             resources['gamma'].unlocked = true;
@@ -66,13 +74,14 @@ const OGUPGRADES = {
             effect:"unlock the &gamma; generator, unlock a button in the tree",
             costDesc:"restart &beta;",
             lore:"supposedly the last we are going to meet."
-        }
+        },
+        tab:"tree",
     },
     isDoneUnlock: {id:"isDoneUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showID("isDone");
             let isDone = document.querySelector(`#isDone`);
             isDone.style.display = "flex";
@@ -82,13 +91,14 @@ const OGUPGRADES = {
             effect:"unlock a bar below the tab buttons that show if any generators are full",
             costDesc:"restart &alpha;",
             lore:"makes it easier to know when the generators are done. hopefully the quality of life will improve the further we go on."
-        }
+        },
+        tab:"tree",
     },
     upgradesUnlock: {id:"upgradesUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showID("buttonUpgrades");
             player.favourability['alpha']++;
             player.choices['buy upgrades first'] = Boolean(resources['beta'].unlocked == false); 
@@ -98,13 +108,14 @@ const OGUPGRADES = {
             effect:"unlock the upgrade tab, and various upgrades depending on how many generators are unlocked",
             costDesc:"restart &alpha;",
             lore:"we can discuss with the alphas on their turf. upgrades are powerful and reliable."
-        }
+        },
+        tab:"tree",
     },
     skillsUnlock: {id:"skillsUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showID("buttonSkills");
             player.choices['buy skills first'] = Boolean(resources['gamma'].unlocked == false);
         },
@@ -113,13 +124,14 @@ const OGUPGRADES = {
             effect:"unlock the skills tab, and various skills depending on how many generators are unlocked",
             costDesc:"restart &beta;",
             lore:"we can talk to the betas there. skills are weak but expansive."
-        }
+        },
+        tab:"tree",
     },
     groupUnlock: {id:"groupUnlock",
         cost: "gamma",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: () => {
+        functionality: function() {
             showID("buttonGroup");
         },
         text:{
@@ -127,7 +139,63 @@ const OGUPGRADES = {
             effect:"unlock the &gamma;-group tab",
             costDesc:"restart &gamma;",
             lore:"we can have a meeting with the gammas here. the &gamma;-group offer insanely strong boosts for a price."
-        }
+        },
+        tab:"tree",
+    },
+    alphaTimeUpgrade: {id:"alphaTimeUpgrade",
+        cost: "alpha",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function() {
+            resources['alpha'].time = resources['alpha'].time * this.amountBought / (this.amountBought + 1);
+            player.favourability['alpha']++;
+            return this.amountBought + 1; // total time reduction factor
+        },
+        text:{
+            title:"&alpha; time upgrade",
+            effect:"reduce the time it takes for the &alpha; generator to fill",
+            costDesc:"restart &alpha;",
+            lore:"it is simple, but effective. much like the alphas."
+        },
+        tab:"upgrade",
+    },
+    betaTimeUpgrade: {id:"betaTimeUpgrade",
+        cost: "beta",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function() {
+            let pre = (this.amountBought == 1) ? 1 : 3 * (this.amountBought - 1);
+            resources['beta'].time = resources['beta'].time * pre / (3 * this.amountBought);
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            return 3 * (this.amountBought + 1); // total time reduction factor
+        },
+        text:{
+            title:"&beta; time upgrade",
+            effect:"greatly reduce the time it takes for the &beta; generator to fill",
+            costDesc:"restart &beta;",
+            lore:"spend itselfs to boost itself, a good deal"
+        },
+        tab:"upgrade",
+    },
+    gammaTimeUpgrade: {id:"gammaTimeUpgrade",
+        cost: "gamma",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function() {
+            let pre = (this.amountBought == 1) ? 1 : 0.5 * (this.amountBought - 1) + 1;
+            resources['gamma'].time = resources['gamma'].time * pre / (0.5 * this.amountBought + 1);
+            player.favourability['alpha']++;
+            player.favourability['gamma']++;
+            return 0.5 * this.amountBought + 1; // total time reduction factor
+        },
+        text:{
+            title:"&gamma; time upgrade",
+            effect:"slightly reduce the time it takes for the &gamma; generator to fill",
+            costDesc:"restart &gamma;",
+            lore:"a deal almost too good to be true, the gamma stay sceptical"
+        },
+        tab:"upgrade",
     },
 };
 
@@ -140,7 +208,7 @@ const ogPlayer = {
         "betagamma",
         "alphagamma",
     ],
-    TIMES: [20, 50, 300, 30, 30, 30],
+    TIMES: [20, 60, 300, 30, 30, 30],
     POWERS: [1, 1, 1, 1, 1, 1],
     percentage: [0, 0, 0, 0, 0, 0],
     UNLOCKED: [false, false, false, false, false, false],
@@ -177,22 +245,18 @@ class generalUpgrade {
         this.bar.style.display = 'flex';
         }
     }
-    updateAmount() {
-        this.amountBought += 1;
-        upgrades[this.id].amountBought += 1;
-    }
     buyOnce() {
         if (this.cost == "none") {
             this.percentage += 100 / this.amountCanBuy;
+            this.amountBought += 1;
             this.showPercentage();
-            this.updateAmount();
             this.functionality();
             return true;
         } else {
             if (resources[this.cost].spend()) {
             this.percentage += 100 / this.amountCanBuy;
+            this.amountBought += 1;
             this.showPercentage();
-            this.updateAmount();
             this.functionality();
             return true;
             } else {
@@ -381,7 +445,6 @@ function incrementBars() {
 function buttonFunction(e) {
     let id = e.target.id;
     let classes = e.target.classList;
-    console.log(id, classes);
     if (classes.contains("tabButton")) {
         showTab(id)
     } else {
@@ -408,6 +471,9 @@ function showTab(id) {
             break;
         case "Group":
             showID("tabGroup");
+            break;
+        case "Unreality":
+            showID("tabUnreality");
             break;
     };
     let buttons = document.querySelectorAll(".tabButton");
