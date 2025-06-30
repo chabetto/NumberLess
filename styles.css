@@ -98,6 +98,10 @@ h1 {
 #rhoBar {
     background-color: rgb(73, 73, 255);
 }
+#descBar {
+    background-color: black;
+    transition-duration: 0.25s;
+}
 .generatorBar {
     height: var(--genHeight);
     text-align: center;

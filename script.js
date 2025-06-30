@@ -1,6 +1,7 @@
 /*
 some notes:
-functionality is applied BEFORE the amount bought
+time upgrades - object {factor: formula, unspent: true/false}
+basically - is it an unspent upgrade
 */
 
 /* generic upgrade:
@@ -20,6 +21,7 @@ id: {id:"id",
     tab:"",
 },
 */
+
 const OGUPGRADES = {
     alphaUnlock: {id:"alphaUnlock",
         cost: "none",
@@ -64,7 +66,7 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: function() {
             showClass("gamma")
-            player.UNLOCKED[1] = true;
+            player.UNLOCKED[2] = true;
             resources['gamma'].unlocked = true;
             player.favourability['gamma']++;
             player.choices['buy gamma first'] = Boolean(upgrades['skillsUnlock'].amountBought == 0);
@@ -117,6 +119,7 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: function() {
             showID("buttonSkills");
+            player.favourability['beta']++;
             player.choices['buy skills first'] = Boolean(resources['gamma'].unlocked == false);
         },
         text:{
@@ -133,6 +136,7 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: function() {
             showID("buttonGroup");
+            player.favourability['gamma']++;
         },
         text:{
             title:"&gamma;-group tab",
@@ -147,9 +151,9 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function() {
-            resources['alpha'].time = resources['alpha'].time * this.amountBought / (this.amountBought + 1);
             player.favourability['alpha']++;
-            return this.amountBought + 1; // total time reduction factor
+            let factor = this.amountBought + 1;
+            resources['alpha'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
         },
         text:{
             title:"&alpha; time upgrade",
@@ -164,17 +168,17 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function() {
-            let pre = (this.amountBought == 1) ? 1 : 3 * (this.amountBought - 1);
-            resources['beta'].time = resources['beta'].time * pre / (3 * this.amountBought);
+            showID("betaTime2Upgrade");
             player.favourability['alpha']++;
             player.favourability['beta']++;
-            return 3 * (this.amountBought + 1); // total time reduction factor
+            let factor = 3 * this.amountBought;
+            resources['beta'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
         },
         text:{
             title:"&beta; time upgrade",
             effect:"greatly reduce the time it takes for the &beta; generator to fill",
             costDesc:"restart &beta;",
-            lore:"spend itselfs to boost itself, a good deal"
+            lore:"spend itselfs to boost itself, a good deal."
         },
         tab:"upgrade",
     },
@@ -183,16 +187,50 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function() {
-            let pre = (this.amountBought == 1) ? 1 : 0.5 * (this.amountBought - 1) + 1;
-            resources['gamma'].time = resources['gamma'].time * pre / (0.5 * this.amountBought + 1);
             player.favourability['alpha']++;
             player.favourability['gamma']++;
-            return 0.5 * this.amountBought + 1; // total time reduction factor
+            let factor = 0.5 * this.amountBought + 1;
+            resources['gamma'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
         },
         text:{
             title:"&gamma; time upgrade",
             effect:"slightly reduce the time it takes for the &gamma; generator to fill",
             costDesc:"restart &gamma;",
+            lore:"a deal almost too good to be true, the gamma stay sceptical."
+        },
+        tab:"upgrade",
+    },
+    betaTime2Upgrade: {id:"betaTime2Upgrade",
+        cost: "beta",
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function() {
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            let factor = this.amountBought + 1;
+            resources['beta'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
+        },
+        text:{
+            title:"&beta; time (time) upgrade",
+            effect:"reduce the time it takes for the &beta; generator to fill (again)",
+            costDesc:"restart &beta;",
+            lore:"did we just do this? i am sure. the beta are sure also."
+        },
+        tab:"upgrade",
+    },
+    alphaPowerUpgrade: {id:"alphaPowerUpgrade",
+        cost: "alpha",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function() {
+            player.favourability['alpha']++;
+            let factor = this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = {'factor': factor, 'unspent': false};
+        },
+        text:{
+            title:"&alpha; power upgrade",
+            effect:"increase the power of &alpha; sacrifice",
+            costDesc:"restart &alpha;",
             lore:"a deal almost too good to be true, the gamma stay sceptical"
         },
         tab:"upgrade",
@@ -209,7 +247,7 @@ const ogPlayer = {
         "alphagamma",
     ],
     TIMES: [20, 60, 300, 30, 30, 30],
-    POWERS: [1, 1, 1, 1, 1, 1],
+    POWERS: [2, 1, 5, 1, 1, 1],
     percentage: [0, 0, 0, 0, 0, 0],
     UNLOCKED: [false, false, false, false, false, false],
     upgrades: {},
@@ -238,12 +276,9 @@ class generalUpgrade {
         if (Math.round(this.percentage) >= 100) {
             this.percentage = 100;
             removeButtonClick(this.id)
-        } if (this.amountCanBuy == 1) {
-            this.bar.style.display = 'none';
-        } else {
+        }
         this.bar.style.width = `${this.percentage}%`;
         this.bar.style.display = 'flex';
-        }
     }
     buyOnce() {
         if (this.cost == "none") {
@@ -277,12 +312,26 @@ class resource {
         this.unlocked = unlocked;
         this.power = power;
         this.percentage = percentage;
+        this.timeUpgrades = {};
+        this.powerUpgrades = {};
         this.index = player.NAMES.indexOf(this.name);
         if (unlocked) {
             this.unlock();
             this.showPercentage();
         } else {
             this.hide();
+        }
+        this.prev;
+        switch (name) {
+            case "alpha":
+                this.prev = "gamma"
+                break
+            case "beta":
+                this.prev = "alpha"
+                break
+            case "gamma":
+                this.prev = "beta"
+                break
         }
     }
     unlock() {
@@ -301,9 +350,10 @@ class resource {
             : this.isdone.classList.add("hidden");
     }
     updateBar(updateTime) {
+        let tempTime = this.checkTime();
         if (this.percentage < 100) {
             this.percentage =
-                this.percentage + (updateTime * 100) / this.time;
+                this.percentage + (updateTime * 100) / tempTime;
                 // updateTime should reflect if the person has tabbed out or not
             if (this.percentage >= 100) {
                 this.percentage = 100;
@@ -312,6 +362,43 @@ class resource {
             this.showPercentage();
         } else if (this.percentage === NaN) {
             this.reset();
+        }
+    }
+    checkTime() {
+        // basically checks for each type of time upgrade - time and unspent
+        let timeUpgradeFactor = 1;
+        let unspentUpgradeFactor = 1;
+        for (item in this.timeUpgrades) {
+            let obj = this.timeUpgrades[item];
+            if (obj.unspent) {
+                unspentUpgradeFactor *= obj.factor;
+            } else {
+                timeUpgradeFactor *= obj.factor;
+            }
+        }
+        if (this.checkPrevUnspent()) {
+            unspentUpgradeFactor = 1;
+        }
+        return this.time / (timeUpgradeFactor * unspentUpgradeFactor);
+    }
+    powerSpend() {
+        if (this.spend()) {
+            let powerUpgradeFactor = 1;
+            let unspentUpgradeFactor = 1;
+            for (item in this.powerUpgrades) {
+                let obj = this.timeUpgrades[item];
+                if (obj.unspent) {
+                    unspentUpgradeFactor *= obj.factor;
+                } else {
+                    powerUpgradeFactor *= obj.factor;
+                }
+            }
+            if (this.checkPrevUnspent()) {
+                unspentUpgradeFactor = 1;
+            }
+            return powerUpgradeFactor * unspentUpgradeFactor;
+        } else {
+            return false
         }
     }
     spend() {
@@ -326,6 +413,9 @@ class resource {
         this.point = false;
         this.percentage = 0;
         this.showPercentage();
+    }
+    checkPrevUnspent() {
+        return resources[this.prev].point;
     }
 }
 
@@ -519,23 +609,40 @@ function startTime() {
 function showDescription(e) {
     let id = e.target.id;
     const tabs = ["buttonTree","buttonGenerators","buttonUpgrades","buttonSkills","buttonGroup"]
-    let div = document.querySelector("#desc");
+    let div = document.querySelector("#descText");
     let title = document.createElement("h2");
-    title.innerHTML = tabs.includes(id) ? "" :upgrades[id].text.title;
-    let effect = document.createElement("p");
-    let cost = document.createElement("p");
-    let lore = document.createElement("h4");
-    if (!tabs.includes(id)) {
-        let txt = upgrades[id].text;
-        effect.innerHTML = txt.effect;
-        cost.innerHTML = txt.costDesc;
-        lore.innerHTML = txt.lore;
-    }
     div.innerHTML = "";
-    div.appendChild(title);
-    div.appendChild(effect);
-    div.appendChild(cost);
-    div.appendChild(lore);
+    let progBarDiv = document.querySelector(`#descProgressBar`);
+    if (!tabs.includes(id)) {
+        let effect = document.createElement("p");
+        let cost = document.createElement("p");
+        let lore = document.createElement("h4");
+        if (!tabs.includes(id)) {
+            let txt = upgrades[id].text;
+            title.innerHTML = txt.title
+            effect.innerHTML = txt.effect;
+            cost.innerHTML = txt.costDesc;
+            lore.innerHTML = txt.lore;
+        }
+        div.appendChild(title);
+        div.appendChild(effect);
+        div.appendChild(cost);
+        div.appendChild(lore);
+        if (upgrades[id].amountCanBuy >= 2) {
+            if (progBarDiv.classList.contains("hidden")) {
+                progBarDiv.classList.remove("hidden")
+                upgrades[id].showPercentage()
+            }
+        } else {
+            if (!progBarDiv.classList.contains("hidden")) {
+                progBarDiv.classList.add("hidden")
+            }
+        }
+    } else {
+        if (!progBarDiv.classList.contains("hidden")) {
+            progBarDiv.classList.add("hidden")
+        }
+    }
 }
 
 function loadBought() {
