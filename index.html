@@ -57,20 +57,52 @@
             </div>
         </div>
     </div>
-    <div id="tabUnreality" class="hidden">
-        <div id="alphaBeta" class="hidden">
-            <div class="barContainer">
-                <div id="alphaBetaBar" class="generatorBar">
-                    <p class="generatorsText">&alpha;&beta;</p>
+    <div id="tabUnreality" class="page hidden">
+        <div id="infusions" class="gameElement">
+            <div id="alphaBeta" class="generator inf">
+                <button id="alphaSacAlphaBeta" class="sac">
+                    &alpha;
+                </button>
+                <button id="betaSacAlphaBeta" class="sac">
+                    &beta;
+                </button>
+                <div class="barContainer">
+                    <div id="alphaBetaBar" class="generatorBar">
+                        <p class="generatorsText">&alpha;&beta;</p>
+                    </div>
                 </div>
             </div>
-            <button id="alphaSacAlphaBeta">
-                &alpha;
-            </button>
-            <button id="betaSacAlphaBeta">
-                &beta;
-            </button>
-        </div>        
+            <div id="alphaGamma" class="generator inf">
+                <button id="alphaSacAlphaGamma" class="sac">
+                    &alpha;
+                </button>
+                <button id="gammaSacAlphaGamma" class="sac">
+                    &gamma;
+                </button>
+                <div class="barContainer">
+                    <div id="alphaGammaBar" class="generatorBar">
+                        <p class="generatorsText">&alpha;&gamma;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="betaGamma" class="generator inf">
+                <button id="betaSacBetaGamma" class="sac">
+                    &beta;
+                </button>
+                <button id="gammaSacBetaGamma" class="sac">
+                    &gamma;
+                </button>
+                <div class="barContainer">
+                    <div id="betaGammaBar" class="generatorBar">
+                        <p class="generatorsText">&beta;&gamma;</p>
+                    </div>
+                </div>
+            </div>
+            <p id="infusionTutorial" onclick="hideID('infusionTutorial')">click to sacrifice a full generator to fill the corresponding infusion bar.<br>
+            the buttons can be toggled on (and off).<br>
+            click to hide this message forever.
+            </p>
+        </div>
     </div>
     <div id="theGame">
         <div id="tabTree" class="game page">
@@ -103,6 +135,9 @@
                     <button id="groupUnlock" class="treeUpgrade upgradable">
                         &gamma;-group
                     </button>
+                    <button id="unrealityUnlock" class="treeUpgrade upgradable">
+                        unreality
+                    </button>
                 </div>
             </div>
         </div>
@@ -119,12 +154,32 @@
                         &gamma;Tu
                     </button>
                 </div>
-                <div id="timeUpgrades" class="upgrades">
+                <div class="upgrades">
                     <button id="alphaPowerUpgrade" class="alphaUpgrade upgradable power hidden">
                         &alpha;Pu
                     </button>
                     <button id="betaTime2Upgrade" class="alphaUpgrade upgradable hidden">
                         &beta;T2u
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="tabSkills" class="game page hidden">
+            <div class="container">
+                <div class="skills">
+                    <button id="alphaUnspentSkill" class="betaSkill upgradable">
+                        &alpha;Us
+                    </button>
+                    <button id="betaUnspentTimeSkill" class="betaSkill upgradable hidden gamma">
+                        &beta;UTs
+                    </button>
+                </div>
+                <div id="powerUnspentSkills" class="skills power hidden">
+                    <button id="betaUnspentPowerSkill" class="betaSkill upgradable">
+                        &beta;UPs
+                    </button>
+                    <button id="gammaUnspentSkill" class="betaSkill upgradable">
+                        &gamma;Us
                     </button>
                 </div>
             </div>

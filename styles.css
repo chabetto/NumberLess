@@ -85,6 +85,7 @@ h1 {
     margin: 30px 20px;
     display: flex;
     align-items: center;
+    width: 95%;
 }
 #alphaBar {
     background-color: lightcoral;
@@ -135,10 +136,17 @@ h1 {
 #generators {
     width: 100%;
 }
-
+.inf {
+    display: flex;
+    align-items: center;
+    object-fit: fill;
+}
 @media (min-width: 1000px) {
     #generators {
         width: 960px;
+    }
+    #infusions {
+        width:960px;
     }
     #isDone {
         width: 960px;

@@ -17,3 +17,7 @@ added "power"
 fixed the description - things that can be upgraded multiple times now have a bar
 changed how upgrades to time/power are done - allows "unspent"
 added 2 new upgrades + found a bug where a superscript had a unique hover event created
+
+0.04
+added a couple skills
+fixed infusions page (need to add functionality)

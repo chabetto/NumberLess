@@ -146,6 +146,25 @@ const OGUPGRADES = {
         },
         tab:"tree",
     },
+    unrealityUnlock: {id:"unrealityUnlock",
+        cost: "alpha",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function() {
+            showID("buttonUnreality");
+            showClass("power");
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            player.favourability['gamma']++;
+        },
+        text:{
+            title:"unreality tab",
+            effect:"unlock the unreality tab and many upgrades",
+            costDesc:"restart &alpha;",
+            lore:"unlock the ability to combine different generators. this opens up more of reality i guess."
+        },
+        tab:"tree",
+    },
     alphaTimeUpgrade: {id:"alphaTimeUpgrade",
         cost: "alpha",
         amountBought: 0,
@@ -231,9 +250,81 @@ const OGUPGRADES = {
             title:"&alpha; power upgrade",
             effect:"increase the power of &alpha; sacrifice",
             costDesc:"restart &alpha;",
-            lore:"a deal almost too good to be true, the gamma stay sceptical"
+            lore:"and it starts, the alphas will ascend. strength in numbers(?)."
         },
         tab:"upgrade",
+    },
+    alphaUnspentSkill: {id:"alphaUnspentSkill",
+        cost: "alpha",
+        amountBought: 0,
+        amountCanBuy: 5,
+        functionality: function() {
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            let factor = 0.3 * this.amountBought + 1;
+            resources['beta'].timeUpgrades[this.id] = {'factor': factor, 'unspent': true};
+        },
+        text:{
+            title:"&alpha; unspent skill",
+            effect:"decrease the time of &beta; if &alpha; is unspent",
+            costDesc:"restart &alpha;",
+            lore:"the alphas help the betas. respect."
+        },
+        tab:"skills",
+    },
+    betaUnspentTimeSkill: {id:"betaUnspentTimeSkill",
+        cost: "beta",
+        amountBought: 0,
+        amountCanBuy: 5,
+        functionality: function() {
+            player.favourability['beta']++;
+            player.favourability['gamma']++;
+            let factor = 0.2 * this.amountBought + 1;
+            resources['gamma'].timeUpgrades[this.id] = {'factor': factor, 'unspent': true};
+        },
+        text:{
+            title:"&beta; unspent time upgrade",
+            effect:"if &beta; is unspent, decrease the time needed to fill &gamma;",
+            costDesc:"restart &beta;",
+            lore:"this is surely a start of a blossoming relation between the betas and the &gamma;-group."
+        },
+        tab:"skills",
+    },
+    betaUnspentPowerSkill: {id:"betaUnspentPowerSkill",
+        cost: "beta",
+        amountBought: 0,
+        amountCanBuy: 5,
+        functionality: function() {
+            player.favourability['beta']++;
+            player.favourability['gamma']++;
+            let factor = 0.1 * this.amountBought + 1;
+            resources['gamma'].powerUpgrades[this.id] = {'factor': factor, 'unspent': true};
+        },
+        text:{
+            title:"&beta; unspent power upgrade",
+            effect:"if &beta; is unspent, increase the power of &gamma; sacrifice",
+            costDesc:"restart &beta;",
+            lore:"makes sense, the betas can feed the gammas. more nutritious."
+        },
+        tab:"skills",
+    },
+    gammaUnspentSkill: {id:"gammaUnspentSkill",
+        cost: "gamma",
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function() {
+            player.favourability['beta']++;
+            player.favourability['gamma']++;
+            let factor = 0.5 * this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = {'factor': factor, 'unspent': true};
+        },
+        text:{
+            title:"&gamma; unspent power upgrade",
+            effect:"&alpha; sacrifice is more powerful if &gamma; is done",
+            costDesc:"restart &beta;",
+            lore:"the gammas can back the alphas. this is just a small taste of their power."
+        },
+        tab:"skills",
     },
 };
 
@@ -577,7 +668,7 @@ function showTab(id) {
 window.onload = function () {
     //loadPlayer();
     fromStart();
-    //cheating();
+    cheating();
     addButtonListeners();
     addButtonHover();
     createResources();
@@ -608,7 +699,7 @@ function startTime() {
 
 function showDescription(e) {
     let id = e.target.id;
-    const tabs = ["buttonTree","buttonGenerators","buttonUpgrades","buttonSkills","buttonGroup"]
+    const tabs = ["buttonTree","buttonGenerators","buttonUpgrades","buttonSkills","buttonGroup","buttonUnreality"]
     let div = document.querySelector("#descText");
     let title = document.createElement("h2");
     div.innerHTML = "";
@@ -631,8 +722,8 @@ function showDescription(e) {
         if (upgrades[id].amountCanBuy >= 2) {
             if (progBarDiv.classList.contains("hidden")) {
                 progBarDiv.classList.remove("hidden")
-                upgrades[id].showPercentage()
             }
+            upgrades[id].showPercentage()
         } else {
             if (!progBarDiv.classList.contains("hidden")) {
                 progBarDiv.classList.add("hidden")
