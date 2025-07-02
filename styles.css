@@ -94,10 +94,19 @@ h1 {
     background-color: rgb(2, 179, 2);
 }
 #gammaBar {
-    background-color: rgb(253, 94, 36);
+    background-color: rgb(73, 73, 255);
 }
 #rhoBar {
-    background-color: rgb(73, 73, 255);
+    background-color: grey;
+}
+#alphaBetaBar {
+    background-image: linear-gradient(to right, lightcoral, rgb(2, 179, 2));
+}
+#alphaGammaBar {
+    background-image: linear-gradient(to left, lightcoral, rgb(73, 73, 255));
+}
+#betaGammaBar {
+    background-image: linear-gradient(to right, rgb(2, 179, 2), rgb(73, 73, 255));
 }
 #descBar {
     background-color: black;

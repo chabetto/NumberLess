@@ -114,7 +114,7 @@ const OGUPGRADES = {
         tab:"tree",
     },
     skillsUnlock: {id:"skillsUnlock",
-        cost: "alpha",
+        cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function() {
@@ -131,7 +131,7 @@ const OGUPGRADES = {
         tab:"tree",
     },
     groupUnlock: {id:"groupUnlock",
-        cost: "gamma",
+        cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function() {
@@ -141,13 +141,13 @@ const OGUPGRADES = {
         text:{
             title:"&gamma;-group tab",
             effect:"unlock the &gamma;-group tab",
-            costDesc:"restart &gamma;",
+            costDesc:"restart &beta;",
             lore:"we can have a meeting with the gammas here. the &gamma;-group offer insanely strong boosts for a price."
         },
         tab:"tree",
     },
     unrealityUnlock: {id:"unrealityUnlock",
-        cost: "alpha",
+        cost: "gamma",
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function() {
@@ -160,7 +160,7 @@ const OGUPGRADES = {
         text:{
             title:"unreality tab",
             effect:"unlock the unreality tab and many upgrades",
-            costDesc:"restart &alpha;",
+            costDesc:"restart &gamma;",
             lore:"unlock the ability to combine different generators. this opens up more of reality i guess."
         },
         tab:"tree",
@@ -333,14 +333,19 @@ const ogPlayer = {
         "alpha",
         "beta",
         "gamma",
-        "alphabeta",
-        "betagamma",
-        "alphagamma",
     ],
-    TIMES: [20, 60, 300, 30, 30, 30],
-    POWERS: [2, 1, 5, 1, 1, 1],
-    percentage: [0, 0, 0, 0, 0, 0],
-    UNLOCKED: [false, false, false, false, false, false],
+    INFUSIONS: [
+        "alphaBeta",
+        "alphaGamma",
+        "betaGamma",
+    ],
+    TIMES: [20, 60, 300],
+    sacsNeeded: [100, 100, 100],
+    POWERS: [2, 1, 10],
+    percentage: [0, 0, 0],
+    infusionPercentage: [0, 0, 0],
+    UNLOCKED: [false, false, false],
+    infusionUnlocked: [false, false, false],
     upgrades: {},
     update: 0.05,
     stopTime: false,
@@ -388,6 +393,114 @@ class generalUpgrade {
             } else {
             return false;
             }
+        }
+    }
+}
+
+let infusions = {};
+const SACBUTTONS = {
+    "alpha": ["alphaSacAlphaBeta", "alphaSacAlphaGamma"],
+    "beta": ["betaSacAlphaBeta", "betaSacBetaGamma"],
+    "gamma": ["gammaSacBetaGamma", "gammaSacAlphaGamma"],
+}
+
+function switchOnSac(id) {
+    for ((item) in SACBUTTONS) {
+        if (SACBUTTONS[item].includes(id)) {
+            for (num in SACBUTTONS[item]) {
+                let button = document.querySelector(`#${SACBUTTONS[item][num]}`);
+                if ((id == SACBUTTONS[item][num]) && (!button.classList.contains("toggle"))) {
+                    button.classList.add('toggle');
+                } else {
+                    button.classList.remove("toggle");
+                }
+            }
+        }
+    }
+}
+
+function switchOffAllSac() {
+    for (item in SACBUTTONS) {
+        for (num in SACBUTTONS[item][num]) {
+            let button = document.querySelector(`#${temp}`);
+            button.classList.remove("toggle");
+        }
+    }
+}
+
+class infusion {
+    constructor(name, time, percentage, unlocked) {
+        this.name = name;
+        this.isdone = document.querySelector(`#${name}IsDone`);
+        this.bar = document.querySelector(`#${name}Bar`);
+        this.point = Boolean(percentage === 100);
+        this.sacsNeeded = time;
+        this.percentage = percentage;
+        if (unlocked) {
+            this.unlock();
+            this.showPercentage();
+        } else {
+            this.hide();
+        }
+        this.index = player.NAMES.indexOf(this.name);
+        this.resUsed;
+        this.buttonsToCheck;
+        switch (name) {
+            case "alphaBeta":
+                this.resUsed = ["alpha", "beta"];
+                this.buttonsToCheck = ["alphaSacAlphaBeta","betaSacAlphaBeta"];
+                break
+            case "alphaGamma":
+                this.resUsed = ["alpha", "gamma"];
+                this.buttonsToCheck = ["alphaSacAlphaGamma","gammaSacAlphaGamma"];
+                break
+            case "betaGamma":
+                this.resUsed = ["beta", "gamma"];
+                this.buttonsToCheck = ["betaSacBetaGamma","gammaSacBetaGamma"];
+                break
+        }
+        this.showPercentage();
+    }
+    unlock() {
+        showClass(this.name);
+        this.unlocked = true;
+    }
+    hide() {
+        hideClass(this.name);
+        this.unlocked = false;
+    }
+    showPercentage() {
+        this.bar.style.width = `${this.percentage}%`
+        player.percentage[this.index] = this.percentage;
+        this.percentage === 100
+            ? this.isdone.classList.remove("hidden")
+            : this.isdone.classList.add("hidden");
+    }
+    updateBar() {
+        for (i in this.buttonsToCheck) {
+            let button = document.querySelector(`#${this.buttonsToCheck[i]}`)
+            if (button.classList.contains("toggle")) {
+                this.updatePercentage(this.resUsed[i]);
+            }
+        }
+        if (this.percentage === 100) {
+            for (i in this.buttonsToCheck) {
+                let button = document.querySelector(`#${this.buttonsToCheck[i]}`);
+                if (button.classList.contains('toggle')) {
+                    button.classList.remove('toggle');
+                }
+            }
+        }
+    }
+    updatePercentage(res) {
+        let pwr = resources[res].powerSpend();
+        if (pwr !== false) {
+            this.percentage += (100 * (pwr / this.sacsNeeded));
+            if (this.percentage > 100) {
+                this.percentage = 100;
+                this.point = true;
+            }
+            this.showPercentage();
         }
     }
 }
@@ -474,7 +587,7 @@ class resource {
     }
     powerSpend() {
         if (this.spend()) {
-            let powerUpgradeFactor = 1;
+            let powerUpgradeFactor = this.power;
             let unspentUpgradeFactor = 1;
             for (item in this.powerUpgrades) {
                 let obj = this.timeUpgrades[item];
@@ -521,6 +634,14 @@ function createResources() {
             player.UNLOCKED[i],
             player.POWERS[i]
         );
+    }
+    for (i in player.INFUSIONS) {
+        infusions[player.INFUSIONS[i]] = new infusion(
+            player.INFUSIONS[i],
+            player.sacsNeeded[i],
+            player.infusionPercentage[i],
+            player.infusionUnlocked[i]
+        )
     }
 }
 
@@ -621,6 +742,9 @@ function incrementBars() {
             resources[item].updateBar(player.update);
         }
     }
+    for (item in infusions) {
+        infusions[item].updateBar();
+    }
 }
 
 function buttonFunction(e) {
@@ -628,6 +752,8 @@ function buttonFunction(e) {
     let classes = e.target.classList;
     if (classes.contains("tabButton")) {
         showTab(id)
+    } else if (classes.contains("sac")) {
+        switchOnSac(id);
     } else {
         upgrades[id].buyOnce();
     };
@@ -668,7 +794,7 @@ function showTab(id) {
 window.onload = function () {
     //loadPlayer();
     fromStart();
-    cheating();
+    //cheating();
     addButtonListeners();
     addButtonHover();
     createResources();
@@ -699,7 +825,7 @@ function startTime() {
 
 function showDescription(e) {
     let id = e.target.id;
-    const tabs = ["buttonTree","buttonGenerators","buttonUpgrades","buttonSkills","buttonGroup","buttonUnreality"]
+    const tabs = ["buttonTree","buttonGenerators","buttonUpgrades","buttonSkills","buttonGroup","buttonUnreality","alphaSacAlphaBeta","betaSacAlphaBeta","alphaSacAlphaGamma","gammaSacAlphaGamma","betaSacBetaGamma","gammaSacBetaGamma"]
     let div = document.querySelector("#descText");
     let title = document.createElement("h2");
     div.innerHTML = "";

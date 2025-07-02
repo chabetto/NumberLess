@@ -21,3 +21,8 @@ added 2 new upgrades + found a bug where a superscript had a unique hover event 
 0.04
 added a couple skills
 fixed infusions page (need to add functionality)
+
+0.05
+added infusion functionality - generators auto sac and switch off once infusion is done
+changed some of the tree costs - i think i want a lot up front so theres many paths to go
+the tree grows...
