@@ -26,3 +26,8 @@ fixed infusions page (need to add functionality)
 added infusion functionality - generators auto sac and switch off once infusion is done
 changed some of the tree costs - i think i want a lot up front so theres many paths to go
 the tree grows...
+
+0.06
+a lot of little fixes with upgrades/skills
+added some buttons that allow you to untoggle saccing of certain generators
+added 3 new skills
