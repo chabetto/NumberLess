@@ -87,6 +87,11 @@ h1 {
     align-items: center;
     width: 95%;
 }
+#toggleButtons {
+    position: fixed;
+    top: 42px;
+    left: 500px;
+}
 #alphaBar {
     background-color: lightcoral;
 }

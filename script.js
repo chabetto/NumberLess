@@ -23,308 +23,406 @@ id: {id:"id",
 */
 
 const OGUPGRADES = {
-    alphaUnlock: {id:"alphaUnlock",
+    alphaUnlock: {
+        id: "alphaUnlock",
         cost: "none",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showClass("alpha");
             player.UNLOCKED[0] = true;
             resources['alpha'].unlocked = true;
             player.favourability['alpha']++;
         },
-        text:{
-            title:"unlock &alpha;",
-            effect:"unlock the generators tab and the &alpha; generator, unlock more buttons in the tree",
-            costDesc:"free ;)",
-            lore:"start the game..."
+        text: {
+            title: "unlock &alpha;",
+            effect: "unlock the generators tab and the &alpha; generator, unlock more buttons in the tree",
+            costDesc: "free ;)",
+            lore: "start the game..."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    betaUnlock: {id:"betaUnlock",
+    betaUnlock: {
+        id: "betaUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showClass("beta")
             player.UNLOCKED[1] = true;
             resources['beta'].unlocked = true;
             player.favourability['beta']++;
             player.choices['buy beta first'] = Boolean(upgrades['upgradesUnlock'].amountBought == 0);
         },
-        text:{
-            title:"unlock &beta;",
-            effect:"unlock the &beta; generator, and more buttons in the tree",
-            costDesc:"restart &alpha;",
-            lore:"meet the betas. funny, short little fellows. always seem to be behind you. misjudged, sometimes misguided."
+        text: {
+            title: "unlock &beta;",
+            effect: "unlock the &beta; generator, and more buttons in the tree",
+            costDesc: "restart &alpha;",
+            lore: "meet the betas. funny, short little fellows. always seem to be behind you. misjudged, sometimes misguided."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    gammaUnlock: {id:"gammaUnlock",
+    gammaUnlock: {
+        id: "gammaUnlock",
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showClass("gamma")
             player.UNLOCKED[2] = true;
             resources['gamma'].unlocked = true;
             player.favourability['gamma']++;
             player.choices['buy gamma first'] = Boolean(upgrades['skillsUnlock'].amountBought == 0);
         },
-        text:{
-            title:"unlock &gamma;",
-            effect:"unlock the &gamma; generator, unlock a button in the tree",
-            costDesc:"restart &beta;",
-            lore:"supposedly the last we are going to meet."
+        text: {
+            title: "unlock &gamma;",
+            effect: "unlock the &gamma; generator, unlock a button in the tree",
+            costDesc: "restart &beta;",
+            lore: "supposedly the last we are going to meet."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    isDoneUnlock: {id:"isDoneUnlock",
+    isDoneUnlock: {
+        id: "isDoneUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showID("isDone");
             let isDone = document.querySelector(`#isDone`);
             isDone.style.display = "flex";
         },
-        text:{
-            title:"is done?",
-            effect:"unlock a bar below the tab buttons that show if any generators are full",
-            costDesc:"restart &alpha;",
-            lore:"makes it easier to know when the generators are done. hopefully the quality of life will improve the further we go on."
+        text: {
+            title: "is done?",
+            effect: "unlock a bar below the tab buttons that show if any generators are full",
+            costDesc: "restart &alpha;",
+            lore: "makes it easier to know when the generators are done. hopefully the quality of life will improve the further we go on."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    upgradesUnlock: {id:"upgradesUnlock",
+    upgradesUnlock: {
+        id: "upgradesUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showID("buttonUpgrades");
             player.favourability['alpha']++;
-            player.choices['buy upgrades first'] = Boolean(resources['beta'].unlocked == false); 
+            player.choices['buy upgrades first'] = Boolean(resources['beta'].unlocked == false);
         },
-        text:{
-            title:"upgrade tab",
-            effect:"unlock the upgrade tab, and various upgrades depending on how many generators are unlocked",
-            costDesc:"restart &alpha;",
-            lore:"we can discuss with the alphas on their turf. upgrades are powerful and reliable."
+        text: {
+            title: "upgrade tab",
+            effect: "unlock the upgrade tab, and various upgrades depending on how many generators are unlocked",
+            costDesc: "restart &alpha;",
+            lore: "we can discuss with the alphas on their turf. upgrades are powerful and reliable."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    skillsUnlock: {id:"skillsUnlock",
+    skillsUnlock: {
+        id: "skillsUnlock",
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showID("buttonSkills");
             player.favourability['beta']++;
             player.choices['buy skills first'] = Boolean(resources['gamma'].unlocked == false);
         },
-        text:{
-            title:"skills tab",
-            effect:"unlock the skills tab, and various skills depending on how many generators are unlocked",
-            costDesc:"restart &beta;",
-            lore:"we can talk to the betas there. skills are weak but expansive."
+        text: {
+            title: "skills tab",
+            effect: "unlock the skills tab, and various skills depending on how many generators are unlocked",
+            costDesc: "restart &beta;",
+            lore: "we can talk to the betas there. skills are weak but expansive."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    groupUnlock: {id:"groupUnlock",
+    groupUnlock: {
+        id: "groupUnlock",
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showID("buttonGroup");
             player.favourability['gamma']++;
         },
-        text:{
-            title:"&gamma;-group tab",
-            effect:"unlock the &gamma;-group tab",
-            costDesc:"restart &beta;",
-            lore:"we can have a meeting with the gammas here. the &gamma;-group offer insanely strong boosts for a price."
+        text: {
+            title: "&gamma;-group tab",
+            effect: "unlock the &gamma;-group tab",
+            costDesc: "restart &beta;",
+            lore: "we can have a meeting with the gammas here. the &gamma;-group offer insanely strong boosts for a price."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    unrealityUnlock: {id:"unrealityUnlock",
+    unrealityUnlock: {
+        id: "unrealityUnlock",
         cost: "gamma",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showID("buttonUnreality");
             showClass("power");
+            showID("helpfulTree")
             player.favourability['alpha']++;
             player.favourability['beta']++;
             player.favourability['gamma']++;
         },
-        text:{
-            title:"unreality tab",
-            effect:"unlock the unreality tab and many upgrades",
-            costDesc:"restart &gamma;",
-            lore:"unlock the ability to combine different generators. this opens up more of reality i guess."
+        text: {
+            title: "unreality tab",
+            effect: "unlock the unreality tab and many upgrades",
+            costDesc: "restart &gamma;",
+            lore: "unlock the ability to combine different generators. this opens up more of reality i guess."
         },
-        tab:"tree",
+        tab: "tree",
     },
-    alphaTimeUpgrade: {id:"alphaTimeUpgrade",
+    untoggleUnlock: {
+        id: "untoggleUnlock",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
+            showClass("togBut");
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            player.favourability['gamma']++;
+        },
+        text: {
+            title: "untoggle buttons",
+            effect: "unlock a couple of buttons to untoggle sacrificing in unreality",
+            costDesc: "restart &alpha;",
+            lore: "if you want something in reality, unreality has to stop."
+        },
+        tab: "tree",
+    },
+    alphaTimeUpgrade: {
+        id: "alphaTimeUpgrade",
+        cost: "alpha",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
             player.favourability['alpha']++;
             let factor = this.amountBought + 1;
-            resources['alpha'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
+            resources['alpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
-        text:{
-            title:"&alpha; time upgrade",
-            effect:"reduce the time it takes for the &alpha; generator to fill",
-            costDesc:"restart &alpha;",
-            lore:"it is simple, but effective. much like the alphas."
+        text: {
+            title: "&alpha; time upgrade",
+            effect: "reduce the time it takes for the &alpha; generator to fill",
+            costDesc: "restart &alpha;",
+            lore: "it is simple, but effective. much like the alphas."
         },
-        tab:"upgrade",
+        tab: "upgrade",
     },
-    betaTimeUpgrade: {id:"betaTimeUpgrade",
+    betaTimeUpgrade: {
+        id: "betaTimeUpgrade",
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             showID("betaTime2Upgrade");
             player.favourability['alpha']++;
             player.favourability['beta']++;
             let factor = 3 * this.amountBought;
-            resources['beta'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
-        text:{
-            title:"&beta; time upgrade",
-            effect:"greatly reduce the time it takes for the &beta; generator to fill",
-            costDesc:"restart &beta;",
-            lore:"spend itselfs to boost itself, a good deal."
+        text: {
+            title: "&beta; time upgrade",
+            effect: "greatly reduce the time it takes for the &beta; generator to fill",
+            costDesc: "restart &beta;",
+            lore: "spend itselfs to boost itself, a good deal."
         },
-        tab:"upgrade",
+        tab: "upgrade",
     },
-    gammaTimeUpgrade: {id:"gammaTimeUpgrade",
+    gammaTimeUpgrade: {
+        id: "gammaTimeUpgrade",
         cost: "gamma",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             player.favourability['alpha']++;
             player.favourability['gamma']++;
             let factor = 0.5 * this.amountBought + 1;
-            resources['gamma'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
+            resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
-        text:{
-            title:"&gamma; time upgrade",
-            effect:"slightly reduce the time it takes for the &gamma; generator to fill",
-            costDesc:"restart &gamma;",
-            lore:"a deal almost too good to be true, the gamma stay sceptical."
+        text: {
+            title: "&gamma; time upgrade",
+            effect: "slightly reduce the time it takes for the &gamma; generator to fill",
+            costDesc: "restart &gamma;",
+            lore: "a deal almost too good to be true, the gamma stay sceptical."
         },
-        tab:"upgrade",
+        tab: "upgrade",
     },
-    betaTime2Upgrade: {id:"betaTime2Upgrade",
+    betaTime2Upgrade: {
+        id: "betaTime2Upgrade",
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 2,
-        functionality: function() {
+        functionality: function () {
             player.favourability['alpha']++;
             player.favourability['beta']++;
             let factor = this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = {'factor': factor, 'unspent': false};
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
-        text:{
-            title:"&beta; time (time) upgrade",
-            effect:"reduce the time it takes for the &beta; generator to fill (again)",
-            costDesc:"restart &beta;",
-            lore:"did we just do this? i am sure. the beta are sure also."
+        text: {
+            title: "&beta; time (time) upgrade",
+            effect: "reduce the time it takes for the &beta; generator to fill (again)",
+            costDesc: "restart &beta;",
+            lore: "did we just do this? i am sure. the beta are sure also."
         },
-        tab:"upgrade",
+        tab: "upgrade",
     },
-    alphaPowerUpgrade: {id:"alphaPowerUpgrade",
+    alphaPowerUpgrade: {
+        id: "alphaPowerUpgrade",
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function() {
+        functionality: function () {
             player.favourability['alpha']++;
             let factor = this.amountBought + 1;
-            resources['alpha'].powerUpgrades[this.id] = {'factor': factor, 'unspent': false};
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
-        text:{
-            title:"&alpha; power upgrade",
-            effect:"increase the power of &alpha; sacrifice",
-            costDesc:"restart &alpha;",
-            lore:"and it starts, the alphas will ascend. strength in numbers(?)."
+        text: {
+            title: "&alpha; power upgrade",
+            effect: "increase the power of &alpha; sacrifice",
+            costDesc: "restart &alpha;",
+            lore: "and it starts, the alphas will ascend. strength in numbers(?)."
         },
-        tab:"upgrade",
+        tab: "upgrade",
     },
-    alphaUnspentSkill: {id:"alphaUnspentSkill",
+    alphaUnspentSkill: {
+        id: "alphaUnspentSkill",
         cost: "alpha",
         amountBought: 0,
-        amountCanBuy: 5,
-        functionality: function() {
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
-            let factor = 0.3 * this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = {'factor': factor, 'unspent': true};
+        amountCanBuy: 10,
+        functionality: function () {
+            player.favourability['alpha'] += 0.2;
+            player.favourability['beta'] += 0.2;
+            let factor = 0.15 * this.amountBought + 1;
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
-        text:{
-            title:"&alpha; unspent skill",
-            effect:"decrease the time of &beta; if &alpha; is unspent",
-            costDesc:"restart &alpha;",
-            lore:"the alphas help the betas. respect."
+        text: {
+            title: "&alpha; unspent skill",
+            effect: "decrease the time of &beta; if &alpha; is unspent",
+            costDesc: "restart &alpha;",
+            lore: "the alphas help the betas. respect."
         },
-        tab:"skills",
+        tab: "skills",
     },
-    betaUnspentTimeSkill: {id:"betaUnspentTimeSkill",
+    betaUnspentTimeSkill: {
+        id: "betaUnspentTimeSkill",
         cost: "beta",
         amountBought: 0,
-        amountCanBuy: 5,
-        functionality: function() {
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
-            let factor = 0.2 * this.amountBought + 1;
-            resources['gamma'].timeUpgrades[this.id] = {'factor': factor, 'unspent': true};
-        },
-        text:{
-            title:"&beta; unspent time upgrade",
-            effect:"if &beta; is unspent, decrease the time needed to fill &gamma;",
-            costDesc:"restart &beta;",
-            lore:"this is surely a start of a blossoming relation between the betas and the &gamma;-group."
-        },
-        tab:"skills",
-    },
-    betaUnspentPowerSkill: {id:"betaUnspentPowerSkill",
-        cost: "beta",
-        amountBought: 0,
-        amountCanBuy: 5,
-        functionality: function() {
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
+        amountCanBuy: 10,
+        functionality: function () {
+            player.favourability['beta'] += 0.2;
+            player.favourability['gamma'] += 0.2;
             let factor = 0.1 * this.amountBought + 1;
-            resources['gamma'].powerUpgrades[this.id] = {'factor': factor, 'unspent': true};
+            resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
-        text:{
-            title:"&beta; unspent power upgrade",
-            effect:"if &beta; is unspent, increase the power of &gamma; sacrifice",
-            costDesc:"restart &beta;",
-            lore:"makes sense, the betas can feed the gammas. more nutritious."
+        text: {
+            title: "&beta; unspent time skill",
+            effect: "if &beta; is unspent, decrease the time needed to fill &gamma;",
+            costDesc: "restart &beta;",
+            lore: "this is surely a start of a blossoming relation between the betas and the &gamma;-group."
         },
-        tab:"skills",
+        tab: "skills",
     },
-    gammaUnspentSkill: {id:"gammaUnspentSkill",
+    betaUnspentPowerSkill: {
+        id: "betaUnspentPowerSkill",
+        cost: "beta",
+        amountBought: 0,
+        amountCanBuy: 10,
+        functionality: function () {
+            player.favourability['beta'] += 0.2;
+            player.favourability['gamma'] += 0.2;
+            let factor = 0.05 * this.amountBought + 1;
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+        },
+        text: {
+            title: "&beta; unspent power skill",
+            effect: "if &beta; is unspent, increase the power of &gamma; sacrifice",
+            costDesc: "restart &beta;",
+            lore: "makes sense, the betas can feed the gammas. more nutritious."
+        },
+        tab: "skills",
+    },
+    gammaUnspentSkill: {
+        id: "gammaUnspentSkill",
         cost: "gamma",
         amountBought: 0,
-        amountCanBuy: 2,
-        functionality: function() {
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
+        amountCanBuy: 4,
+        functionality: function () {
+            player.favourability['beta'] += 0.5;
+            player.favourability['gamma'] += 0.5;
             let factor = 0.5 * this.amountBought + 1;
-            resources['alpha'].powerUpgrades[this.id] = {'factor': factor, 'unspent': true};
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
-        text:{
-            title:"&gamma; unspent power upgrade",
-            effect:"&alpha; sacrifice is more powerful if &gamma; is done",
-            costDesc:"restart &beta;",
-            lore:"the gammas can back the alphas. this is just a small taste of their power."
+        text: {
+            title: "&gamma; unspent power skill",
+            effect: "&alpha; sacrifice is more powerful if &gamma; is done",
+            costDesc: "restart &gamma;",
+            lore: "the gammas can back the alphas. this is just a small taste of their power."
         },
-        tab:"skills",
+        tab: "skills",
+    },
+    alphaBetaTimeSkill: {
+        id: "alphaBetaTimeSkill",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 8,
+        functionality: function () {
+            player.favourability['alpha'] += 0.25;
+            player.favourability['beta'] += 0.5;
+            let factor1 = 0.05 * this.amountBought + 1;
+            let factor2 = 0.25 * this.amountBought + 1;
+            resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
+        },
+        text: {
+            title: "&alpha;&beta; time skill",
+            effect: "&alpha; and &beta; fill up quicker",
+            costDesc: "restart &alpha;&beta;",
+            lore: "they can work together, alphas pushing the betas to work faster, whilst the betas stand behind the alphas, protected."
+        },
+        tab: "skills",
+    },
+    alphaBetaPowerSkill: {
+        id: "alphaBetaPowerSkill",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 8,
+        functionality: function () {
+            player.favourability['alpha'] += 0.25;
+            player.favourability['beta'] += 0.5;
+            let factor1 = 0.25 * this.amountBought + 1;
+            let factor2 = 0.05 * this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
+            resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
+        },
+        text: {
+            title: "&alpha;&beta; power skill",
+            effect: "&alpha; and &beta; fill up their infusions quicker",
+            costDesc: "restart &alpha;&beta;",
+            lore: "the alphas can understand how the betas work together to become stronger. the betas can use the alphas to become stronger."
+        },
+        tab: "skills",
+    },
+    alphaUnspent2Skill: {
+        id: "alphaUnspent2Skill",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 5,
+        functionality: function () {
+            player.favourability['alpha'] += 0.2;
+            player.favourability['beta'] += 0.6;
+            let factor = 0.2 * this.amountBought + 1;
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+        },
+        text: {
+            title: "&alpha;&beta; unspent+ skill",
+            effect: "increase the effectiveness of the &alpha; unspent skill",
+            costDesc: "restart &alpha;&beta;",
+            lore: "back the betas, alphas, and see where they will lead you."
+        },
+        tab: "skills",
     },
 };
 
@@ -349,7 +447,7 @@ const ogPlayer = {
     upgrades: {},
     update: 0.05,
     stopTime: false,
-    favourability: {'alpha':0, 'beta':0, 'gamma':0},
+    favourability: { 'alpha': 0, 'beta': 0, 'gamma': 0 },
     choices: {}
 };
 
@@ -377,23 +475,32 @@ class generalUpgrade {
         this.bar.style.display = 'flex';
     }
     buyOnce() {
+        let toUpdate = false;
         if (this.cost == "none") {
-            this.percentage += 100 / this.amountCanBuy;
-            this.amountBought += 1;
-            this.showPercentage();
-            this.functionality();
-            return true;
+            toUpdate = true;
         } else {
-            if (resources[this.cost].spend()) {
-            this.percentage += 100 / this.amountCanBuy;
-            this.amountBought += 1;
-            this.showPercentage();
-            this.functionality();
-            return true;
-            } else {
-            return false;
+            if (player.NAMES.includes(this.cost)) {
+                if (resources[this.cost].spend()) {
+                    toUpdate = true;
+                }
+            } else if (player.INFUSIONS.includes(this.cost)) {
+                if (infusions[this.cost].spend()) {
+                    toUpdate = true;
+                }
             }
         }
+        if (toUpdate) {
+            this.updatePercentage();
+            return true;
+        } else {
+            return false
+        }
+    }
+    updatePercentage() {
+        this.percentage += 100 / this.amountCanBuy;
+        this.amountBought += 1;
+        this.showPercentage();
+        this.functionality();
     }
 }
 
@@ -405,16 +512,20 @@ const SACBUTTONS = {
 }
 
 function switchOnSac(id) {
-    for ((item) in SACBUTTONS) {
-        if (SACBUTTONS[item].includes(id)) {
-            for (num in SACBUTTONS[item]) {
-                let button = document.querySelector(`#${SACBUTTONS[item][num]}`);
-                if ((id == SACBUTTONS[item][num]) && (!button.classList.contains("toggle"))) {
+    for ((res) in SACBUTTONS) {
+        if (SACBUTTONS[res].includes(id)) {
+            let isOn = false; // is there a current toggle button on for this resource
+            for (num in SACBUTTONS[res]) {
+                let button = document.querySelector(`#${SACBUTTONS[res][num]}`);
+                if ((id == SACBUTTONS[res][num]) && (!button.classList.contains("toggle"))) {
                     button.classList.add('toggle');
+                    isOn = true;
                 } else {
                     button.classList.remove("toggle");
                 }
             }
+            let togBut = document.querySelector(`#${res}Toggle`)
+            isOn ? togBut.classList.add("toggle") : togBut.classList.remove("toggle");
         }
     }
 }
@@ -448,15 +559,15 @@ class infusion {
         switch (name) {
             case "alphaBeta":
                 this.resUsed = ["alpha", "beta"];
-                this.buttonsToCheck = ["alphaSacAlphaBeta","betaSacAlphaBeta"];
+                this.buttonsToCheck = ["alphaSacAlphaBeta", "betaSacAlphaBeta"];
                 break
             case "alphaGamma":
                 this.resUsed = ["alpha", "gamma"];
-                this.buttonsToCheck = ["alphaSacAlphaGamma","gammaSacAlphaGamma"];
+                this.buttonsToCheck = ["alphaSacAlphaGamma", "gammaSacAlphaGamma"];
                 break
             case "betaGamma":
                 this.resUsed = ["beta", "gamma"];
-                this.buttonsToCheck = ["betaSacBetaGamma","gammaSacBetaGamma"];
+                this.buttonsToCheck = ["betaSacBetaGamma", "gammaSacBetaGamma"];
                 break
         }
         this.showPercentage();
@@ -479,10 +590,12 @@ class infusion {
     updateBar() {
         for (i in this.buttonsToCheck) {
             let button = document.querySelector(`#${this.buttonsToCheck[i]}`)
-            if (button.classList.contains("toggle")) {
+            if (button.classList.contains("toggle") && this.percentage !== 100) {
                 this.updatePercentage(this.resUsed[i]);
             }
         }
+        /* idk if i like the fact it does this below: maybe i can add a setting that does this
+        
         if (this.percentage === 100) {
             for (i in this.buttonsToCheck) {
                 let button = document.querySelector(`#${this.buttonsToCheck[i]}`);
@@ -490,18 +603,31 @@ class infusion {
                     button.classList.remove('toggle');
                 }
             }
-        }
+        }*/
     }
     updatePercentage(res) {
         let pwr = resources[res].powerSpend();
         if (pwr !== false) {
             this.percentage += (100 * (pwr / this.sacsNeeded));
-            if (this.percentage > 100) {
+            if (this.percentage >= 100) {
                 this.percentage = 100;
                 this.point = true;
             }
             this.showPercentage();
         }
+    }
+    spend() {
+        if (this.point) {
+            this.reset();
+            return true;
+        } else {
+            return false;
+        }
+    }
+    reset() {
+        this.point = false;
+        this.percentage = 0;
+        this.showPercentage();
     }
 }
 
@@ -558,7 +684,7 @@ class resource {
         if (this.percentage < 100) {
             this.percentage =
                 this.percentage + (updateTime * 100) / tempTime;
-                // updateTime should reflect if the person has tabbed out or not
+            // updateTime should reflect if the person has tabbed out or not
             if (this.percentage >= 100) {
                 this.percentage = 100;
                 this.point = true;
@@ -580,7 +706,7 @@ class resource {
                 timeUpgradeFactor *= obj.factor;
             }
         }
-        if (this.checkPrevUnspent()) {
+        if (!this.checkPrevUnspent()) {
             unspentUpgradeFactor = 1;
         }
         return this.time / (timeUpgradeFactor * unspentUpgradeFactor);
@@ -590,14 +716,14 @@ class resource {
             let powerUpgradeFactor = this.power;
             let unspentUpgradeFactor = 1;
             for (item in this.powerUpgrades) {
-                let obj = this.timeUpgrades[item];
+                let obj = this.powerUpgrades[item];
                 if (obj.unspent) {
                     unspentUpgradeFactor *= obj.factor;
                 } else {
                     powerUpgradeFactor *= obj.factor;
                 }
             }
-            if (this.checkPrevUnspent()) {
+            if (!this.checkPrevUnspent()) {
                 unspentUpgradeFactor = 1;
             }
             return powerUpgradeFactor * unspentUpgradeFactor;
@@ -747,6 +873,20 @@ function incrementBars() {
     }
 }
 
+function untoggleButtons(id) {
+    let button = document.querySelector(`#${id}`);
+    button.classList.remove("toggle")
+    for (i in player.NAMES) {
+        let res = player.NAMES[i];
+        if (id.includes(res)) {
+            for (j in SACBUTTONS[res]) {
+                button = document.querySelector(`#${SACBUTTONS[res][j]}`);
+                button.classList.remove("toggle")
+            }
+        }
+    }
+}
+
 function buttonFunction(e) {
     let id = e.target.id;
     let classes = e.target.classList;
@@ -754,11 +894,12 @@ function buttonFunction(e) {
         showTab(id)
     } else if (classes.contains("sac")) {
         switchOnSac(id);
+    } else if (classes.contains("togBut")) {
+        untoggleButtons(id);
     } else {
         upgrades[id].buyOnce();
     };
     // tabbing
-    
 }
 
 function showTab(id) {
@@ -791,26 +932,12 @@ function showTab(id) {
     button.classList.add("toggle");
 }
 
-window.onload = function () {
-    //loadPlayer();
-    fromStart();
-    //cheating();
-    addButtonListeners();
-    addButtonHover();
-    createResources();
-    startTime();
-    createUpgrade();
-    startSaves();
-    player.UNLOCKED[0] == true ? showTab("buttonGenerators") : showTab("buttonTree");
-    //loadBought();
-};
-
 function addButtonListeners() {
     let buttons = document.querySelectorAll("button");
     buttons.forEach((button) => {
         //if (!player.bought.contains(button.id)) {
-            button.addEventListener("click", buttonFunction);
-            button.classList.remove("bought");
+        button.addEventListener("click", buttonFunction);
+        button.classList.remove("bought");
         //}
     });
 }
@@ -825,7 +952,7 @@ function startTime() {
 
 function showDescription(e) {
     let id = e.target.id;
-    const tabs = ["buttonTree","buttonGenerators","buttonUpgrades","buttonSkills","buttonGroup","buttonUnreality","alphaSacAlphaBeta","betaSacAlphaBeta","alphaSacAlphaGamma","gammaSacAlphaGamma","betaSacBetaGamma","gammaSacBetaGamma"]
+    const tabs = ["buttonTree", "buttonGenerators", "buttonUpgrades", "buttonSkills", "buttonGroup", "buttonUnreality", "alphaSacAlphaBeta", "betaSacAlphaBeta", "alphaSacAlphaGamma", "gammaSacAlphaGamma", "betaSacBetaGamma", "gammaSacBetaGamma", "alphaToggle", "betaToggle", "gammaToggle", "allToggle"]
     let div = document.querySelector("#descText");
     let title = document.createElement("h2");
     div.innerHTML = "";
@@ -867,3 +994,17 @@ function loadBought() {
         if (item.amountBought >= 1) item.functionality();
     }
 }
+
+window.onload = function () {
+    //loadPlayer();
+    fromStart();
+    //cheating();
+    addButtonListeners();
+    addButtonHover();
+    createResources();
+    startTime();
+    createUpgrade();
+    startSaves();
+    player.UNLOCKED[0] == true ? showTab("buttonGenerators") : showTab("buttonTree");
+    //loadBought();
+};
