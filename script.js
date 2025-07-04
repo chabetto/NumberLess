@@ -198,8 +198,10 @@ const OGUPGRADES = {
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function () {
-            player.favourability['alpha']++;
+        functionality: function (ps = false) {
+            if (!ps) {
+                player.favourability['alpha']++;
+            }
             let factor = this.amountBought + 1;
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -216,10 +218,12 @@ const OGUPGRADES = {
         cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function () {
+        functionality: function (ps = false) {
             showID("betaTime2Upgrade");
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
+            if (!ps) {
+                player.favourability['alpha']++;
+                player.favourability['beta']++;
+            }
             let factor = 3 * this.amountBought;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -236,9 +240,11 @@ const OGUPGRADES = {
         cost: "gamma",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['gamma']++;
+        functionality: function (ps = false) {
+            if (!ps) {
+                player.favourability['alpha']++;
+                player.favourability['gamma']++;
+            }
             let factor = 0.5 * this.amountBought + 1;
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -252,19 +258,22 @@ const OGUPGRADES = {
     },
     betaTime2Upgrade: {
         id: "betaTime2Upgrade",
-        cost: "beta",
+        cost: "gamma",
         amountBought: 0,
         amountCanBuy: 2,
-        functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
+        functionality: function (ps = false) {
+            if (!ps) {
+                player.favourability['alpha']++;
+                player.favourability['beta']++;
+                player.favourability['gamma']++;
+            }
             let factor = this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
         text: {
             title: "&beta; time (time) upgrade",
             effect: "reduce the time it takes for the &beta; generator to fill (again)",
-            costDesc: "restart &beta;",
+            costDesc: "restart &gamma;",
             lore: "did we just do this? i am sure. the beta are sure also."
         },
         tab: "upgrade",
@@ -274,8 +283,10 @@ const OGUPGRADES = {
         cost: "alpha",
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function () {
-            player.favourability['alpha']++;
+        functionality: function (ps = false) {
+            if (!ps) {
+                player.favourability['alpha']++;
+            }
             let factor = this.amountBought + 1;
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -284,6 +295,50 @@ const OGUPGRADES = {
             effect: "increase the power of &alpha; sacrifice",
             costDesc: "restart &alpha;",
             lore: "and it starts, the alphas will ascend. strength in numbers(?)."
+        },
+        tab: "upgrade",
+    },
+    upgradeUpgrade: {
+        id: "upgradeUpgrade",
+        cost: "alphaGamma",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']++;
+            player.favourability['gamma']++;
+            let upgToReset = ["alphaPowerUpgrade", "betaTime2Upgrade", "gammaTimeUpgrade", "betaTimeUpgrade", "alphaTimeUpgrade"];
+            for (i in upgToReset) {
+                upgID = upgToReset[i];
+                upgrades[upgID].amountBought = 0;
+                upgrades[upgID].functionality(true);
+                upgrades[upgID].amountCanBuy++;
+                upgrades[upgID].percentage = 0;
+                addButtonClick(upgID);
+            }
+        },
+        text: {
+            title: "upgrade upgrade",
+            effect: "you can buy another level of every upgrade above",
+            costDesc: "restart &alpha;&gamma; and every upgrade above",
+            lore: "with some gamma backing we can expand the upgrades, but the gammas never give anything for free"
+        },
+        tab: "upgrade",
+    },
+    alphaBetaSkillsUpgrade: {
+        id: "alphaBetaSkillsUpgrade",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            showID("alphaBetaSkills");
+        },
+        text: {
+            title: "&alpha;&beta; skills upgrade",
+            effect: "expand the skills tree",
+            costDesc: "restart &alpha;&beta;",
+            lore: "the beta slide the alphas a deal. work with us, expand, and make yourself stronger. enough said."
         },
         tab: "upgrade",
     },
@@ -437,7 +492,7 @@ const ogPlayer = {
         "alphaGamma",
         "betaGamma",
     ],
-    TIMES: [20, 60, 300],
+    TIMES: [20, 60, 200],
     sacsNeeded: [100, 100, 100],
     POWERS: [2, 1, 10],
     percentage: [0, 0, 0],
@@ -822,6 +877,12 @@ function removeButtonClick(id) {
     button.classList.add("bought");
 }
 
+function addButtonClick(id) {
+    let button = document.querySelector(`#${id}`);
+    button.addEventListener("click", buttonFunction);
+    button.classList.remove("bought");
+}
+
 function addButtonHover() {
     let buttons = document.querySelectorAll("button");
     buttons.forEach((button) => {
@@ -830,7 +891,7 @@ function addButtonHover() {
 }
 
 function cheating() {
-    player.TIMES = [1, 1, 1, 1, 1, 1];
+    player.TIMES = [0.1, 0.1, 0.1, 1, 1, 1];
 }
 
 function fromStart() {
@@ -935,10 +996,15 @@ function showTab(id) {
 function addButtonListeners() {
     let buttons = document.querySelectorAll("button");
     buttons.forEach((button) => {
-        //if (!player.bought.contains(button.id)) {
-        button.addEventListener("click", buttonFunction);
-        button.classList.remove("bought");
-        //}
+        try {
+            if (upgrades[button.id].amountBought != upgrades[button.id].amountCanBuy) {
+                button.addEventListener("click", buttonFunction);
+                button.classList.remove("bought");
+            }
+        } catch {
+            button.addEventListener("click", buttonFunction);
+            button.classList.remove("bought");
+        }
     });
 }
 
@@ -998,12 +1064,12 @@ function loadBought() {
 window.onload = function () {
     //loadPlayer();
     fromStart();
-    //cheating();
+    cheating();
+    createResources();
+    createUpgrade();
     addButtonListeners();
     addButtonHover();
-    createResources();
     startTime();
-    createUpgrade();
     startSaves();
     player.UNLOCKED[0] == true ? showTab("buttonGenerators") : showTab("buttonTree");
     //loadBought();
