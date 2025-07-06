@@ -181,13 +181,27 @@
                         &beta;T2u
                     </button>
                 </div>
-                <div class="upgrades">
-                    <button id="upgradeUpgrade" class="alphaUpgrade upgradable power hidden">
+                <div class="upgrades hidden power">
+                    <button id="upgradeUpgrade" class="alphaUpgrade upgradable">
                         Uu
                     </button>
-                    <button id="alphaBetaSkillsUpgrade" class="alphaUpgrade upgradable power hidden">
+                    <button id="alphaBetaSkillsUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&beta;Su
                     </button>
+                    <button id="gammaPowerUpgrade" class="alphaUpgrade upgradable">
+                        &gamma;Pu
+                    </button>
+                </div>
+                <div id="alphaGammaUpgrades" class="upgrades hidden">
+                    <!--<button id="upgradeUpgrade" class="alphaUpgrade upgradable">
+                        Uu
+                    </button>
+                    <button id="alphaBetaSkillsUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&beta;Su
+                    </button>
+                    <button id="gammaPowerUpgrade" class="alphaUpgrade upgradable">
+                        &gamma;Pu
+                    </button>-->
                 </div>
             </div>
         </div>
@@ -235,7 +249,45 @@
         </div>
         <div id="tabGroup" class="game page hidden">
             <div class="container">
-                hello
+                <div id="timeGroup" class="group">
+                    <button id="alphaGammaTimeGroup" class="gammaGroup power hidden upgradable">
+                        &alpha;&gamma;Tg
+                    </button>
+                    <button id="betaTimeUnspentGroup" class="gammaGroup upgradable">
+                        &beta;TUg
+                    </button>
+                    <button id="gammaTimeGroup" class="gammaGroup upgradable hidden">
+                        &gamma;Tg
+                    </button>
+                    <button id="betaGammaTimeGroup" class="gammaGroup power hidden upgradable">
+                        &beta;&gamma;Tg
+                    </button>
+                </div>
+                <!--<div id="powerGroup" class="group power hidden">
+                    <button id="betaGammapowerGroup" class="gammaGroup upgradable">
+                        &beta;&gamma;Pg
+                    </button>
+                    <button id="betaPowerUnspentGroup" class="gammaGroup upgradable">
+                        &beta;PUg
+                    </button>
+                    <button id="gammaPowerGroup" class="gammaGroup upgradable">
+                        &gamma;Pg
+                    </button>
+                    <button id="alphaGammaPowerGroup" class="gammaGroup upgradable">
+                        &alpha;&gamma;Pg
+                    </button>
+                </div>
+                <div id="upgradeGroup" class="group hidden">
+                    <button id="gammaUpgradeGroup" class="gammaGroup upgradable">
+                        &gamma;&alpha;Ug
+                    </button>
+                    <button id="gammaUpgradesUpgradeGroup" class="gammaGroup upgradable">
+                        &gamma;UUg
+                    </button>
+                    <button id="gammaSkillGroup" class="gammaGroup upgradable">
+                        &gamma;&beta;Sg
+                    </button>
+                </div>-->
             </div>
         </div>
         <div id="desc">
@@ -248,5 +300,6 @@
         </div>
     </div>
     </div>
+    <script src="upgrades.js"></script>
     <script src="script.js"></script>
 </body>

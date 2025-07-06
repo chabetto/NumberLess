@@ -31,3 +31,6 @@ the tree grows...
 a lot of little fixes with upgrades/skills
 added some buttons that allow you to untoggle saccing of certain generators
 added 3 new skills
+
+0.07
+added 2 new upgrades
