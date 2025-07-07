@@ -195,7 +195,6 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function (ps = false) {
-            showID("betaTime2Upgrade");
             if (!ps) {
                 player.favourability['alpha']++;
                 player.favourability['beta']++;
@@ -223,7 +222,7 @@ const OGUPGRADES = {
             }
             let factor = 0.5 * this.amountBought + 1;
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
-            showID("gammaTimeGroup")
+            showID("gammaTimeGroup");
         },
         text: {
             title: "&gamma; time upgrade",
@@ -311,11 +310,12 @@ const OGUPGRADES = {
             player.favourability['beta']++;
             player.favourability['gamma']--;
             showID("alphaBetaSkills");
+            showID("alphaBetaUpgrades")
             hideID("gammaPowerUpgrade");
         },
         text: {
-            title: "&alpha;&beta; skills upgrade",
-            effect: "expand the skills tree",
+            title: "&alpha;&beta; expansion upgrade",
+            effect: "expand upgrades and skills",
             costDesc: "restart &alpha;&beta;",
             lore: "the beta slide the alphas a deal. work with us, expand, and make yourself stronger. enough said. though the gamma will not be happy."
         },
@@ -351,7 +351,7 @@ const OGUPGRADES = {
         functionality: function () {
             player.favourability['alpha'] += 0.2;
             player.favourability['beta'] += 0.2;
-            let factor = 0.15 * this.amountBought + 1;
+            let factor = 0.2 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
         text: {
@@ -370,7 +370,7 @@ const OGUPGRADES = {
         functionality: function () {
             player.favourability['beta'] += 0.2;
             player.favourability['gamma'] += 0.2;
-            let factor = 0.1 * this.amountBought + 1;
+            let factor = 0.15 * this.amountBought + 1;
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
         text: {
@@ -389,7 +389,7 @@ const OGUPGRADES = {
         functionality: function () {
             player.favourability['beta'] += 0.2;
             player.favourability['gamma'] += 0.2;
-            let factor = 0.05 * this.amountBought + 1;
+            let factor = 0.1 * this.amountBought + 1;
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
         text: {
@@ -427,8 +427,8 @@ const OGUPGRADES = {
         functionality: function () {
             player.favourability['alpha'] += 0.25;
             player.favourability['beta'] += 0.5;
-            let factor1 = 0.05 * this.amountBought + 1;
-            let factor2 = 0.25 * this.amountBought + 1;
+            let factor1 = 0.1 * this.amountBought + 1;
+            let factor2 = 0.3 * this.amountBought + 1;
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
         },
@@ -448,8 +448,8 @@ const OGUPGRADES = {
         functionality: function () {
             player.favourability['alpha'] += 0.25;
             player.favourability['beta'] += 0.5;
-            let factor1 = 0.25 * this.amountBought + 1;
-            let factor2 = 0.05 * this.amountBought + 1;
+            let factor1 = 0.3 * this.amountBought + 1;
+            let factor2 = 0.1 * this.amountBought + 1;
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
         },
@@ -469,7 +469,7 @@ const OGUPGRADES = {
         functionality: function () {
             player.favourability['alpha'] += 0.2;
             player.favourability['beta'] += 0.6;
-            let factor = 0.2 * this.amountBought + 1;
+            let factor = 0.25 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
         text: {
@@ -489,7 +489,7 @@ const OGUPGRADES = {
             player.favourability['alpha']--;
             player.favourability['beta']++;
             player.favourability['gamma']++;
-            let factor1 = 1 - 0.75 * this.amountBought;
+            let factor1 = 1 - 0.25 * this.amountBought;
             let factor2 = this.amountBought + 1;
             let factor3 = 0.5 * this.amountBought + 1;
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
@@ -501,7 +501,7 @@ const OGUPGRADES = {
             title: "&beta;&gamma; time group",
             effect: "reduce the amount of time for &beta; and &gamma; to fill, increase it for &alpha;",
             costDesc: "restart &beta;&gamma;",
-            lore: "by starting the beta gamma time division, the alpha division will have to be 'cut', as they say. this may lead to some small delays. the gamma group apologises. not profusely, but slightly."
+            lore: "by starting the beta gamma time division, the alpha division can be 'cut', as they say (this is done by the newly formed division). this may lead to some small delays. the gamma group apologises. not profusely, but slightly."
         },
         tab: "group",
     },
@@ -532,22 +532,22 @@ const OGUPGRADES = {
     },
     betaTimeUnspentGroup: {
         id: "betaTimeUnspentGroup",
-        cost: "gamma",
+        cost: "beta",
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             player.favourability['alpha']--;
             player.favourability['beta']--;
             player.favourability['gamma']++;
-            let factor1 = 1 - 0.8 * this.amountBought;
+            let factor1 = 1 - 0.2 * this.amountBought;
             let factor2 = 0.3 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': true };
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': true };
         },
         text: {
             title: "unspent &beta; time group",
-            effect: "when &alpha;/&beta; is full, increase/reduce the time it takes for &beta;/&gamma; to fill",
-            costDesc: "restart &gamma;",
+            effect: "when &alpha; is full, increase the time it takes for &beta; to fill<br>when &beta; is full, decrease the time for &gamma;",
+            costDesc: "restart &beta;",
             lore: "if the alphas and betas have finished their work, we can send them on their way. the gammas work more efficiently anyways."
         },
         tab: "group",
@@ -561,8 +561,8 @@ const OGUPGRADES = {
             player.favourability['alpha']--;
             player.favourability['beta']--;
             player.favourability['gamma']++;
-            let factor1 = 1 - 0.8 * this.amountBought;
-            let factor2 = 1 - 0.7 * this.amountBought;
+            let factor1 = 1 - 0.2 * this.amountBought;
+            let factor2 = 1 - 0.3 * this.amountBought;
             let factor3 = 0.7 * this.amountBought + 1;
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
@@ -570,9 +570,105 @@ const OGUPGRADES = {
         },
         text: {
             title: "&gamma; time group",
-            effect: "decrease/decrease/increase the rate at which &alpha;/&beta;/&gamma; fills",
+            effect: "decrease the rate at which &alpha; and &beta; fills<br>increase it for &gamma;",
+            costDesc: "restart &gamma;",
+            lore: "the &gamma;-group has hired consultants to tell them what they already want them to do: cut the fat off the alpha and beta division."
+        },
+        tab: "group",
+    },
+    betaGammaPowerGroup: {
+        id: "betaGammaPowerGroup",
+        cost: "betaGamma",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']--;
+            player.favourability['beta']++;
+            player.favourability['gamma']++;
+            let factor1 = 1 - 0.3 * this.amountBought;
+            let factor2 = 0.5 * this.amountBought + 1;
+            let factor3 = this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
+            resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
+            hideID("alphaGammaPowerGroup")
+        },
+        text: {
+            title: "&beta;&gamma; power group",
+            effect: "increase the sacrificial power of &beta; and &gamma;, reduce it for &alpha;",
+            costDesc: "restart &beta;&gamma;",
+            lore: "the &gamma;-group are scaling back the alpha protocol, seems like logging operations will move abroad. the betas will work on acquiring fresh talent, preferably the free kind."
+        },
+        tab: "group",
+    },
+    alphaGammaPowerGroup: {
+        id: "alphaGammaPowerGroup",
+        cost: "alphaGamma",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']++;
+            player.favourability['beta']--;
+            player.favourability['gamma']++;
+            let factor1 = this.amountBought + 1;
+            let factor2 = 1 - 0.3 * this.amountBought;
+            let factor3 = 0.5 * this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
+            resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
+            hideID("betaGammaPowerGroup")
+        },
+        text: {
+            title: "&alpha;&gamma; power group",
+            effect: "&alpha; and &gamma; fill infusions quicker, but &beta; fills them less",
             costDesc: "restart &alpha;&gamma;",
-            lore: "the alpha gamma time division focus on logging, mining, and crowd control situations. the beta division will be streamlined."
+            lore: "as the &gamma;-group employ more alphas, they expand into diplomacy, mostly by strongarming. note: the &gamma;-group does not endorse violence."
+        },
+        tab: "group",
+    },
+    betaPowerUnspentGroup: {
+        id: "betaPowerUnspentGroup",
+        cost: "beta",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']--;
+            player.favourability['beta']--;
+            player.favourability['gamma']++;
+            let factor1 = 1 - 0.2 * this.amountBought;
+            let factor2 = 0.5 * this.amountBought + 1;
+            resources['beta'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': true };
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': true };
+        },
+        text: {
+            title: "unspent &beta; power group",
+            effect: "when &alpha; is full, &beta; sacrifice becomes less powerful<br>when &beta; is done, &gamma; fills up the infusion bar more",
+            costDesc: "restart &beta;",
+            lore: "the gamma have researched new blood leaching technologies that only work on consecutive generators. luckily it can be negatively configured."
+        },
+        tab: "group",
+    },
+    gammaPowerGroup: {
+        id: "gammaPowerGroup",
+        cost: "gamma",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']--;
+            player.favourability['beta']--;
+            player.favourability['gamma']++;
+            let factor1 = 1 - 0.3 * this.amountBought;
+            let factor2 = 1 - 0.2 * this.amountBought;
+            let factor3 = 0.7 * this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
+            resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
+        },
+        text: {
+            title: "&gamma; power group",
+            effect: "decrease the sacrifice power of &alpha; and &beta;<br>increase the power of &gamma;",
+            costDesc: "restart &gamma;",
+            lore: "the &gamma;eo says we need to build a new floor. the cheaper alternative is to kick out the alphas and betas on the floor below."
         },
         tab: "group",
     },

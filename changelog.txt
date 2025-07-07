@@ -38,3 +38,8 @@ added 2 new upgrades
 0.08
 added upgrade
 added 4 new group upgrades
+
+0.09
+changed some variables for upgrades
+added 4 brand spanking new group upgrades
+added ideas for 6 new upgrades, 3 skills, 4 group upgrades

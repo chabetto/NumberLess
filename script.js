@@ -15,8 +15,8 @@ const ogPlayer = {
         "alphaGamma",
         "betaGamma",
     ],
-    TIMES: [20, 60, 300],
-    sacsNeeded: [100, 300, 300],
+    TIMES: [20, 60, 200],
+    sacsNeeded: [50, 150, 150],
     POWERS: [2, 1, 10],
     percentage: [0, 0, 0],
     infusionPercentage: [0, 0, 0],
@@ -197,6 +197,7 @@ class infusion {
     spend() {
         if (this.point) {
             this.reset();
+            this.sacsNeeded += 10;
             return true;
         } else {
             return false;
@@ -589,7 +590,7 @@ function loadBought() {
 window.onload = function () {
     //loadPlayer();
     fromStart();
-    //cheating();
+    cheating();
     createResources();
     createUpgrade();
     addButtonListeners();
