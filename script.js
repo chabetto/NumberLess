@@ -388,6 +388,7 @@ function showClass(classStr) {
 function hideID(idstr) {
     let div = document.querySelector(`#${idstr}`);
     div.classList.add("hidden");
+    div.classList.remove("toggle");
 }
 
 function showID(idstr) {
@@ -587,10 +588,17 @@ function loadBought() {
     }
 }
 
+function resetUpgrade(id) {
+    upgrades[id].amountBought = 0;
+    upgrades[id].functionality(true);
+    upgrades[id].percentage = 0;
+    addButtonClick(id);
+}
+
 window.onload = function () {
     //loadPlayer();
     fromStart();
-    cheating();
+    //cheating();
     createResources();
     createUpgrade();
     addButtonListeners();

@@ -199,7 +199,7 @@ const OGUPGRADES = {
                 player.favourability['alpha']++;
                 player.favourability['beta']++;
             }
-            let factor = 3 * this.amountBought;
+            let factor = 2 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
         text: {
@@ -285,11 +285,8 @@ const OGUPGRADES = {
             let upgToReset = ["alphaPowerUpgrade", "betaTime2Upgrade", "gammaTimeUpgrade", "betaTimeUpgrade", "alphaTimeUpgrade"];
             for (i in upgToReset) {
                 upgID = upgToReset[i];
-                upgrades[upgID].amountBought = 0;
-                upgrades[upgID].functionality(true);
                 upgrades[upgID].amountCanBuy++;
-                upgrades[upgID].percentage = 0;
-                addButtonClick(upgID);
+                resetUpgrade(upgID);
             }
         },
         text: {
@@ -300,8 +297,8 @@ const OGUPGRADES = {
         },
         tab: "upgrade",
     },
-    alphaBetaSkillsUpgrade: {
-        id: "alphaBetaSkillsUpgrade",
+    alphaBetaExpansionUpgrade: {
+        id: "alphaBetaExpansionUpgrade",
         cost: "alphaBeta",
         amountBought: 0,
         amountCanBuy: 1,
@@ -340,6 +337,94 @@ const OGUPGRADES = {
             effect: "increase the power of &gamma; sacrifice, unlock a gamma group upgrade",
             costDesc: "restart &alpha;&gamma;",
             lore: "we welcome gamma to alpha lands, we shake hands. alphas believe in strength in numbers, the gammas believe in strength. this is the start of a mutually beneficial relationship."
+        },
+        tab: "upgrade",
+    },
+    alphaBetaMutualUpgrade: {
+        id: "alphaBetaMutualUpgrade",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 3,
+        functionality: function () {
+            if (this.amountBought == this.amountCanBuy) {
+                player.favourability['alpha']++;
+                player.favourability['beta']++;
+                player.favourability['gamma']--;
+                resources.alpha.prev = "beta";
+                hideID("alphaBetaUpgradeUpgrade");
+            }
+        },
+        text: {
+            title: "&alpha;-&beta; mutual upgrade",
+            effect: "if &beta; is unspent, boost &alpha; sacrifice power",
+            costDesc: "restart &alpha;&beta; (needs a couple restarts)",
+            lore: "the gammas have officially closed down the alpha wing, a huge sigh of relief. now the alphas can use the betas help for their own mining operation. obviously after they finish whatever business they have."
+        },
+        tab: "upgrade",
+    },
+    gammaDespansionUpgrade: {
+        id: "gammaDespansionUpgrade",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            player.favourability['alpha']++;
+            player.favourability['beta']++;
+            player.favourability['gamma']--;
+            hideID("betaGamma");
+            (this.amountCanBuy == 1) ? showID("alphaBetaMutualUpgrade") : hideID("alphaBetaMutualUpgrade");
+            showID("alphaBetaUpgradeUpgrade");
+            hideID("betaSacBetaGamma");
+            hideID("gammaSacBetaGamma");
+            let factorA = 0.5 * this.amountBought + 1;
+            let factorB = this.amountBought + 1;
+            let factorC = 1 - 0.2 * this.amountBought;
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factorA, 'unspent': false };
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factorB, 'unspent': false };
+            resources['gamma'].timeUpgrades[this.id] = { 'factor': factorC, 'unspent': false };
+        },
+        text: {
+            title: "&gamma; despansion upgrade",
+            effect: "boost &alpha; power and reduce &beta; time slightly<br>increase &gamma; time and remove the &beta;&gamma; sac buttons",
+            costDesc: "restart &alpha;&beta;",
+            lore: "a floor of the gamma building has completely closed. the alphas may have mined too close meaning they need to scale down operation. motivation for alphas and betas increase. gammas give up their relations with the alphas."
+        },
+        tab: "upgrade",
+    },
+    alphaBetaUpgradeUpgrade: {
+        id: "alphaBetaUpgradeUpgrade",
+        cost: "alphaBeta",
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function () {
+            if (this.amountBought == this.amountCanBuy) {
+                player.favourability['alpha']++;
+                player.favourability['beta']--;
+                player.favourability['gamma']--;
+                let toHide = ["alphaBetaMutualUpgrade", "gammaTimeUpgrade"]
+                for (i in toHide) {
+                    upgID = toHide[i];
+                    resetUpgrade(upgID);
+                    hideID(upgID);
+                };
+                let toReset = ["betaTimeUpgrade", "betaTime2Upgrade"]
+                for (i in toReset) {
+                    upgID = toReset[i];
+                    resetUpgrade(upgID);
+                };
+                let toInc = ["gammaDespansionUpgrade", "alphaPowerUpgrade", "alphaTimeUpgrade"]
+                for (i in toInc) {
+                    upgID = toInc[i];
+                    upgrades[upgID].amountCanBuy++;
+                    resetUpgrade(upgID);
+                };
+            }
+        },
+        text: {
+            title: "&alpha;&beta; upgrade upgrade",
+            effect: "restart certain upgrades and remove some<br>increase the number you can buy of certain upgrades",
+            costDesc: "restart &alpha;&beta;",
+            lore: "i think the alphas are serious about mining to the centre of the earth, the beta are concerned. theyre going right under the gamma building... this might not be good."
         },
         tab: "upgrade",
     },
