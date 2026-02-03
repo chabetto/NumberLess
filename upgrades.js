@@ -1,14 +1,14 @@
 const OGUPGRADES = {
     alphaUnlock: {
         id: "alphaUnlock",
-        cost: "none",
+        cost: ["none"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showClass("alpha");
             player.UNLOCKED[0] = true;
             resources['alpha'].unlocked = true;
-            player.favourability['alpha']++;
         },
         text: {
             title: "unlock &alpha;",
@@ -20,14 +20,14 @@ const OGUPGRADES = {
     },
     betaUnlock: {
         id: "betaUnlock",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'beta': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showClass("beta")
             player.UNLOCKED[1] = true;
             resources['beta'].unlocked = true;
-            player.favourability['beta']++;
             player.choices['buy beta first'] = Boolean(upgrades['upgradesUnlock'].amountBought == 0);
         },
         text: {
@@ -40,14 +40,14 @@ const OGUPGRADES = {
     },
     gammaUnlock: {
         id: "gammaUnlock",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showClass("gamma")
             player.UNLOCKED[2] = true;
             resources['gamma'].unlocked = true;
-            player.favourability['gamma']++;
             player.choices['buy gamma first'] = Boolean(upgrades['skillsUnlock'].amountBought == 0);
         },
         text: {
@@ -60,7 +60,8 @@ const OGUPGRADES = {
     },
     isDoneUnlock: {
         id: "isDoneUnlock",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
@@ -78,12 +79,12 @@ const OGUPGRADES = {
     },
     upgradesUnlock: {
         id: "upgradesUnlock",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showID("buttonUpgrades");
-            player.favourability['alpha']++;
             player.choices['buy upgrades first'] = Boolean(resources['beta'].unlocked == false);
         },
         text: {
@@ -96,12 +97,12 @@ const OGUPGRADES = {
     },
     skillsUnlock: {
         id: "skillsUnlock",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'beta': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showID("buttonSkills");
-            player.favourability['beta']++;
             player.choices['buy skills first'] = Boolean(resources['gamma'].unlocked == false);
         },
         text: {
@@ -114,12 +115,12 @@ const OGUPGRADES = {
     },
     groupUnlock: {
         id: "groupUnlock",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showID("buttonGroup");
-            player.favourability['gamma']++;
         },
         text: {
             title: "&gamma;-group tab",
@@ -131,16 +132,14 @@ const OGUPGRADES = {
     },
     unrealityUnlock: {
         id: "unrealityUnlock",
-        cost: "gamma",
+        cost: ["gamma"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showID("buttonUnreality");
             showClass("power");
             showID("helpfulTree")
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
         },
         text: {
             title: "unreality tab",
@@ -152,14 +151,12 @@ const OGUPGRADES = {
     },
     untoggleUnlock: {
         id: "untoggleUnlock",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
             showClass("togBut");
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
         },
         text: {
             title: "untoggle buttons",
@@ -171,13 +168,11 @@ const OGUPGRADES = {
     },
     alphaTimeUpgrade: {
         id: "alphaTimeUpgrade",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function (ps = false) {
-            if (!ps) {
-                player.favourability['alpha']++;
-            }
+        functionality: function () {
             let factor = this.amountBought + 1;
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -191,14 +186,11 @@ const OGUPGRADES = {
     },
     betaTimeUpgrade: {
         id: "betaTimeUpgrade",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'alpha': 1, 'beta': 1 },
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function (ps = false) {
-            if (!ps) {
-                player.favourability['alpha']++;
-                player.favourability['beta']++;
-            }
+        functionality: function () {
             let factor = 2 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -212,14 +204,11 @@ const OGUPGRADES = {
     },
     gammaTimeUpgrade: {
         id: "gammaTimeUpgrade",
-        cost: "gamma",
+        cost: ["gamma"],
+        favourability: { 'alpha': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function (ps = false) {
-            if (!ps) {
-                player.favourability['alpha']++;
-                player.favourability['gamma']++;
-            }
+        functionality: function () {
             let factor = 0.5 * this.amountBought + 1;
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
             showID("gammaTimeGroup");
@@ -234,15 +223,11 @@ const OGUPGRADES = {
     },
     betaTime2Upgrade: {
         id: "betaTime2Upgrade",
-        cost: "gamma",
+        cost: ["gamma"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 2,
-        functionality: function (ps = false) {
-            if (!ps) {
-                player.favourability['alpha']++;
-                player.favourability['beta']++;
-                player.favourability['gamma']++;
-            }
+        functionality: function () {
             let factor = this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -256,13 +241,11 @@ const OGUPGRADES = {
     },
     alphaPowerUpgrade: {
         id: "alphaPowerUpgrade",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
-        functionality: function (ps = false) {
-            if (!ps) {
-                player.favourability['alpha']++;
-            }
+        functionality: function () {
             let factor = this.amountBought + 1;
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
         },
@@ -276,12 +259,11 @@ const OGUPGRADES = {
     },
     upgradeUpgrade: {
         id: "upgradeUpgrade",
-        cost: "alphaGamma",
+        cost: ["alphaGamma"],
+        favourability: { 'alpha': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['gamma']++;
             let upgToReset = ["alphaPowerUpgrade", "betaTime2Upgrade", "gammaTimeUpgrade", "betaTimeUpgrade", "alphaTimeUpgrade"];
             for (i in upgToReset) {
                 upgID = upgToReset[i];
@@ -299,13 +281,11 @@ const OGUPGRADES = {
     },
     alphaBetaExpansionUpgrade: {
         id: "alphaBetaExpansionUpgrade",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': -1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
-            player.favourability['gamma']--;
             showID("alphaBetaSkills");
             showID("alphaBetaUpgrades")
             hideID("gammaPowerUpgrade");
@@ -320,12 +300,11 @@ const OGUPGRADES = {
     },
     gammaPowerUpgrade: {
         id: "gammaPowerUpgrade",
-        cost: "alphaGamma",
+        cost: ["alphaGamma"],
+        favourability: { 'alpha': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['gamma']++;
             let factor = 1.5 * this.amountBought + 1;
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
             hideID("alphaBetaSkillsUpgrade");
@@ -342,16 +321,13 @@ const OGUPGRADES = {
     },
     alphaBetaMutualUpgrade: {
         id: "alphaBetaMutualUpgrade",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1 / 3, 'beta': 1 / 3, 'gamma': -1 / 3 },
         amountBought: 0,
         amountCanBuy: 3,
         functionality: function () {
             if (this.amountBought == this.amountCanBuy) {
-                player.favourability['alpha']++;
-                player.favourability['beta']++;
-                player.favourability['gamma']--;
                 resources.alpha.prev = "beta";
-                hideID("alphaBetaUpgradeUpgrade");
             }
         },
         text: {
@@ -364,15 +340,13 @@ const OGUPGRADES = {
     },
     gammaDespansionUpgrade: {
         id: "gammaDespansionUpgrade",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': -1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['beta']++;
-            player.favourability['gamma']--;
             hideID("betaGamma");
-            (this.amountCanBuy == 1) ? showID("alphaBetaMutualUpgrade") : hideID("alphaBetaMutualUpgrade");
+            showID("alphaBetaMutualUpgrade");
             showID("alphaBetaUpgradeUpgrade");
             hideID("betaSacBetaGamma");
             hideID("gammaSacBetaGamma");
@@ -393,20 +367,12 @@ const OGUPGRADES = {
     },
     alphaBetaUpgradeUpgrade: {
         id: "alphaBetaUpgradeUpgrade",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1 / 2, 'beta': -1 / 2, 'gamma': -1 / 2 },
         amountBought: 0,
         amountCanBuy: 2,
         functionality: function () {
             if (this.amountBought == this.amountCanBuy) {
-                player.favourability['alpha']++;
-                player.favourability['beta']--;
-                player.favourability['gamma']--;
-                let toHide = ["alphaBetaMutualUpgrade", "gammaTimeUpgrade"]
-                for (i in toHide) {
-                    upgID = toHide[i];
-                    resetUpgrade(upgID);
-                    hideID(upgID);
-                };
                 let toReset = ["betaTimeUpgrade", "betaTime2Upgrade"]
                 for (i in toReset) {
                     upgID = toReset[i];
@@ -422,7 +388,7 @@ const OGUPGRADES = {
         },
         text: {
             title: "&alpha;&beta; upgrade upgrade",
-            effect: "restart certain upgrades and remove some<br>increase the number you can buy of certain upgrades",
+            effect: "restart certain upgrades<br>increase the number you can buy of certain upgrades",
             costDesc: "restart &alpha;&beta;",
             lore: "i think the alphas are serious about mining to the centre of the earth, the beta are concerned. theyre going right under the gamma building... this might not be good."
         },
@@ -430,12 +396,11 @@ const OGUPGRADES = {
     },
     alphaUnspentSkill: {
         id: "alphaUnspentSkill",
-        cost: "alpha",
+        cost: ["alpha"],
+        favourability: { 'alpha': 0.2, 'beta': 0.2 },
         amountBought: 0,
         amountCanBuy: 10,
         functionality: function () {
-            player.favourability['alpha'] += 0.2;
-            player.favourability['beta'] += 0.2;
             let factor = 0.2 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
@@ -449,12 +414,11 @@ const OGUPGRADES = {
     },
     betaUnspentTimeSkill: {
         id: "betaUnspentTimeSkill",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'beta': 0.2, 'gamma': 0.2 },
         amountBought: 0,
         amountCanBuy: 10,
         functionality: function () {
-            player.favourability['beta'] += 0.2;
-            player.favourability['gamma'] += 0.2;
             let factor = 0.15 * this.amountBought + 1;
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
@@ -468,12 +432,11 @@ const OGUPGRADES = {
     },
     betaUnspentPowerSkill: {
         id: "betaUnspentPowerSkill",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'beta': 0.2, 'gamma': 0.2 },
         amountBought: 0,
         amountCanBuy: 10,
         functionality: function () {
-            player.favourability['beta'] += 0.2;
-            player.favourability['gamma'] += 0.2;
             let factor = 0.1 * this.amountBought + 1;
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
@@ -487,12 +450,11 @@ const OGUPGRADES = {
     },
     gammaUnspentSkill: {
         id: "gammaUnspentSkill",
-        cost: "gamma",
+        cost: ["gamma"],
+        favourability: { 'beta': 0.5, 'gamma': 0.5 },
         amountBought: 0,
         amountCanBuy: 4,
         functionality: function () {
-            player.favourability['beta'] += 0.5;
-            player.favourability['gamma'] += 0.5;
             let factor = 0.5 * this.amountBought + 1;
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
@@ -506,12 +468,11 @@ const OGUPGRADES = {
     },
     alphaBetaTimeSkill: {
         id: "alphaBetaTimeSkill",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 0.25, 'beta': 0.5 },
         amountBought: 0,
         amountCanBuy: 8,
         functionality: function () {
-            player.favourability['alpha'] += 0.25;
-            player.favourability['beta'] += 0.5;
             let factor1 = 0.1 * this.amountBought + 1;
             let factor2 = 0.3 * this.amountBought + 1;
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
@@ -527,12 +488,11 @@ const OGUPGRADES = {
     },
     alphaBetaPowerSkill: {
         id: "alphaBetaPowerSkill",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 0.25, 'beta': 0.5 },
         amountBought: 0,
         amountCanBuy: 8,
         functionality: function () {
-            player.favourability['alpha'] += 0.25;
-            player.favourability['beta'] += 0.5;
             let factor1 = 0.3 * this.amountBought + 1;
             let factor2 = 0.1 * this.amountBought + 1;
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
@@ -548,12 +508,11 @@ const OGUPGRADES = {
     },
     alphaUnspent2Skill: {
         id: "alphaUnspent2Skill",
-        cost: "alphaBeta",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 0.2, 'beta': 0.6 },
         amountBought: 0,
         amountCanBuy: 5,
         functionality: function () {
-            player.favourability['alpha'] += 0.2;
-            player.favourability['beta'] += 0.6;
             let factor = 0.25 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
         },
@@ -567,13 +526,11 @@ const OGUPGRADES = {
     },
     betaGammaTimeGroup: {
         id: "betaGammaTimeGroup",
-        cost: "betaGamma",
+        cost: ["betaGamma"],
+        favourability: { 'alpha': -1, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']--;
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
             let factor1 = 1 - 0.25 * this.amountBought;
             let factor2 = this.amountBought + 1;
             let factor3 = 0.5 * this.amountBought + 1;
@@ -592,13 +549,11 @@ const OGUPGRADES = {
     },
     alphaGammaTimeGroup: {
         id: "alphaGammaTimeGroup",
-        cost: "alphaGamma",
+        cost: ["alphaGamma"],
+        favourability: { 'alpha': 1, 'beta': -1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['beta']--;
-            player.favourability['gamma']++;
             let factor1 = 0.5 * this.amountBought + 1;
             let factor2 = 1 - 0.5 * this.amountBought;
             let factor3 = 0.3 * this.amountBought + 1;
@@ -617,13 +572,11 @@ const OGUPGRADES = {
     },
     betaTimeUnspentGroup: {
         id: "betaTimeUnspentGroup",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'alpha': -1, 'beta': -1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']--;
-            player.favourability['beta']--;
-            player.favourability['gamma']++;
             let factor1 = 1 - 0.2 * this.amountBought;
             let factor2 = 0.3 * this.amountBought + 1;
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': true };
@@ -639,13 +592,11 @@ const OGUPGRADES = {
     },
     gammaTimeGroup: {
         id: "gammaTimeGroup",
-        cost: "gamma",
+        cost: ["gamma"],
+        favourability: { 'alpha': -1, 'beta': -1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']--;
-            player.favourability['beta']--;
-            player.favourability['gamma']++;
             let factor1 = 1 - 0.2 * this.amountBought;
             let factor2 = 1 - 0.3 * this.amountBought;
             let factor3 = 0.7 * this.amountBought + 1;
@@ -663,13 +614,11 @@ const OGUPGRADES = {
     },
     betaGammaPowerGroup: {
         id: "betaGammaPowerGroup",
-        cost: "betaGamma",
+        cost: ["betaGamma"],
+        favourability: { 'alpha': -1, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']--;
-            player.favourability['beta']++;
-            player.favourability['gamma']++;
             let factor1 = 1 - 0.3 * this.amountBought;
             let factor2 = 0.5 * this.amountBought + 1;
             let factor3 = this.amountBought + 1;
@@ -688,13 +637,11 @@ const OGUPGRADES = {
     },
     alphaGammaPowerGroup: {
         id: "alphaGammaPowerGroup",
-        cost: "alphaGamma",
+        cost: ["alphaGamma"],
+        favourability: { 'alpha': 1, 'beta': -1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']++;
-            player.favourability['beta']--;
-            player.favourability['gamma']++;
             let factor1 = this.amountBought + 1;
             let factor2 = 1 - 0.3 * this.amountBought;
             let factor3 = 0.5 * this.amountBought + 1;
@@ -713,13 +660,11 @@ const OGUPGRADES = {
     },
     betaPowerUnspentGroup: {
         id: "betaPowerUnspentGroup",
-        cost: "beta",
+        cost: ["beta"],
+        favourability: { 'alpha': -1, 'beta': -1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']--;
-            player.favourability['beta']--;
-            player.favourability['gamma']++;
             let factor1 = 1 - 0.2 * this.amountBought;
             let factor2 = 0.5 * this.amountBought + 1;
             resources['beta'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': true };
@@ -735,13 +680,11 @@ const OGUPGRADES = {
     },
     gammaPowerGroup: {
         id: "gammaPowerGroup",
-        cost: "gamma",
+        cost: ["gamma"],
+        favourability: { 'alpha': -1, 'beta': -1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            player.favourability['alpha']--;
-            player.favourability['beta']--;
-            player.favourability['gamma']++;
             let factor1 = 1 - 0.3 * this.amountBought;
             let factor2 = 1 - 0.2 * this.amountBought;
             let factor3 = 0.7 * this.amountBought + 1;

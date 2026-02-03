@@ -33,7 +33,7 @@ const ogPlayer = {
 let player = {};
 
 class generalUpgrade {
-    constructor(id, cost, amountBought, amountCanBuy, functionality, text) {
+    constructor(id, cost, favourability, amountBought, amountCanBuy, functionality, text) {
         this.id = id;
         this.button = document.querySelector(`#${id}`);
         this.bar = document.querySelector(`#descBar`);
@@ -43,8 +43,10 @@ class generalUpgrade {
         this.amountCanBuy = amountCanBuy;
         this.functionality = functionality;
         this.text = text;
+        this.favourability = favourability;
     }
     showPercentage() {
+        this.percentage = (this.amountBought / this.amountCanBuy) * 100;
         if (Math.round(this.percentage) >= 100) {
             this.percentage = 100;
             removeButtonClick(this.id)
@@ -52,23 +54,34 @@ class generalUpgrade {
         this.bar.style.width = `${this.percentage}%`;
         this.bar.style.display = 'flex';
     }
+    updateFavourability() {
+        for (i in this.favourability) {
+            player.favourability[i] += this.favourability[i];
+        }
+    }
     buyOnce() {
-        let toUpdate = false;
-        if (this.cost == "none") {
-            toUpdate = true;
-        } else {
-            if (player.NAMES.includes(this.cost)) {
-                if (resources[this.cost].spend()) {
-                    toUpdate = true;
-                }
-            } else if (player.INFUSIONS.includes(this.cost)) {
-                if (infusions[this.cost].spend()) {
-                    toUpdate = true;
-                }
+        let toUpdate = true;
+        let i = 0;
+        while (toUpdate && i < this.cost.length) {
+            let item = this.cost[i];
+            if (player.NAMES.includes(item)) {
+                toUpdate = resources[item].point;
+            } else if (player.INFUSIONS.includes(item)) {
+                toUpdate = infusions[item].point;
             }
+            i++;
         }
         if (toUpdate) {
+            for (i in this.cost) {
+                item = this.cost[i];
+                if (player.NAMES.includes(item)) {
+                    resources[item].spend();
+                } else if (player.INFUSIONS.includes(item)) {
+                    infusions[item].spend();
+                }
+            }
             this.updatePercentage();
+            this.updateFavourability();
             return true;
         } else {
             return false
@@ -353,19 +366,26 @@ function createResources() {
 let upgrades = {};
 
 function createUpgrade() {
+    upgrades = {};
     let buttons = document.querySelectorAll(".upgradable")
     buttons.forEach((button) => {
         let id = button.id;
         let info = player.upgrades[id];
+        let oldInfo = OGUPGRADES[id];
         //console.log(id);
         upgrades[id] = new generalUpgrade(
-            info.id,
-            info.cost,
-            info.amountBought,
-            info.amountCanBuy,
-            info.functionality,
-            info.text
+            oldInfo.id,
+            oldInfo.cost,
+            oldInfo.favourability,
+            oldInfo.amountBought,
+            oldInfo.amountCanBuy,
+            oldInfo.functionality,
+            oldInfo.text
         );
+        if (info !== undefined) {
+            upgrades[id].amountBought = info[0];
+            upgrades[id].amountCanBuy = info[1];
+        }
     });
 }
 
@@ -422,11 +442,13 @@ function cheating() {
 
 function fromStart() {
     player = ogPlayer;
-    player.upgrades = OGUPGRADES;
+    upgrades = OGUPGRADES;
 }
 
 function saving() {
-    player.upgrades = upgrades;
+    for (item in upgrades) {
+        player.upgrades[item] = [upgrades[item].amountBought, upgrades[item].amountCanBuy]
+    }
     player.resources = resources;
     localStorage.setItem("player", JSON.stringify(player));
     console.log("saved");
@@ -440,10 +462,7 @@ function startSaves() {
 }
 
 function loadPlayer() {
-    if (localStorage.getItem("player") === null) {
-        player = ogPlayer;
-        upgrades = OGUPGRADES;
-    } else {
+    if (localStorage.getItem("player") !== null) {
         player = JSON.parse(localStorage.getItem("player"));
         upgrades = JSON.parse(localStorage.getItem("upgrades"));
     }
@@ -555,11 +574,11 @@ function showDescription(e) {
         let cost = document.createElement("p");
         let lore = document.createElement("h4");
         //if (!tabs.includes(id)) {
-            let txt = upgrades[id].text;
-            title.innerHTML = txt.title
-            effect.innerHTML = txt.effect;
-            cost.innerHTML = txt.costDesc;
-            lore.innerHTML = txt.lore;
+        let txt = upgrades[id].text;
+        title.innerHTML = txt.title
+        effect.innerHTML = txt.effect;
+        cost.innerHTML = txt.costDesc;
+        lore.innerHTML = txt.lore;
         //}
         div.appendChild(title);
         div.appendChild(effect);
@@ -583,21 +602,25 @@ function showDescription(e) {
 }
 
 function loadBought() {
-    for (item in player.upgrades) {
-        if (item.amountBought >= 1) item.functionality();
+    let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade"]
+    for (item in upgrades) {
+        if (upgrades[item].amountBought >= 1) {
+            if (!toSkip.includes(upgrades[item].id)) upgrades[item].functionality();
+            upgrades[item].showPercentage();
+        }
     }
 }
 
 function resetUpgrade(id) {
     upgrades[id].amountBought = 0;
-    upgrades[id].functionality(true);
+    upgrades[id].functionality();
     upgrades[id].percentage = 0;
     addButtonClick(id);
 }
 
 window.onload = function () {
-    //loadPlayer();
     fromStart();
+    loadPlayer();
     //cheating();
     createResources();
     createUpgrade();
@@ -606,5 +629,10 @@ window.onload = function () {
     startTime();
     startSaves();
     player.UNLOCKED[0] == true ? showTab("buttonGenerators") : showTab("buttonTree");
-    //loadBought();
+    loadBought();
 };
+
+function completeReset() {
+    localStorage.clear();
+    location.reload();
+}

@@ -46,3 +46,8 @@ added ideas for 6 new upgrades, 3 skills, 4 group upgrades
 
 0.10
 added 3 NEW unique alpha beta upgrades
+
+0.11
+added loading + changed upgrade to work with it
+changed what is saved to local storage as well
+changed how favourability is stored (again for loading/resetting purposes)
