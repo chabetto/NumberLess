@@ -19,7 +19,7 @@ const ogPlayer = {
     sacsNeeded: [50, 150, 150],
     POWERS: [2, 1, 10],
     percentage: [0, 0, 0],
-    infusionPercentage: [0, 0, 0],
+    sacsDone: [0, 0, 0],
     UNLOCKED: [false, false, false],
     infusionUnlocked: [false, false, false],
     upgrades: {},
@@ -131,20 +131,21 @@ function switchOffAllSac() {
 }
 
 class infusion {
-    constructor(name, time, percentage, unlocked) {
+    constructor(name, sacsNeeded, sacsDone, unlocked) {
         this.name = name;
         this.isdone = document.querySelector(`#${name}IsDone`);
         this.bar = document.querySelector(`#${name}Bar`);
-        this.point = Boolean(percentage === 100);
-        this.sacsNeeded = time;
-        this.percentage = percentage;
+        this.sacsNeeded = sacsNeeded;
+        this.sacsDone = sacsDone;
+        this.percentage = 100 * (sacsDone / sacsNeeded);
+        this.point = (sacsDone === sacsNeeded);
         if (unlocked) {
             this.unlock();
             this.showPercentage();
         } else {
             this.hide();
         }
-        this.index = player.NAMES.indexOf(this.name);
+        this.index = player.INFUSIONS.indexOf(this.name);
         this.resUsed;
         this.buttonsToCheck;
         switch (name) {
@@ -173,7 +174,7 @@ class infusion {
     }
     showPercentage() {
         this.bar.style.width = `${this.percentage}%`
-        player.percentage[this.index] = this.percentage;
+        player.sacsDone[this.index] = this.sacsDone;
         this.percentage === 100
             ? this.isdone.classList.remove("hidden")
             : this.isdone.classList.add("hidden");
@@ -199,8 +200,10 @@ class infusion {
     updatePercentage(res) {
         let pwr = resources[res].powerSpend();
         if (pwr !== false) {
-            this.percentage += (100 * (pwr / this.sacsNeeded));
+            this.sacsDone += pwr;
+            this.percentage = (100 * (this.sacsDone / this.sacsNeeded));
             if (this.percentage >= 100) {
+                this.sacsDone = this.sacsNeeded;
                 this.percentage = 100;
                 this.point = true;
             }
@@ -243,18 +246,6 @@ class resource {
         } else {
             this.hide();
         }
-        this.prev;
-        switch (name) {
-            case "alpha":
-                this.prev = "gamma"
-                break
-            case "beta":
-                this.prev = "alpha"
-                break
-            case "gamma":
-                this.prev = "beta"
-                break
-        }
     }
     unlock() {
         showClass(this.name);
@@ -277,6 +268,7 @@ class resource {
             this.percentage =
                 this.percentage + (updateTime * 100) / tempTime;
             // updateTime should reflect if the person has tabbed out or not
+            // acc i decided against it as waiting times arent that long
             if (this.percentage >= 100) {
                 this.percentage = 100;
                 this.point = true;
@@ -292,36 +284,29 @@ class resource {
         let unspentUpgradeFactor = 1;
         for (item in this.timeUpgrades) {
             let obj = this.timeUpgrades[item];
-            if (obj.unspent) {
-                unspentUpgradeFactor *= obj.factor;
-            } else {
+            if (!obj.unspent) {
                 timeUpgradeFactor *= obj.factor;
+            } else if (this.checkUnspent(obj.unspent)) {
+                unspentUpgradeFactor *= obj.factor;
             }
-        }
-        if (!this.checkPrevUnspent()) {
-            unspentUpgradeFactor = 1;
         }
         return this.time / (timeUpgradeFactor * unspentUpgradeFactor);
     }
     powerSpend() {
-        if (this.spend()) {
-            let powerUpgradeFactor = this.power;
-            let unspentUpgradeFactor = 1;
-            for (item in this.powerUpgrades) {
-                let obj = this.powerUpgrades[item];
-                if (obj.unspent) {
-                    unspentUpgradeFactor *= obj.factor;
-                } else {
-                    powerUpgradeFactor *= obj.factor;
-                }
+        if (!this.spend()) return false;
+
+        let powerUpgradeFactor = this.power;
+        let unspentUpgradeFactor = 1;
+        
+        for (item in this.powerUpgrades) {
+            let obj = this.powerUpgrades[item];
+            if (!obj.unspent) {
+                powerUpgradeFactor *= obj.factor;
+            } else if (this.checkUnspent(obj.unspent)) {
+                unspentUpgradeFactor *= obj.factor;
             }
-            if (!this.checkPrevUnspent()) {
-                unspentUpgradeFactor = 1;
-            }
-            return powerUpgradeFactor * unspentUpgradeFactor;
-        } else {
-            return false
         }
+        return powerUpgradeFactor * unspentUpgradeFactor;
     }
     spend() {
         if (this.point) {
@@ -336,8 +321,9 @@ class resource {
         this.percentage = 0;
         this.showPercentage();
     }
-    checkPrevUnspent() {
-        return resources[this.prev].point;
+    checkUnspent(resToCheck) {
+        if (player.NAMES.includes(resToCheck)) return resources[resToCheck].point;
+        return infusions[resToCheck].point;
     }
 }
 
@@ -357,9 +343,10 @@ function createResources() {
         infusions[player.INFUSIONS[i]] = new infusion(
             player.INFUSIONS[i],
             player.sacsNeeded[i],
-            player.infusionPercentage[i],
+            player.sacsDone[i],
             player.infusionUnlocked[i]
         )
+        infusions[player.INFUSIONS[i]].showPercentage();
     }
 }
 
@@ -621,7 +608,7 @@ function resetUpgrade(id) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    //cheating();
+    cheating();
     createResources();
     createUpgrade();
     addButtonListeners();

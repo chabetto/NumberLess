@@ -50,7 +50,7 @@ input[type="reset"] {
 }
 button:hover,
 .toggle {
-    background-color: grey;
+    background-color: black;
     cursor: pointer;
     color: whitesmoke;
 }

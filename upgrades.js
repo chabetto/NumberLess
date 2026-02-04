@@ -326,14 +326,13 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 3,
         functionality: function () {
-            if (this.amountBought == this.amountCanBuy) {
-                resources.alpha.prev = "beta";
-            }
+            let factor = 0.5 * this.amountBought + 1;
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': 'beta' };
         },
         text: {
             title: "&alpha;-&beta; mutual upgrade",
             effect: "if &beta; is unspent, boost &alpha; sacrifice power",
-            costDesc: "restart &alpha;&beta; (needs a couple restarts)",
+            costDesc: "restart &alpha;&beta;",
             lore: "the gammas have officially closed down the alpha wing, a huge sigh of relief. now the alphas can use the betas help for their own mining operation. obviously after they finish whatever business they have."
         },
         tab: "upgrade",
@@ -348,8 +347,6 @@ const OGUPGRADES = {
             hideID("betaGamma");
             showID("alphaBetaMutualUpgrade");
             showID("alphaBetaUpgradeUpgrade");
-            hideID("betaSacBetaGamma");
-            hideID("gammaSacBetaGamma");
             let factorA = 0.5 * this.amountBought + 1;
             let factorB = this.amountBought + 1;
             let factorC = 1 - 0.2 * this.amountBought;
@@ -359,7 +356,7 @@ const OGUPGRADES = {
         },
         text: {
             title: "&gamma; despansion upgrade",
-            effect: "boost &alpha; power and reduce &beta; time slightly<br>increase &gamma; time and remove the &beta;&gamma; sac buttons",
+            effect: "boost &alpha; power and reduce &beta; time slightly<br>increase &gamma; time",
             costDesc: "restart &alpha;&beta;",
             lore: "a floor of the gamma building has completely closed. the alphas may have mined too close meaning they need to scale down operation. motivation for alphas and betas increase. gammas give up their relations with the alphas."
         },
@@ -402,7 +399,7 @@ const OGUPGRADES = {
         amountCanBuy: 10,
         functionality: function () {
             let factor = 0.2 * this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': 'alpha' };
         },
         text: {
             title: "&alpha; unspent skill",
@@ -420,7 +417,7 @@ const OGUPGRADES = {
         amountCanBuy: 10,
         functionality: function () {
             let factor = 0.15 * this.amountBought + 1;
-            resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+            resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': 'beta' };
         },
         text: {
             title: "&beta; unspent time skill",
@@ -438,7 +435,7 @@ const OGUPGRADES = {
         amountCanBuy: 10,
         functionality: function () {
             let factor = 0.1 * this.amountBought + 1;
-            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': 'beta' };
         },
         text: {
             title: "&beta; unspent power skill",
@@ -456,7 +453,7 @@ const OGUPGRADES = {
         amountCanBuy: 4,
         functionality: function () {
             let factor = 0.5 * this.amountBought + 1;
-            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': 'gamma' };
         },
         text: {
             title: "&gamma; unspent power skill",
@@ -514,7 +511,7 @@ const OGUPGRADES = {
         amountCanBuy: 5,
         functionality: function () {
             let factor = 0.25 * this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': true };
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': 'alpha' };
         },
         text: {
             title: "&alpha;&beta; unspent+ skill",
@@ -579,12 +576,12 @@ const OGUPGRADES = {
         functionality: function () {
             let factor1 = 1 - 0.2 * this.amountBought;
             let factor2 = 0.3 * this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': true };
-            resources['gamma'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': true };
+            resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': 'beta' };
+            resources['gamma'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': 'beta' };
         },
         text: {
             title: "unspent &beta; time group",
-            effect: "when &alpha; is full, increase the time it takes for &beta; to fill<br>when &beta; is full, decrease the time for &gamma;",
+            effect: "when &beta; is full, increase the time it takes for &alpha; to fill<br>decrease the time for &gamma;",
             costDesc: "restart &beta;",
             lore: "if the alphas and betas have finished their work, we can send them on their way. the gammas work more efficiently anyways."
         },
@@ -667,12 +664,12 @@ const OGUPGRADES = {
         functionality: function () {
             let factor1 = 1 - 0.2 * this.amountBought;
             let factor2 = 0.5 * this.amountBought + 1;
-            resources['beta'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': true };
-            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': true };
+            resources['beta'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': 'alpha' };
+            resources['gamma'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': 'alpha' };
         },
         text: {
             title: "unspent &beta; power group",
-            effect: "when &alpha; is full, &beta; sacrifice becomes less powerful<br>when &beta; is done, &gamma; fills up the infusion bar more",
+            effect: "when &alpha; is full, &beta; sacrifice becomes less powerful<br>but &gamma; fills up the infusion bar more",
             costDesc: "restart &beta;",
             lore: "the gamma have researched new blood leaching technologies that only work on consecutive generators. luckily it can be negatively configured."
         },
