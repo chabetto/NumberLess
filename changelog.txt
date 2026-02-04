@@ -51,3 +51,7 @@ added 3 NEW unique alpha beta upgrades
 added loading + changed upgrade to work with it
 changed what is saved to local storage as well
 changed how favourability is stored (again for loading/resetting purposes)
+
+0.12
+changed how unspent works
+changed infusions (now it saves properly)
