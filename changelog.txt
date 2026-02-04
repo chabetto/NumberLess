@@ -55,3 +55,4 @@ changed how favourability is stored (again for loading/resetting purposes)
 0.12
 changed how unspent works
 changed infusions (now it saves properly)
+added consistent hover effects (toggled/bought = black, not = light grey, otherwise grey)

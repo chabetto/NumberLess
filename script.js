@@ -608,7 +608,7 @@ function resetUpgrade(id) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    cheating();
+    //cheating();
     createResources();
     createUpgrade();
     addButtonListeners();

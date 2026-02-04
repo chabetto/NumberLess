@@ -48,14 +48,19 @@ input[type="reset"] {
     flex-direction: column;
     align-items: center;
 }
-button:hover,
-.toggle {
+button:hover {
+    background-color: grey;
+    cursor: pointer;
+    color: whitesmoke;
+}
+.toggle,
+.toggle:hover {
     background-color: black;
     cursor: pointer;
     color: whitesmoke;
 }
 .bought {
-    background-color: grey;
+    background-color: black;
     color: whitesmoke;
 }
 p:hover,
@@ -67,7 +72,7 @@ h1:hover {
 }
 .bought:hover {
     cursor: default;
-    background-color: grey;
+    background-color: black;
 }
 .container {
     display: flex;
