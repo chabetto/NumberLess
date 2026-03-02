@@ -28,6 +28,7 @@
         <p id="alphaIsDone" class="isDone hidden">&alpha;</p>
         <p id="betaIsDone" class="isDone hidden">&beta;</p>
         <p id="gammaIsDone" class="isDone hidden">&gamma;</p>
+        <p id="alphaAlphaIsDone" class="isDone hidden">&alpha;&alpha;</p>
         <p id="alphaBetaIsDone" class="isDone hidden">&alpha;&beta;</p>
         <p id="alphaGammaIsDone" class="isDone hidden">&alpha;&gamma;</p>
         <p id="betaGammaIsDone" class="isDone hidden">&beta;&gamma;</p>
@@ -41,6 +42,13 @@
                 <div class="barContainer">
                     <div id="alphaBar" class="generatorBar">
                         <p class="generatorsText">&alpha;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="alphaAlpha" class="generator alphaAlpha hidden">
+                <div class="barContainer">
+                    <div id="alphaAlphaBar" class="generatorBar">
+                        <p class="generatorsText">&alpha;&alpha;</p>
                     </div>
                 </div>
             </div>
@@ -156,6 +164,11 @@
                 <div id="helpfulTree" class="tree hidden">
                     <button id="untoggleUnlock" class="treeUpgrade upgradable">
                         untoggle
+                    </button>
+                </div>
+                <div id="extendedAlphaTree" class="tree">
+                    <button id="alphaAlphaUnlock" class="treeUpgrade upgradable hidden">
+                        &alpha;&alpha;
                     </button>
                 </div>
             </div>

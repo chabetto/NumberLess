@@ -9,6 +9,9 @@ const OGUPGRADES = {
             showClass("alpha");
             player.UNLOCKED[0] = true;
             resources['alpha'].unlocked = true;
+            showTab("buttonGenerators");
+            let div = document.querySelector("#descText");
+            div.innerHTML = "";
         },
         text: {
             title: "unlock &alpha;",
@@ -166,6 +169,26 @@ const OGUPGRADES = {
         },
         tab: "tree",
     },
+    alphaAlphaUnlock: {
+        id: "alphaAlphaUnlock",
+        cost: ["alpha", "beta", "gamma"],
+        favourability: { 'alpha': 2 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showClass("alphaAlpha");
+            player.UNLOCKED[3] = true;
+            resources['alphaAlpha'].unlocked = true;
+            resources['alphaAlpha'].timeUpgrades[this.id] = {'factor': 100, 'unspent': 'alpha'}
+        },
+        text: {
+            title: "unlock &alpha;&alpha;",
+            effect: "unlock a new generator",
+            costDesc: "restart &alpha;, &beta;, &gamma;",
+            lore: "how perculiar"
+        },
+        tab: "tree",
+    },
     alphaTimeUpgrade: {
         id: "alphaTimeUpgrade",
         cost: ["alpha"],
@@ -259,8 +282,8 @@ const OGUPGRADES = {
     },
     upgradeUpgrade: {
         id: "upgradeUpgrade",
-        cost: ["alphaGamma"],
-        favourability: { 'alpha': 1, 'gamma': 1 },
+        cost: ["betaGamma"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
@@ -270,11 +293,13 @@ const OGUPGRADES = {
                 upgrades[upgID].amountCanBuy++;
                 resetUpgrade(upgID);
             }
+            showID("alphaAlphaUnlock");
+            //showID("alphaAlphaUpgrades");
         },
         text: {
             title: "upgrade upgrade",
             effect: "you can buy another level of every upgrade above",
-            costDesc: "restart &alpha;&gamma; and every upgrade above",
+            costDesc: "restart &beta;&gamma; and every upgrade above",
             lore: "with some gamma backing we can expand the upgrades, but the gammas never give anything for free"
         },
         tab: "upgrade",
@@ -307,9 +332,9 @@ const OGUPGRADES = {
         functionality: function () {
             let factor = 1.5 * this.amountBought + 1;
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
-            hideID("alphaBetaSkillsUpgrade");
+            hideID("alphaBetaExpansionUpgrade");
             showID("gammaUpgradeGroup");
-            showID("gammaUpgradesUpgradeGroup");
+            showID("alphaGammaUpgrades");
         },
         text: {
             title: "&gamma; power upgrade",
@@ -370,7 +395,7 @@ const OGUPGRADES = {
         amountCanBuy: 2,
         functionality: function () {
             if (this.amountBought == this.amountCanBuy) {
-                let toReset = ["betaTimeUpgrade", "betaTime2Upgrade"]
+                let toReset = ["betaTimeUpgrade", "gammaTimeUpgrade", "betaTime2Upgrade"]
                 for (i in toReset) {
                     upgID = toReset[i];
                     resetUpgrade(upgID);

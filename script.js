@@ -9,18 +9,19 @@ const ogPlayer = {
         "alpha",
         "beta",
         "gamma",
+        "alphaAlpha"
     ],
     INFUSIONS: [
         "alphaBeta",
         "alphaGamma",
         "betaGamma",
     ],
-    TIMES: [20, 60, 200],
-    sacsNeeded: [50, 150, 150],
+    TIMES: [20, 60, 200, 20000],
+    infusionsSpent: [0, 0, 0],
     POWERS: [2, 1, 10],
-    percentage: [0, 0, 0],
+    percentage: [0, 0, 0, 0],
     sacsDone: [0, 0, 0],
-    UNLOCKED: [false, false, false],
+    UNLOCKED: [false, false, false, false],
     infusionUnlocked: [false, false, false],
     upgrades: {},
     update: 0.05,
@@ -131,14 +132,14 @@ function switchOffAllSac() {
 }
 
 class infusion {
-    constructor(name, sacsNeeded, sacsDone, unlocked) {
+    constructor(name, timesSpent, sacsDone, unlocked) {
         this.name = name;
         this.isdone = document.querySelector(`#${name}IsDone`);
         this.bar = document.querySelector(`#${name}Bar`);
-        this.sacsNeeded = sacsNeeded;
+        this.timesSpent = timesSpent;
+        this.sacsNeeded;
+        this.calcSacsNeeded();
         this.sacsDone = sacsDone;
-        this.percentage = 100 * (sacsDone / sacsNeeded);
-        this.point = (sacsDone === sacsNeeded);
         if (unlocked) {
             this.unlock();
             this.showPercentage();
@@ -162,7 +163,24 @@ class infusion {
                 this.buttonsToCheck = ["betaSacBetaGamma", "gammaSacBetaGamma"];
                 break
         }
-        this.showPercentage();
+        this.sacsNeededUpgrades = [];
+    }
+    calculatePercentage(){
+        this.percentage = (100 * (this.sacsDone / this.sacsNeeded));
+        if (this.percentage >= 100) {
+            this.sacsDone = this.sacsNeeded;
+            this.percentage = 100;
+            this.point = true;
+        }
+    }
+    calcSacsNeeded() {
+        this.sacsNeeded = Math.round(30 + 5 * (this.timesSpent + this.timesSpent ** 0.8));
+        let toReduce = 0;
+        for (i in this.sacsNeededUpgrades) {
+            let name = this.sacsNeededUpgrades[i];
+            toReduce += upgrades[name].functionality(this.timesSpent);
+        }
+        this.sacsNeeded -= toReduce;
     }
     unlock() {
         showClass(this.name);
@@ -173,6 +191,7 @@ class infusion {
         this.unlocked = false;
     }
     showPercentage() {
+        this.calculatePercentage();
         this.bar.style.width = `${this.percentage}%`
         player.sacsDone[this.index] = this.sacsDone;
         this.percentage === 100
@@ -201,19 +220,15 @@ class infusion {
         let pwr = resources[res].powerSpend();
         if (pwr !== false) {
             this.sacsDone += pwr;
-            this.percentage = (100 * (this.sacsDone / this.sacsNeeded));
-            if (this.percentage >= 100) {
-                this.sacsDone = this.sacsNeeded;
-                this.percentage = 100;
-                this.point = true;
-            }
             this.showPercentage();
         }
     }
     spend() {
         if (this.point) {
             this.reset();
-            this.sacsNeeded += 10;
+            this.timesSpent++;
+            player.infusionsSpent[this.index] = this.timesSpent;
+            this.calcSacsNeeded();
             return true;
         } else {
             return false;
@@ -221,7 +236,7 @@ class infusion {
     }
     reset() {
         this.point = false;
-        this.percentage = 0;
+        this.sacsDone = 0;
         this.showPercentage();
     }
 }
@@ -342,7 +357,7 @@ function createResources() {
     for (i in player.INFUSIONS) {
         infusions[player.INFUSIONS[i]] = new infusion(
             player.INFUSIONS[i],
-            player.sacsNeeded[i],
+            player.infusionsSpent[i],
             player.sacsDone[i],
             player.infusionUnlocked[i]
         )
@@ -424,7 +439,7 @@ function addButtonHover() {
 }
 
 function cheating() {
-    player.TIMES = [0.1, 0.1, 0.1, 1, 1, 1];
+    player.TIMES = [0.1, 0.1, 0.1, 20000, 1, 1, 1];
 }
 
 function fromStart() {
@@ -596,6 +611,10 @@ function loadBought() {
             upgrades[item].showPercentage();
         }
     }
+    if (upgrades["upgradeUpgrade"].amountBought >= 1) {
+        showID("alphaAlphaUnlock");
+        //showID("alphaAlphaUpgrades");
+    }
 }
 
 function resetUpgrade(id) {
@@ -608,7 +627,7 @@ function resetUpgrade(id) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    //cheating();
+    cheating();
     createResources();
     createUpgrade();
     addButtonListeners();

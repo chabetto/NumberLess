@@ -100,6 +100,9 @@ h1 {
 #alphaBar {
     background-color: lightcoral;
 }
+#alphaAlphaBar {
+    background-color: lightsalmon;
+}
 #betaBar {
     background-color: rgb(2, 179, 2);
 }
