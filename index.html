@@ -13,6 +13,7 @@
             <button id="alphaToggle" class="togBut hidden">&alpha;</button>
             <button id="betaToggle" class="togBut hidden">&beta;</button>
             <button id="gammaToggle" class="togBut hidden">&gamma;</button>
+            <button id="alphaAlphaSacButton" class="alphaAlphaSac hidden">&alpha;&alpha;</button>
         </div>
     </div>
     <div id="topTabs" class="tabs">
@@ -116,6 +117,9 @@
                     </div>
                 </div>
             </div>
+            <h3 id="alphaalpha" class ="hidden alphaAlphaSac">
+                psst. theres a new sacrifice button by the toggles at the top...
+            </h3>
             <p id="infusionTutorial" onclick="hideID('infusionTutorial')">click to sacrifice a full generator to fill the corresponding infusion bar.<br>
             the buttons can be toggled on (and off).<br>
             click to hide this message forever.<br>
@@ -191,7 +195,7 @@
                         &alpha;Pu
                     </button>
                     <button id="betaTime2Upgrade" class="alphaUpgrade upgradable gamma hidden">
-                        &beta;T2u
+                        &beta;TTu
                     </button>
                 </div>
                 <div class="upgrades hidden power">
@@ -216,16 +220,19 @@
                         &alpha;&beta;Uu
                     </button>
                 </div>
-                <div id="ultimateAlphaUpgrades" class="upgrades hidden">
-                    <!--<button id="alphaBetaMutualUpgrade" class="alphaUpgrade upgradable">
-                        &alpha;&beta;Mu
+                <div id="alphaAlphaUpgrades" class="upgrades hidden">
+                    <button id="alphaAlphaPowerUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&alpha;Pu
                     </button>
-                    <button id="gammaDespansionUpgrade" class="alphaUpgrade upgradable">
-                        &gamma;Du
+                    <button id="alphaAlphaSelflessUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&alpha;Su
                     </button>
-                    <button id="alphaBetaUpgradeUpgrade" class="alphaUpgrade upgradable">
-                        &alpha;&beta;Uu
-                    </button>-->
+                    <button id="alphaAlphaUpgradeUpgrade" class="alphaUpgrade upgradable hidden">
+                        &alpha;&alpha;Uu
+                    </button>
+                    <button id="alphaAlphaTimeUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&alpha;Tu
+                    </button>
                 </div>
                 <div id="alphaGammaUpgrades" class="upgrades hidden">
                     <!--

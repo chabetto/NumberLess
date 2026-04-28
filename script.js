@@ -18,7 +18,7 @@ const ogPlayer = {
     ],
     TIMES: [20, 60, 200, 20000],
     infusionsSpent: [0, 0, 0],
-    POWERS: [2, 1, 10],
+    POWERS: [2, 1, 10, 10],
     percentage: [0, 0, 0, 0],
     sacsDone: [0, 0, 0],
     UNLOCKED: [false, false, false, false],
@@ -439,7 +439,7 @@ function addButtonHover() {
 }
 
 function cheating() {
-    player.TIMES = [0.1, 0.1, 0.1, 20000, 1, 1, 1];
+    player.TIMES = [0.1, 0.1, 0.1, 200, 1, 1, 1];
 }
 
 function fromStart() {
@@ -495,6 +495,14 @@ function untoggleButtons(id) {
     }
 }
 
+function alphaAlphaSac() {
+    if (resources["alphaAlpha"].point && !infusions["alphaBeta"].point && !infusions["alphaGamma"].point) {
+        infusions["alphaBeta"].updatePercentage("alphaAlpha");
+        resources["alphaAlpha"].point = true;
+        infusions["alphaGamma"].updatePercentage("alphaAlpha");
+    }
+}
+
 function buttonFunction(e) {
     let id = e.target.id;
     let classes = e.target.classList;
@@ -504,6 +512,8 @@ function buttonFunction(e) {
         switchOnSac(id);
     } else if (classes.contains("togBut")) {
         untoggleButtons(id);
+    } else if (id == "alphaAlphaSacButton") {
+        alphaAlphaSac();
     } else {
         upgrades[id].buyOnce();
     };
@@ -563,6 +573,23 @@ function startTime() {
     }, player.update * 1000);
 }
 
+function createCostDescription(costList) {
+    if (costList[0] == "none") return "free..."
+    let costDescription = []
+    let conversion = { alpha: "&alpha;", beta: "&beta;", gamma: "&gamma;", alphaBeta: "&alpha;&beta;", alphaGamma: "&alpha;&gamma;", betaGamma: "&beta;&gamma;", alphaAlpha: "&alpha;&alpha;" }
+    for (let i in costList) { // i is a string
+        costDescription.push(conversion[costList[i]])
+    }
+    let costSentence = "restart ";
+    for (let i = 0; i < costDescription.length; i++) {
+        costSentence += costDescription[i];
+        if ((i + 1) != costList.length) {
+            costSentence += ", "
+        }
+    }
+    return costSentence;
+}
+
 function showDescription(e) {
     let id = e.target.id;
     let cL = e.target.classList;
@@ -579,7 +606,7 @@ function showDescription(e) {
         let txt = upgrades[id].text;
         title.innerHTML = txt.title
         effect.innerHTML = txt.effect;
-        cost.innerHTML = txt.costDesc;
+        cost.innerHTML = createCostDescription(upgrades[id].cost);
         lore.innerHTML = txt.lore;
         //}
         div.appendChild(title);
@@ -604,7 +631,7 @@ function showDescription(e) {
 }
 
 function loadBought() {
-    let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade"]
+    let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade", "alphaAlphaUpgradeUpgrade"]
     for (item in upgrades) {
         if (upgrades[item].amountBought >= 1) {
             if (!toSkip.includes(upgrades[item].id)) upgrades[item].functionality();
@@ -613,7 +640,8 @@ function loadBought() {
     }
     if (upgrades["upgradeUpgrade"].amountBought >= 1) {
         showID("alphaAlphaUnlock");
-        //showID("alphaAlphaUpgrades");
+    } if (upgrades["alphaAlphaUpgradeUpgrade"].amountBought >= 1) {
+        hideID("alphaAlphaSelflessUpgrade");
     }
 }
 
@@ -622,6 +650,14 @@ function resetUpgrade(id) {
     upgrades[id].functionality();
     upgrades[id].percentage = 0;
     addButtonClick(id);
+}
+
+function resetUpgradeList(ids, increaseAmount = false) {
+    for (i in ids) {
+        upgID = ids[i];
+        if (increaseAmount) upgrades[upgID].amountCanBuy++;
+        resetUpgrade(upgID);
+    }
 }
 
 window.onload = function () {

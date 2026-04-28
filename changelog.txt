@@ -56,4 +56,12 @@ changed how favourability is stored (again for loading/resetting purposes)
 changed how unspent works
 changed infusions (now it saves properly)
 added consistent hover effects (toggled/bought = black, not = light grey, otherwise grey)
+
+0.13
 added a new gen (the alphaalpha)
+stopped a number appearing!!!
+
+0.14
+added alphaalpha upgrades
+removed cost descriptions and added 'automated' ones
+add alpha alpha MEGASAC button - sacs into both alpha infusions
