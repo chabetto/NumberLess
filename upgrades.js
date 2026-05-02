@@ -1,4 +1,28 @@
+/*
+UPGRADEID: {
+        id: "UPGRADEID",
+        cost: [],
+        favourability: { 'alpha': 0,'beta': 0,'gamma': 0 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            // add functionality
+        },
+        text: {
+            title: "to add",
+            effect: "to add",
+            lore: "to add"
+        },
+        tab: "to add",
+        upgradesToUnlock: {  },
+
+NOTES:
+cost involves list of resources/infusions to consume for upgrade
+upgrades to unlock is dictionary of upgradeid to unlock as key + true/false (true = unlock, flase = lock)
+*/
+
 const OGUPGRADES = {
+    // THE TREE
     alphaUnlock: {
         id: "alphaUnlock",
         cost: ["none"],
@@ -19,6 +43,7 @@ const OGUPGRADES = {
             lore: "start the game..."
         },
         tab: "tree",
+        upgradesToUnlock: { "isDoneUnlock": true, "betaUnlock": true, "upgradesUnlock": true },
     },
     betaUnlock: {
         id: "betaUnlock",
@@ -38,6 +63,7 @@ const OGUPGRADES = {
             lore: "meet the betas. funny, short little fellows. always seem to be behind you. misjudged, sometimes misguided."
         },
         tab: "tree",
+        upgradesToUnlock: { "gammaUnlock": true, "skillsUnlock": true, "betaTimeUpgrade": true },
     },
     gammaUnlock: {
         id: "gammaUnlock",
@@ -57,6 +83,7 @@ const OGUPGRADES = {
             lore: "supposedly the last we are going to meet."
         },
         tab: "tree",
+        upgradesToUnlock: { "groupUnlock": true, "unrealityUnlock": true, "gammaTimeUpgrade": true, "betaUnspentTimeSkill": true, "betaTime2Upgrade":true},
     },
     isDoneUnlock: {
         id: "isDoneUnlock",
@@ -75,6 +102,7 @@ const OGUPGRADES = {
             lore: "makes it easier to know when the generators are done. hopefully the quality of life will improve the further we go on."
         },
         tab: "tree",
+        upgradesToUnlock: [],
     },
     upgradesUnlock: {
         id: "upgradesUnlock",
@@ -92,6 +120,7 @@ const OGUPGRADES = {
             lore: "we can discuss with the alphas on their turf. upgrades are powerful and reliable."
         },
         tab: "tree",
+        upgradesToUnlock: { "alphaTimeUpgrade": true },
     },
     skillsUnlock: {
         id: "skillsUnlock",
@@ -109,6 +138,7 @@ const OGUPGRADES = {
             lore: "we can talk to the betas there. skills are weak but expansive."
         },
         tab: "tree",
+        upgradesToUnlock: { "alphaUnspentSkill": true },
     },
     groupUnlock: {
         id: "groupUnlock",
@@ -125,6 +155,7 @@ const OGUPGRADES = {
             lore: "we can have a meeting with the gammas here. the &gamma;-group offer insanely strong boosts for a price."
         },
         tab: "tree",
+        upgradesToUnlock: {"betaTimeUnspentGroup":true},
     },
     unrealityUnlock: {
         id: "unrealityUnlock",
@@ -134,8 +165,6 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: function () {
             showID("buttonUnreality");
-            showClass("power");
-            showID("helpfulTree")
         },
         text: {
             title: "unreality tab",
@@ -143,6 +172,7 @@ const OGUPGRADES = {
             lore: "unlock the ability to combine different generators. this opens up more of reality i guess."
         },
         tab: "tree",
+        upgradesToUnlock: {"untoggleUnlock": true, "alphaPowerUpgrade":true,"gammaUnspentSkill":true,"betaUnspentPowerSkill":true,"upgradeUpgrade":true,"alphaBetaExpansionUpgrade":true,"gammaPowerUpgrade":true,"betaGammaTimeGroup":true,"alphaGammaTimeGroup":true,"betaPowerUnspentGroup": true,"gammaPowerGroup":true},
     },
     untoggleUnlock: {
         id: "untoggleUnlock",
@@ -159,6 +189,7 @@ const OGUPGRADES = {
             lore: "if you want something in reality, unreality has to stop."
         },
         tab: "tree",
+        upgradesToUnlock: {},
     },
     alphaAlphaUnlock: {
         id: "alphaAlphaUnlock",
@@ -168,11 +199,10 @@ const OGUPGRADES = {
         amountCanBuy: 1,
         functionality: function () {
             showClass("alphaAlpha");
-            showID("alphaAlphaUpgrades");
             showClass("alphaAlphaSac");
             player.UNLOCKED[3] = true;
             resources['alphaAlpha'].unlocked = true;
-            resources['alphaAlpha'].timeUpgrades[this.id] = {'factor': 100, 'unspent': 'alpha'}
+            resources['alphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alpha' }
         },
         text: {
             title: "unlock &alpha;&alpha;",
@@ -180,7 +210,56 @@ const OGUPGRADES = {
             lore: "how peculiar - it only grows when &alpha; is full. it also can infuse both &alpha; infusions in unreality. how cool."
         },
         tab: "tree",
+        upgradesToUnlock: {"alphaAlphaPowerUpgrade":true,"alphaAlphaSelflessUpgrade":true,"alphaAlphaTimeUpgrade":true},
     },
+    alpha3Unlock: {
+        id: "alpha3Unlock",
+        cost: ["alpha", "alphaAlpha"],
+        favourability: { 'alpha': 3 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showClass("alphaAlphaAlpha");
+            showID("alphaAlphaAlphaUpgrades");
+            player.UNLOCKED[4] = true;
+            resources['alphaAlphaAlpha'].unlocked = true;
+            resources['alphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alpha' }
+            resources['alphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alphaAlpha' }
+        },
+        text: {
+            title: "unlock &alpha;&alpha;&alpha;",
+            effect: "unlock another new and original generator",
+            lore: "how peculiar - it only grows when &alpha; and &alpha;&alpha; is full. how cool."
+        },
+        tab: "tree",
+        upgradesToUnlock: {alphaAlphaAlphaTimeUpgrade:true},
+    },
+    alpha4Unlock: {
+        id: "alpha4Unlock",
+        cost: ["alpha", "alphaAlpha", "alphaAlphaAlpha"],
+        favourability: { 'alpha': 4 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showClass("alphaAlphaAlphaAlpha");
+            showID("buttonFakeUpgrades")
+            //showID("alphaAlphaAlphaAlphaUpgrades");
+            player.UNLOCKED[5] = true;
+            resources['alphaAlphaAlphaAlpha'].unlocked = true;
+            resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alpha' }
+            resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alphaAlpha' }
+            resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alphaAlphaAlpha' }
+            // TODO change the whole game
+        },
+        text: {
+            title: "unlock &alpha;&alpha;&alpha;&alpha;",
+            effect: "unlock another new and original generator",
+            lore: "how peculiar - it only grows when &alpha; and &alpha;&alpha; and &alpha;&alpha;&alpha; is full. it also is causing a major reality change. how cool."
+        },
+        tab: "tree",
+        upgradesToUnlock: {},
+    },
+    // UPGRADES
     alphaTimeUpgrade: {
         id: "alphaTimeUpgrade",
         cost: ["alpha"],
@@ -197,6 +276,7 @@ const OGUPGRADES = {
             lore: "it is simple, but effective. much like the alphas."
         },
         tab: "upgrade",
+        upgradesToUnlock: {},
     },
     betaTimeUpgrade: {
         id: "betaTimeUpgrade",
@@ -214,6 +294,7 @@ const OGUPGRADES = {
             lore: "spend itselfs to boost itself, a good deal."
         },
         tab: "upgrade",
+        upgradesToUnlock: {},
     },
     gammaTimeUpgrade: {
         id: "gammaTimeUpgrade",
@@ -224,7 +305,6 @@ const OGUPGRADES = {
         functionality: function () {
             let factor = 0.5 * this.amountBought + 1;
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
-            showID("gammaTimeGroup");
         },
         text: {
             title: "&gamma; time upgrade",
@@ -232,6 +312,7 @@ const OGUPGRADES = {
             lore: "a deal almost too good to be true, the gamma stay sceptical."
         },
         tab: "upgrade",
+        upgradesToUnlock: { "gammaTimeGroup": true },
     },
     betaTime2Upgrade: {
         id: "betaTime2Upgrade",
@@ -249,6 +330,7 @@ const OGUPGRADES = {
             lore: "did we just do this? i am sure. the beta are sure also."
         },
         tab: "upgrade",
+        upgradesToUnlock:{},
     },
     alphaPowerUpgrade: {
         id: "alphaPowerUpgrade",
@@ -266,6 +348,7 @@ const OGUPGRADES = {
             lore: "and it starts, the alphas will ascend. strength in numbers(?)."
         },
         tab: "upgrade",
+        upgradesToUnlock:{},
     },
     upgradeUpgrade: {
         id: "upgradeUpgrade",
@@ -276,7 +359,6 @@ const OGUPGRADES = {
         functionality: function () {
             let upgToReset = ["alphaPowerUpgrade", "betaTime2Upgrade", "gammaTimeUpgrade", "betaTimeUpgrade", "alphaTimeUpgrade"];
             resetUpgradeList(upgToReset, true);
-            showID("alphaAlphaUnlock");
         },
         text: {
             title: "upgrade upgrade",
@@ -284,6 +366,7 @@ const OGUPGRADES = {
             lore: "with some gamma backing we can expand the upgrades, but the gammas never give anything for free"
         },
         tab: "upgrade",
+        upgradesToUnlock:{"alphaAlphaUnlock":true},
     },
     alphaBetaExpansionUpgrade: {
         id: "alphaBetaExpansionUpgrade",
@@ -292,9 +375,7 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            showID("alphaBetaSkills");
-            showID("alphaBetaUpgrades")
-            hideID("gammaPowerUpgrade");
+            // TODO add alpha beta skills unlocks
             let factor = 0.2 * this.amountBought + 1;
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
             resources['beta'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
@@ -305,6 +386,7 @@ const OGUPGRADES = {
             lore: "the beta slide the alphas a deal. work with us, expand, and make yourself stronger. enough said. though the gamma will not be happy."
         },
         tab: "upgrade",
+        upgradesToUnlock:{"gammaPowerUpgrade":false,"alphaBetaMutualUpgrade":true,"gammaDespansionUpgrade":true,"alphaBetaUpgradeUpgrade":true,"alphaBetaTimeUpgrade":true},
     },
     gammaPowerUpgrade: {
         id: "gammaPowerUpgrade",
@@ -315,9 +397,7 @@ const OGUPGRADES = {
         functionality: function () {
             let factor = 1.5 * this.amountBought + 1;
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': false };
-            hideID("alphaBetaExpansionUpgrade");
-            //showID("gammaUpgradeGroup");
-            showID("alphaGammaUpgrades");
+            // TODO add alpha gamma group
         },
         text: {
             title: "&gamma; power upgrade",
@@ -325,11 +405,12 @@ const OGUPGRADES = {
             lore: "we welcome gamma to alpha lands, we shake hands. alphas believe in strength in numbers, the gammas believe in strength. this is the start of a mutually beneficial relationship."
         },
         tab: "upgrade",
+        upgradesToUnlock:{"alphaBetaExpansionUpgrade":false,"alphaGammaUpgradeUpgrade":true,"gammaExclusiveUpgrade":true,"alphaGammaPowerUpgrade":true,"alphaGammaMutualUpgrade":true},
     },
     alphaAlphaPowerUpgrade: {
         id: "alphaAlphaPowerUpgrade",
-        cost: ["alphaAlpha","alpha"],
-        favourability: { 'alpha': 1},
+        cost: ["alphaAlpha", "alpha"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
@@ -337,7 +418,7 @@ const OGUPGRADES = {
             let factorT = 1 - 0.25 * this.amountBought;
             resources['alphaAlpha'].powerUpgrades[this.id] = { 'factor': factorP, 'unspent': false };
             resources['alphaAlpha'].timeUpgrades[this.id] = { 'factor': factorT, 'unspent': false };
-            if (upgrades['alphaAlphaSelflessUpgrade'].amountBought == 0) showID("alphaAlphaUpgradeUpgrade")            
+            if (upgrades['alphaAlphaSelflessUpgrade'].amountBought == 0) upgrades["alphaAlphaUpgradeUpgrade"].unlock();
         },
         text: {
             title: "&alpha;&alpha; power upgrade",
@@ -345,21 +426,21 @@ const OGUPGRADES = {
             lore: "to add"
         },
         tab: "upgrade",
+        upgradesToUnlock:{ },
     },
     alphaAlphaSelflessUpgrade: {
         id: "alphaAlphaSelflessUpgrade",
-        cost: ["alphaAlpha","betaGamma","alpha"],
-        favourability: {'alpha': -2, 'beta':1 , 'gamma':1},
+        cost: ["alphaAlpha", "betaGamma", "alpha"],
+        favourability: { 'alpha': -2, 'beta': 1, 'gamma': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            hideID("alphaAlphaUpgradeUpgrade");
             let factorA = 1 - 0.25 * this.amountBought;
             resources['alphaAlpha'].powerUpgrades[this.id] = { 'factor': factorA, 'unspent': false };
             resources['alphaAlpha'].timeUpgrades[this.id] = { 'factor': factorA, 'unspent': "alpha" };
             let factorT = this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = {'factor':factorT, 'unspent':"alphaAlpha"};
-            resources['gamma'].timeUpgrades[this.id] = {'factor':factorT, 'unspent':"alphaAlpha"};
+            resources['beta'].timeUpgrades[this.id] = { 'factor': factorT, 'unspent': "alphaAlpha" };
+            resources['gamma'].timeUpgrades[this.id] = { 'factor': factorT, 'unspent': "alphaAlpha" };
         },
         text: {
             title: "&alpha;&alpha; selfless upgrade",
@@ -367,11 +448,12 @@ const OGUPGRADES = {
             lore: "to add"
         },
         tab: "upgrade",
+        upgradesToUnlock:{ "alphaAlphaUpgradeUpgrade":false },
     },
     alphaAlphaTimeUpgrade: {
         id: "alphaAlphaTimeUpgrade",
-        cost: ["alphaAlpha","alpha"],
-        favourability: {'alpha': 1},
+        cost: ["alphaAlpha", "alpha"],
+        favourability: { 'alpha': 1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
@@ -384,17 +466,17 @@ const OGUPGRADES = {
             lore: "to add"
         },
         tab: "upgrade",
+        upgradesToUnlock:{},
     },
     alphaAlphaUpgradeUpgrade: {
         id: "alphaAlphaUpgradeUpgrade",
         cost: ["alphaAlpha", "alpha"],
-        favourability: {'alpha': 2,'beta':-1,'gamma':-1},
+        favourability: { 'alpha': 2, 'beta': -1, 'gamma': -1 },
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            hideID("alphaAlphaSelflessUpgrade");
-            let upgToReset = ["betaTimeUpgrade","gammaTimeUpgrade","betaTime2Upgrade"];
-            let upgToInc = ["alphaTimeUpgrade","alphaPowerUpgrade","upgradeUpgrade","alphaAlphaTimeUpgrade","alphaAlphaPowerUpgrade"];
+            let upgToReset = ["betaTimeUpgrade", "gammaTimeUpgrade", "betaTime2Upgrade"];
+            let upgToInc = ["alphaTimeUpgrade", "alphaPowerUpgrade", "upgradeUpgrade", "alphaAlphaTimeUpgrade", "alphaAlphaPowerUpgrade"];
             resetUpgradeList(upgToReset);
             resetUpgradeList(upgToInc, true);
             if (upgrades['gammaPowerUpgrade'].amountBought == 1) resetUpgrade('gammaPowerUpgrade');
@@ -406,6 +488,47 @@ const OGUPGRADES = {
             lore: "to add"
         },
         tab: "upgrade",
+        upgradesToUnlock:{"alphaAlphaSelflessUpgrade":false,"alpha3Unlock":true},
+    },
+    alphaAlphaAlphaTimeUpgrade: {
+        id: "alphaAlphaAlphaTimeUpgrade",
+        cost: ["alphaAlphaAlpha", "alphaAlpha", "alpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let factor = 0.5 * this.amountBought + 1;
+            resources['alphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': "alphaAlpha" };
+        },
+        text: {
+            title: "&alpha;&alpha;&alpha; time upgrade",
+            effect: "decrease &alpha;&alpha;&alpha; time to fill",
+            lore: "to add"
+        },
+        tab: "upgrade",
+        upgradesToUnlock:{"alphaAlphaAlphaUpgradeUpgrade":true},
+    },
+    alphaAlphaAlphaUpgradeUpgrade: {
+        id: "alphaAlphaAlphaUpgradeUpgrade",
+        cost: ["alphaAlphaAlpha", "alphaAlpha", "alpha"],
+        favourability: { 'alpha': 2, 'beta': -1, 'gamma': -1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let upgToReset = ["betaTimeUpgrade", "gammaTimeUpgrade", "betaTime2Upgrade"];
+            let upgToInc = ["alphaTimeUpgrade", "alphaPowerUpgrade", "upgradeUpgrade", "alphaAlphaTimeUpgrade", "alphaAlphaPowerUpgrade", "alphaAlphaUpgradeUpgrade"];
+            resetUpgradeList(upgToReset);
+            resetUpgradeList(upgToInc, true);
+            if (upgrades['gammaPowerUpgrade'].amountBought == 1) resetUpgrade('gammaPowerUpgrade');
+            if (upgrades['alphaBetaExpansionUpgrade'].amountBought == 1) resetUpgrade('alphaBetaExpansionUpgrade');
+        },
+        text: {
+            title: "&alpha;&alpha;&alpha; upgrade upgrade",
+            effect: "restart every upgrade above BUT increase cap of all &alpha;, &alpha;&alpha; ones",
+            lore: "to add"
+        },
+        tab: "upgrade",
+        upgradesToUnlock:{"alpha4Unlock":true},
     },
     alphaBetaMutualUpgrade: {
         id: "alphaBetaMutualUpgrade",
@@ -414,8 +537,7 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 3,
         functionality: function () {
-            let factor = 0.5 * this.amountBought + 1;
-            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor, 'unspent': 'beta' };
+            // TODO
         },
         text: {
             title: "&alpha;-&beta; mutual upgrade",
@@ -423,6 +545,7 @@ const OGUPGRADES = {
             lore: "the gammas have officially closed down the alpha wing, a huge sigh of relief. now the alphas can use the betas help for their own mining operation. obviously after they finish whatever business they have."
         },
         tab: "upgrade",
+        upgradesToUnlock: {},
     },
     gammaDespansionUpgrade: {
         id: "gammaDespansionUpgrade",
@@ -431,15 +554,7 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            hideID("betaGamma");
-            showID("alphaBetaMutualUpgrade");
-            showID("alphaBetaUpgradeUpgrade");
-            let factorA = 0.5 * this.amountBought + 1;
-            let factorB = this.amountBought + 1;
-            let factorC = 1 - 0.2 * this.amountBought;
-            resources['alpha'].powerUpgrades[this.id] = { 'factor': factorA, 'unspent': false };
-            resources['beta'].timeUpgrades[this.id] = { 'factor': factorB, 'unspent': false };
-            resources['gamma'].timeUpgrades[this.id] = { 'factor': factorC, 'unspent': false };
+            // TODO    
         },
         text: {
             title: "&gamma; despansion upgrade",
@@ -447,6 +562,7 @@ const OGUPGRADES = {
             lore: "a floor of the gamma building has completely closed. the alphas may have mined too close meaning they need to scale down operation. motivation for alphas and betas increase. gammas give up their relations with the alphas."
         },
         tab: "upgrade",
+        upgradesToUnlock: {},
     },
     alphaBetaUpgradeUpgrade: {
         id: "alphaBetaUpgradeUpgrade",
@@ -455,19 +571,7 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 2,
         functionality: function () {
-            if (this.amountBought == this.amountCanBuy) {
-                let toReset = ["betaTimeUpgrade", "gammaTimeUpgrade", "betaTime2Upgrade"]
-                for (i in toReset) {
-                    upgID = toReset[i];
-                    resetUpgrade(upgID);
-                };
-                let toInc = ["gammaDespansionUpgrade", "alphaPowerUpgrade", "alphaTimeUpgrade"]
-                for (i in toInc) {
-                    upgID = toInc[i];
-                    upgrades[upgID].amountCanBuy++;
-                    resetUpgrade(upgID);
-                };
-            }
+            // TO DO
         },
         text: {
             title: "&alpha;&beta; upgrade upgrade",
@@ -475,7 +579,94 @@ const OGUPGRADES = {
             lore: "i think the alphas are serious about mining to the centre of the earth, the beta are concerned. theyre going right under the gamma building... this might not be good."
         },
         tab: "upgrade",
+        upgradesToUnlock: {},
     },
+    alphaBetaTimeUpgrade: {
+        id: "alphaBetaTimeUpgrade",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': -1 },
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function () {
+            // TODO
+        },
+        text: {
+            title: "&alpha;&beta; upgrade upgrade",
+            effect: "restart certain upgrades<br>increase the number you can buy of certain upgrades",
+            lore: "i think the alphas are serious about mining to the centre of the earth, the beta are concerned. theyre going right under the gamma building... this might not be good."
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {},
+    },
+    alphaGammaUpgradeUpgrade: {
+        id: "alphaGammaUpgradeUpgrade",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1 / 3, 'beta': 1 / 3, 'gamma': -1 / 3 },
+        amountBought: 0,
+        amountCanBuy: 3,
+        functionality: function () {
+            // TODO
+        },
+        text: {
+            title: "&alpha;-&beta; mutual upgrade",
+            effect: "if &beta; is unspent, boost &alpha; sacrifice power",
+            lore: "the gammas have officially closed down the alpha wing, a huge sigh of relief. now the alphas can use the betas help for their own mining operation. obviously after they finish whatever business they have."
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {},
+    },
+    gammaExclusiveUpgrade: {
+        id: "gammaExclusiveUpgrade",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': -1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            // TODO    
+        },
+        text: {
+            title: "&gamma; despansion upgrade",
+            effect: "boost &alpha; power and reduce &beta; time slightly<br>increase &gamma; time",
+            lore: "a floor of the gamma building has completely closed. the alphas may have mined too close meaning they need to scale down operation. motivation for alphas and betas increase. gammas give up their relations with the alphas."
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {},
+    },
+    alphaGammaPowerUpgrade: {
+        id: "alphaGammaPowerUpgrade",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1 / 2, 'beta': -1 / 2, 'gamma': -1 / 2 },
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function () {
+            // TO DO
+        },
+        text: {
+            title: "&alpha;&beta; upgrade upgrade",
+            effect: "restart certain upgrades<br>increase the number you can buy of certain upgrades",
+            lore: "i think the alphas are serious about mining to the centre of the earth, the beta are concerned. theyre going right under the gamma building... this might not be good."
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {},
+    },
+    alphaGammaMutualUpgrade: {
+        id: "alphaGammaMutualUpgrade",
+        cost: ["alphaBeta"],
+        favourability: { 'alpha': 1, 'beta': 1, 'gamma': -1 },
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function () {
+            // TODO
+        },
+        text: {
+            title: "&alpha;&beta; upgrade upgrade",
+            effect: "restart certain upgrades<br>increase the number you can buy of certain upgrades",
+            lore: "i think the alphas are serious about mining to the centre of the earth, the beta are concerned. theyre going right under the gamma building... this might not be good."
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {},
+    },
+    // SKILLS
     alphaUnspentSkill: {
         id: "alphaUnspentSkill",
         cost: ["alpha"],
@@ -492,6 +683,7 @@ const OGUPGRADES = {
             lore: "the alphas help the betas. respect."
         },
         tab: "skills",
+        upgradesToUnlock:{},
     },
     betaUnspentTimeSkill: {
         id: "betaUnspentTimeSkill",
@@ -509,6 +701,7 @@ const OGUPGRADES = {
             lore: "this is surely a start of a blossoming relation between the betas and the &gamma;-group."
         },
         tab: "skills",
+        upgradesToUnlock:{},
     },
     betaUnspentPowerSkill: {
         id: "betaUnspentPowerSkill",
@@ -526,6 +719,7 @@ const OGUPGRADES = {
             lore: "makes sense, the betas can feed the gammas. more nutritious."
         },
         tab: "skills",
+        upgradesToUnlock:{},
     },
     gammaUnspentSkill: {
         id: "gammaUnspentSkill",
@@ -543,62 +737,9 @@ const OGUPGRADES = {
             lore: "the gammas can back the alphas. this is just a small taste of their power."
         },
         tab: "skills",
+        upgradesToUnlock:{},
     },
-    alphaBetaTimeSkill: {
-        id: "alphaBetaTimeSkill",
-        cost: ["alphaBeta"],
-        favourability: { 'alpha': 0.25, 'beta': 0.5 },
-        amountBought: 0,
-        amountCanBuy: 8,
-        functionality: function () {
-            let factor1 = 0.1 * this.amountBought + 1;
-            let factor2 = 0.3 * this.amountBought + 1;
-            resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
-            resources['beta'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
-        },
-        text: {
-            title: "&alpha;&beta; time skill",
-            effect: "&alpha; and &beta; fill up quicker",
-            lore: "they can work together, alphas pushing the betas to work faster, whilst the betas stand behind the alphas, protected."
-        },
-        tab: "skills",
-    },
-    alphaBetaPowerSkill: {
-        id: "alphaBetaPowerSkill",
-        cost: ["alphaBeta"],
-        favourability: { 'alpha': 0.25, 'beta': 0.5 },
-        amountBought: 0,
-        amountCanBuy: 8,
-        functionality: function () {
-            let factor1 = 0.3 * this.amountBought + 1;
-            let factor2 = 0.1 * this.amountBought + 1;
-            resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
-            resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
-        },
-        text: {
-            title: "&alpha;&beta; power skill",
-            effect: "&alpha; and &beta; fill up their infusions quicker",
-            lore: "the alphas can understand how the betas work together to become stronger. the betas can use the alphas to become stronger."
-        },
-        tab: "skills",
-    },
-    alphaUnspent2Skill: {
-        id: "alphaUnspent2Skill",
-        cost: ["alphaBeta"],
-        favourability: { 'alpha': 0.2, 'beta': 0.6 },
-        amountBought: 0,
-        amountCanBuy: 5,
-        functionality: function () {
-            let factor = 0.25 * this.amountBought + 1;
-            resources['beta'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': 'alpha' };
-        },
-        text: {
-            title: "&alpha;&beta; unspent+ skill",
-            effect: "increase the effectiveness of the &alpha; unspent skill",
-            lore: "back the betas, alphas, and see where they will lead you."
-        },
-        tab: "skills",
-    },
+    // GROUPS
     betaGammaTimeGroup: {
         id: "betaGammaTimeGroup",
         cost: ["betaGamma"],
@@ -612,7 +753,6 @@ const OGUPGRADES = {
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
-            hideID("alphaGammaTimeGroup")
         },
         text: {
             title: "&beta;&gamma; time group",
@@ -620,6 +760,7 @@ const OGUPGRADES = {
             lore: "by starting the beta gamma time division, the alpha division can be 'cut', as they say (this is done by the newly formed division). this may lead to some small delays. the gamma group apologises. not profusely, but slightly."
         },
         tab: "group",
+        upgradesToUnlock: { "betaGammaPowerGroup": true,"alphaGammaTimeGroup":false },
     },
     alphaGammaTimeGroup: {
         id: "alphaGammaTimeGroup",
@@ -634,7 +775,6 @@ const OGUPGRADES = {
             resources['alpha'].timeUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
             resources['gamma'].timeUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
-            hideID("betaGammaTimeGroup")
         },
         text: {
             title: "&alpha;&gamma; time group",
@@ -642,6 +782,7 @@ const OGUPGRADES = {
             lore: "the alpha gamma time division focus on logging, mining, and crowd control situations. the beta division will be streamlined."
         },
         tab: "group",
+        upgradesToUnlock: { "alphaGammaPowerGroup": true,"betaGammaTimeGroup":false },
     },
     betaTimeUnspentGroup: {
         id: "betaTimeUnspentGroup",
@@ -661,6 +802,8 @@ const OGUPGRADES = {
             lore: "if the alphas and betas have finished their work, we can send them on their way. the gammas work more efficiently anyways."
         },
         tab: "group",
+        upgradesToUnlock:{},
+        upgradesToUnlock: { },
     },
     gammaTimeGroup: {
         id: "gammaTimeGroup",
@@ -682,6 +825,7 @@ const OGUPGRADES = {
             lore: "the &gamma;-group has hired consultants to tell them what they already want them to do: cut the fat off the alpha and beta division."
         },
         tab: "group",
+        upgradesToUnlock:{ },
     },
     betaGammaPowerGroup: {
         id: "betaGammaPowerGroup",
@@ -696,7 +840,6 @@ const OGUPGRADES = {
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
-            hideID("alphaGammaPowerGroup")
         },
         text: {
             title: "&beta;&gamma; power group",
@@ -704,6 +847,7 @@ const OGUPGRADES = {
             lore: "the &gamma;-group are scaling back the alpha protocol, seems like logging operations will move abroad. the betas will work on acquiring fresh talent, preferably the free kind."
         },
         tab: "group",
+        upgradesToUnlock:{},
     },
     alphaGammaPowerGroup: {
         id: "alphaGammaPowerGroup",
@@ -718,7 +862,6 @@ const OGUPGRADES = {
             resources['alpha'].powerUpgrades[this.id] = { 'factor': factor1, 'unspent': false };
             resources['beta'].powerUpgrades[this.id] = { 'factor': factor2, 'unspent': false };
             resources['gamma'].powerUpgrades[this.id] = { 'factor': factor3, 'unspent': false };
-            hideID("betaGammaPowerGroup")
         },
         text: {
             title: "&alpha;&gamma; power group",
@@ -726,6 +869,7 @@ const OGUPGRADES = {
             lore: "as the &gamma;-group employ more alphas, they expand into diplomacy, mostly by strongarming. note: the &gamma;-group does not endorse violence."
         },
         tab: "group",
+        upgradesToUnlock:{},
     },
     betaPowerUnspentGroup: {
         id: "betaPowerUnspentGroup",
@@ -745,6 +889,7 @@ const OGUPGRADES = {
             lore: "the gamma have researched new blood leaching technologies that only work on consecutive generators. luckily it can be negatively configured."
         },
         tab: "group",
+        upgradesToUnlock:{},
     },
     gammaPowerGroup: {
         id: "gammaPowerGroup",
@@ -766,5 +911,6 @@ const OGUPGRADES = {
             lore: "the &gamma;eo says we need to build a new floor. the cheaper alternative is to kick out the alphas and betas on the floor below."
         },
         tab: "group",
+        upgradesToUnlock:{},
     },
 };

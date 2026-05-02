@@ -65,3 +65,12 @@ stopped a number appearing!!!
 added alphaalpha upgrades
 removed cost descriptions and added 'automated' ones
 add alpha alpha MEGASAC button - sacs into both alpha infusions
+
+0.15
+added alphaalphaalpha and its respective upgrades
+added alpha4 + change of reality
+new TABBING method
+
+0.16
+new saving - the idiot me didnt add unlocked state to upgrades...
+means easier dependencies for upgrades (which ones un/lock which)

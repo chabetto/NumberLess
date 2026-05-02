@@ -103,6 +103,12 @@ h1 {
 #alphaAlphaBar {
     background-color: lightsalmon;
 }
+#alphaAlphaAlphaBar {
+    background-color: lightpink;
+}
+#alphaAlphaAlphaAlphaBar {
+    background-color: lightseagreen;
+}
 #betaBar {
     background-color: rgb(2, 179, 2);
 }

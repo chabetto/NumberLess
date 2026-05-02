@@ -9,19 +9,21 @@ const ogPlayer = {
         "alpha",
         "beta",
         "gamma",
-        "alphaAlpha"
+        "alphaAlpha",
+        "alphaAlphaAlpha",
+        "alphaAlphaAlphaAlpha"
     ],
     INFUSIONS: [
         "alphaBeta",
         "alphaGamma",
         "betaGamma",
     ],
-    TIMES: [20, 60, 200, 20000],
+    TIMES: [20, 60, 200, 20000, 3000000, 100000000],
     infusionsSpent: [0, 0, 0],
     POWERS: [2, 1, 10, 10],
-    percentage: [0, 0, 0, 0],
+    percentage: [0, 0, 0, 0, 0, 0],
     sacsDone: [0, 0, 0],
-    UNLOCKED: [false, false, false, false],
+    UNLOCKED: [false, false, false, false, false],
     infusionUnlocked: [false, false, false],
     upgrades: {},
     update: 0.05,
@@ -34,7 +36,7 @@ const ogPlayer = {
 let player = {};
 
 class generalUpgrade {
-    constructor(id, cost, favourability, amountBought, amountCanBuy, functionality, text) {
+    constructor(id, cost, favourability, amountBought, amountCanBuy, functionality, text, tab, upgradesToUnlock) {
         this.id = id;
         this.button = document.querySelector(`#${id}`);
         this.bar = document.querySelector(`#descBar`);
@@ -45,6 +47,10 @@ class generalUpgrade {
         this.functionality = functionality;
         this.text = text;
         this.favourability = favourability;
+        this.unlocked = false;
+        this.firstTimeBought = false;
+        this.tab = tab;
+        this.upgradesToUnlock = upgradesToUnlock;
     }
     showPercentage() {
         this.percentage = (this.amountBought / this.amountCanBuy) * 100;
@@ -81,11 +87,30 @@ class generalUpgrade {
                     infusions[item].spend();
                 }
             }
+            if (this.firstTimeBought == false) { 
+                this.firstTimeBought = true;
+                if (this.upgradesToUnlock.length !== 0) this.unlockUpgrades();
+            }
             this.updatePercentage();
             this.updateFavourability();
             return true;
         } else {
             return false
+        }
+    }
+    unlock() {
+        this.unlocked = true;
+        showID(this.id);
+    }
+    lock() {
+        this.unlocked = false;
+        hideID(this.id);
+    }
+    unlockUpgrades() {
+        for (i in this.upgradesToUnlock) {
+            let toUnlock = this.upgradesToUnlock[i];
+            if (toUnlock) upgrades[i].unlock();
+            else upgrades[i].lock();
         }
     }
     updatePercentage() {
@@ -382,13 +407,19 @@ function createUpgrade() {
             oldInfo.amountBought,
             oldInfo.amountCanBuy,
             oldInfo.functionality,
-            oldInfo.text
+            oldInfo.text,
+            oldInfo.tab,
+            oldInfo.upgradesToUnlock
         );
         if (info !== undefined) {
             upgrades[id].amountBought = info[0];
             upgrades[id].amountCanBuy = info[1];
+            upgrades[id].unlocked = info[2];
+            upgrades[id].firstTimeBought = info[3];
         }
+        if (!upgrades[id].unlocked) hideID(id);
     });
+    upgrades["alphaUnlock"].unlock();
 }
 
 // insert class name
@@ -449,7 +480,7 @@ function fromStart() {
 
 function saving() {
     for (item in upgrades) {
-        player.upgrades[item] = [upgrades[item].amountBought, upgrades[item].amountCanBuy]
+        player.upgrades[item] = [upgrades[item].amountBought, upgrades[item].amountCanBuy, upgrades[item].unlocked, upgrades[item].firstTimeBought]
     }
     player.resources = resources;
     localStorage.setItem("player", JSON.stringify(player));
@@ -496,7 +527,7 @@ function untoggleButtons(id) {
 }
 
 function alphaAlphaSac() {
-    if (resources["alphaAlpha"].point && !infusions["alphaBeta"].point && !infusions["alphaGamma"].point) {
+    if (resources["alphaAlpha"].point && (!infusions["alphaBeta"].point || !infusions["alphaGamma"].point)) {
         infusions["alphaBeta"].updatePercentage("alphaAlpha");
         resources["alphaAlpha"].point = true;
         infusions["alphaGamma"].updatePercentage("alphaAlpha");
@@ -522,26 +553,7 @@ function buttonFunction(e) {
 
 function showTab(id) {
     hideClass("page");
-    switch (id.slice(6)) {
-        case "Generators":
-            showID("tabGenerators");
-            break;
-        case "Tree":
-            showID("tabTree");
-            break;
-        case "Upgrades":
-            showID("tabUpgrades");
-            break;
-        case "Skills":
-            showID("tabSkills");
-            break;
-        case "Group":
-            showID("tabGroup");
-            break;
-        case "Unreality":
-            showID("tabUnreality");
-            break;
-    };
+    showID("tab" + id.slice(6))
     let buttons = document.querySelectorAll(".tabButton");
     buttons.forEach((button) => {
         button.classList.remove("toggle");
@@ -576,7 +588,7 @@ function startTime() {
 function createCostDescription(costList) {
     if (costList[0] == "none") return "free..."
     let costDescription = []
-    let conversion = { alpha: "&alpha;", beta: "&beta;", gamma: "&gamma;", alphaBeta: "&alpha;&beta;", alphaGamma: "&alpha;&gamma;", betaGamma: "&beta;&gamma;", alphaAlpha: "&alpha;&alpha;" }
+    let conversion = { alpha: "&alpha;", beta: "&beta;", gamma: "&gamma;", alphaBeta: "&alpha;&beta;", alphaGamma: "&alpha;&gamma;", betaGamma: "&beta;&gamma;", alphaAlpha: "&alpha;&alpha;", alphaAlphaAlpha: "&alpha;&alpha;&alpha;" ,alphaAlphaAlphaAlpha:"&alpha;&alpha;&alpha;&alpha;"}
     for (let i in costList) { // i is a string
         costDescription.push(conversion[costList[i]])
     }
@@ -633,15 +645,11 @@ function showDescription(e) {
 function loadBought() {
     let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade", "alphaAlphaUpgradeUpgrade"]
     for (item in upgrades) {
-        if (upgrades[item].amountBought >= 1) {
+        if (upgrades[item].unlocked) upgrades[item].unlock();
+        if (upgrades[item].firstTimeBought) {
             if (!toSkip.includes(upgrades[item].id)) upgrades[item].functionality();
             upgrades[item].showPercentage();
         }
-    }
-    if (upgrades["upgradeUpgrade"].amountBought >= 1) {
-        showID("alphaAlphaUnlock");
-    } if (upgrades["alphaAlphaUpgradeUpgrade"].amountBought >= 1) {
-        hideID("alphaAlphaSelflessUpgrade");
     }
 }
 
@@ -663,7 +671,7 @@ function resetUpgradeList(ids, increaseAmount = false) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    cheating();
+    //cheating();
     createResources();
     createUpgrade();
     addButtonListeners();

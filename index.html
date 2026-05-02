@@ -21,6 +21,7 @@
         <button id="buttonGenerators" class="tabButton hidden alpha">generators</button>
         <button id="buttonUnreality" class="tabButton hidden">unreality</button>
         <button id="buttonUpgrades" class="tabButton hidden">&alpha;-upgrades</button>
+        <button id="buttonFakeUpgrades" class="tabButton hidden">upgrades</button>
         <button id="buttonSkills" class="tabButton hidden">&beta;-skills</button>
         <button id="buttonGroup" class="tabButton hidden">&gamma;-group</button>
     </div>
@@ -30,6 +31,8 @@
         <p id="betaIsDone" class="isDone hidden">&beta;</p>
         <p id="gammaIsDone" class="isDone hidden">&gamma;</p>
         <p id="alphaAlphaIsDone" class="isDone hidden">&alpha;&alpha;</p>
+        <p id="alphaAlphaAlphaIsDone" class="isDone hidden">&alpha;&alpha;&alpha;</p>
+        <p id="alphaAlphaAlphaAlphaIsDone" class="isDone hidden">&alpha;&alpha;&alpha;&alpha;</p>
         <p id="alphaBetaIsDone" class="isDone hidden">&alpha;&beta;</p>
         <p id="alphaGammaIsDone" class="isDone hidden">&alpha;&gamma;</p>
         <p id="betaGammaIsDone" class="isDone hidden">&beta;&gamma;</p>
@@ -50,6 +53,20 @@
                 <div class="barContainer">
                     <div id="alphaAlphaBar" class="generatorBar">
                         <p class="generatorsText">&alpha;&alpha;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="alphaAlphaAlpha" class="generator alphaAlphaAlpha hidden">
+                <div class="barContainer">
+                    <div id="alphaAlphaAlphaBar" class="generatorBar">
+                        <p class="generatorsText">&alpha;&alpha;&alpha;</p>
+                    </div>
+                </div>
+            </div>
+            <div id="alphaAlphaAlphaAlpha" class="generator alphaAlphaAlphaAlpha hidden">
+                <div class="barContainer">
+                    <div id="alphaAlphaAlphaAlphaBar" class="generatorBar">
+                        <p class="generatorsText">&alpha;&alpha;&alpha;&alpha;</p>
                     </div>
                 </div>
             </div>
@@ -137,19 +154,19 @@
                     <button id="alphaUnlock" class="treeUpgrade upgradable">
                         &alpha;
                     </button>
-                    <button id="isDoneUnlock" class="treeUpgrade alpha hidden upgradable">
+                    <button id="isDoneUnlock" class="treeUpgrade upgradable">
                         is done
                     </button>
                 </div>
                 <div id="alphaTree" class="tree">
-                    <button id="betaUnlock" class="treeUpgrade alpha hidden upgradable">
+                    <button id="betaUnlock" class="treeUpgrade upgradable">
                         &beta;
                     </button>
-                    <button id="upgradesUnlock" class="treeUpgrade alpha hidden upgradable">
+                    <button id="upgradesUnlock" class="treeUpgrade upgradable">
                         &alpha;-upgrades
                     </button>
                 </div>
-                <div id="betaTree" class="beta tree">
+                <div id="betaTree" class="tree">
                     <button id="gammaUnlock" class="treeUpgrade upgradable">
                         &gamma;
                     </button>
@@ -157,7 +174,7 @@
                         &beta;-skills
                     </button>
                 </div>
-                <div id="gammaTree" class="gamma tree">
+                <div id="gammaTree" class="tree">
                     <button id="groupUnlock" class="treeUpgrade upgradable">
                         &gamma;-group
                     </button>
@@ -165,17 +182,26 @@
                         unreality
                     </button>
                 </div>
-                <div id="helpfulTree" class="tree hidden">
+                <div id="helpfulTree" class="tree">
                     <button id="untoggleUnlock" class="treeUpgrade upgradable">
                         untoggle
                     </button>
                 </div>
                 <div id="extendedAlphaTree" class="tree">
-                    <button id="alphaAlphaUnlock" class="treeUpgrade upgradable hidden">
+                    <button id="alphaAlphaUnlock" class="treeUpgrade upgradable">
                         &alpha;&alpha;
+                    </button>
+                    <button id="alpha3Unlock" class="treeUpgrade upgradable">
+                        &alpha;&alpha;&alpha;
+                    </button>
+                    <button id="alpha4Unlock" class="treeUpgrade upgradable">
+                        &alpha;&alpha;&alpha;&alpha;
                     </button>
                 </div>
             </div>
+        </div>
+        <div id="tabFakeUpgrades" class="game page hidden">
+            <p>fake hello</p>
         </div>
         <div id="tabUpgrades" class="game page hidden">
             <div class="container">
@@ -183,22 +209,22 @@
                     <button id="alphaTimeUpgrade" class="alphaUpgrade upgradable">
                         &alpha;Tu
                     </button>
-                    <button id="betaTimeUpgrade" class="alphaUpgrade upgradable hidden beta">
+                    <button id="betaTimeUpgrade" class="alphaUpgrade upgradable">
                         &beta;Tu
                     </button>
-                    <button id="gammaTimeUpgrade" class="alphaUpgrade upgradable hidden gamma">
+                    <button id="gammaTimeUpgrade" class="alphaUpgrade upgradable">
                         &gamma;Tu
                     </button>
                 </div>
                 <div class="upgrades">
-                    <button id="alphaPowerUpgrade" class="alphaUpgrade upgradable power hidden">
+                    <button id="alphaPowerUpgrade" class="alphaUpgrade upgradable">
                         &alpha;Pu
                     </button>
-                    <button id="betaTime2Upgrade" class="alphaUpgrade upgradable gamma hidden">
+                    <button id="betaTime2Upgrade" class="alphaUpgrade upgradable">
                         &beta;TTu
                     </button>
                 </div>
-                <div class="upgrades hidden power">
+                <div class="upgrades">
                     <button id="upgradeUpgrade" class="alphaUpgrade upgradable">
                         Uu
                     </button>
@@ -209,42 +235,55 @@
                         &gamma;Pu
                     </button>
                 </div>
-                <div id="alphaBetaUpgrades" class="upgrades hidden">
-                    <button id="alphaBetaMutualUpgrade" class="alphaUpgrade upgradable hidden">
-                        &alpha;&beta;Mu
-                    </button>
-                    <button id="gammaDespansionUpgrade" class="alphaUpgrade upgradable">
-                        &gamma;Du
-                    </button>
-                    <button id="alphaBetaUpgradeUpgrade" class="alphaUpgrade upgradable hidden">
-                        &alpha;&beta;Uu
-                    </button>
-                </div>
-                <div id="alphaAlphaUpgrades" class="upgrades hidden">
+                <div id="alphaAlphaUpgrades" class="upgrades">
                     <button id="alphaAlphaPowerUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&alpha;Pu
                     </button>
                     <button id="alphaAlphaSelflessUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&alpha;Su
                     </button>
-                    <button id="alphaAlphaUpgradeUpgrade" class="alphaUpgrade upgradable hidden">
+                    <button id="alphaAlphaUpgradeUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&alpha;Uu
                     </button>
                     <button id="alphaAlphaTimeUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&alpha;Tu
                     </button>
                 </div>
-                <div id="alphaGammaUpgrades" class="upgrades hidden">
-                    <!--
+                <div id="alphaAlphaAlphaUpgrades" class="upgrades">
+                    <button id="alphaAlphaAlphaTimeUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&alpha;&alpha;Tu
+                    </button>
+                    <button id="alphaAlphaAlphaUpgradeUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&alpha;&alpha;Uu
+                    </button>
+                </div>
+                <div id="alphaBetaUpgrades" class="upgrades">
+                    <button id="alphaBetaMutualUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&beta;Mu
+                    </button>
+                    <button id="gammaDespansionUpgrade" class="alphaUpgrade upgradable">
+                        &gamma;Du
+                    </button>
+                    <button id="alphaBetaUpgradeUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&beta;Uu
+                    </button>
+                    <button id="alphaBetaTimeUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&beta;Tu
+                    </button>
+                </div>
+                <div id="alphaGammaUpgrades" class="upgrades">
                     <button id="alphaGammaUpgradeUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&gamma;Uu
                     </button>
                     <button id="alphaGammaPowerUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&gamma;Pu
                     </button>
-                    <button id="groupUpgrade" class="alphaUpgrade upgradable">
-                        &gamma;Gu
-                    </button>-->
+                    <button id="alphaGammaMutualUpgrade" class="alphaUpgrade upgradable">
+                        &alpha;&gamma;Mu
+                    </button>
+                    <button id="gammaExclusiveUpgrade" class="alphaUpgrade upgradable">
+                        &gamma;Eu
+                    </button>
                 </div>
             </div>
         </div>
@@ -254,11 +293,11 @@
                     <button id="alphaUnspentSkill" class="betaSkill upgradable">
                         &alpha;Us
                     </button>
-                    <button id="betaUnspentTimeSkill" class="betaSkill upgradable hidden gamma">
+                    <button id="betaUnspentTimeSkill" class="betaSkill upgradable">
                         &beta;UTs
                     </button>
                 </div>
-                <div id="powerUnspentSkills" class="skills power hidden">
+                <div id="powerUnspentSkills" class="skills">
                     <button id="betaUnspentPowerSkill" class="betaSkill upgradable">
                         &beta;UPs
                     </button>
@@ -266,47 +305,25 @@
                         &gamma;Us
                     </button>
                 </div>
-                <div id="alphaBetaSkills" class="skills hidden">
-                    <button id="alphaBetaTimeSkill" class="betaSkill upgradable">
-                        &alpha;&beta;Ts
-                    </button>
-                    <button id="alphaUnspent2Skill" class="betaSkill upgradable">
-                        &alpha;U+s
-                    </button>
-                    <button id="alphaBetaPowerSkill" class="betaSkill upgradable">
-                        &alpha;&beta;Ps
-                    </button>
-                </div>
-                <!--<div id="gammaSkills" class="skills hidden">
-                    <button id="gammaTimeSkill" class="betaSkill upgradable">
-                        &gamma;Ts
-                    </button>
-                    <button id="betaUnspentTimePowerSkill" class="betaSkill upgradable">
-                        &beta;UTPs
-                    </button>
-                    <button id="gammaPowerSkill" class="betaSkill upgradable">
-                        &gamma;Ps
-                    </button>
-                </div>-->
             </div>
         </div>
         <div id="tabGroup" class="game page hidden">
             <div class="container">
                 <div id="timeGroup" class="group">
-                    <button id="alphaGammaTimeGroup" class="gammaGroup power hidden upgradable">
+                    <button id="alphaGammaTimeGroup" class="gammaGroup upgradable">
                         &alpha;&gamma;Tg
                     </button>
                     <button id="betaTimeUnspentGroup" class="gammaGroup upgradable">
                         U&beta;Tg
                     </button>
-                    <button id="gammaTimeGroup" class="gammaGroup upgradable hidden">
+                    <button id="gammaTimeGroup" class="gammaGroup upgradable">
                         &gamma;Tg
                     </button>
-                    <button id="betaGammaTimeGroup" class="gammaGroup power hidden upgradable">
+                    <button id="betaGammaTimeGroup" class="gammaGroup upgradable">
                         &beta;&gamma;Tg
                     </button>
                 </div>
-                <div id="powerGroup" class="group power hidden">
+                <div id="powerGroup" class="group">
                     <button id="alphaGammaPowerGroup" class="gammaGroup upgradable">
                         &alpha;&gamma;Pg
                     </button>
@@ -320,20 +337,6 @@
                         &beta;&gamma;Pg
                     </button>
                 </div>
-                <!--<div id="upgradeGroup" class="group">
-                    <button id="gammaUpgradeGroup" class="gammaGroup upgradable hidden">
-                        &gamma;&alpha;Ug
-                    </button>
-                    <button id="gammaUpgradesUpgradeGroup" class="gammaGroup upgradable hidden">
-                        &gamma;UUg
-                    </button>
-                    <button id="gammaSkillGroup" class="gammaGroup upgradable hidden">
-                        &gamma;&beta;Sg
-                    </button>
-                    <button id="gammaSkillUpgradeGroup" class="gammaGroup upgradable hidden">
-                        &gamma;SUg
-                    </button>
-                </div>-->
             </div>
         </div>
         <div id="desc">
