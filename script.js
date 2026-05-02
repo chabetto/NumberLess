@@ -672,7 +672,7 @@ function resetUpgradeList(ids, increaseAmount = false) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    cheating();
+    //cheating();
     createResources();
     createUpgrade();
     addButtonListeners();
