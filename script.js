@@ -643,11 +643,13 @@ function showDescription(e) {
 }
 
 function loadBought() {
-    let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade", "alphaAlphaUpgradeUpgrade"]
+    // let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade", "alphaAlphaUpgradeUpgrade"]
     for (item in upgrades) {
         if (upgrades[item].unlocked) upgrades[item].unlock();
+        // all 'upgrade upgrades' need to be skipped
+        let toSkip = (item.toLowerCase().includes("upgradeupgrade"))
         if (upgrades[item].firstTimeBought) {
-            if (!toSkip.includes(upgrades[item].id)) upgrades[item].functionality();
+            if (!toSkip) upgrades[item].functionality();
             upgrades[item].showPercentage();
         }
     }

@@ -77,3 +77,4 @@ means easier dependencies for upgrades (which ones un/lock which)
 
 0.17
 ending alpha complete - need to add popups and story for it now - that can wait
+some saving errors (upgrade upgrades + ending alpha stuff)

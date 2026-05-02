@@ -251,7 +251,7 @@ const OGUPGRADES = {
             // TODO change the whole game
             for (i in upgrades) {
                 let toSkip = ["alphaUnlock","isDoneUnlock","upgradesUnlock","alphaAlphaUnlock","alpha2Unlock","alpha3Unlock","alpha4Unlock"];
-                if (upgrades[i].firstTimeBought && (!toSkip.includes(i) && !upgrades[i].tab == "upgradeFake")) {
+                if ((upgrades[i].firstTimeBought && !upgrades[i].tab == "upgradeFake") && !toSkip.includes(i)) {
                     upgrades[i].lock();
                     resetUpgrade(i);
                 }
