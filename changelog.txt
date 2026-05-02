@@ -74,3 +74,6 @@ new TABBING method
 0.16
 new saving - the idiot me didnt add unlocked state to upgrades...
 means easier dependencies for upgrades (which ones un/lock which)
+
+0.17
+ending alpha complete - need to add popups and story for it now - that can wait

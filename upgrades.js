@@ -243,13 +243,35 @@ const OGUPGRADES = {
         functionality: function () {
             showClass("alphaAlphaAlphaAlpha");
             showID("buttonFakeUpgrades")
-            //showID("alphaAlphaAlphaAlphaUpgrades");
             player.UNLOCKED[5] = true;
             resources['alphaAlphaAlphaAlpha'].unlocked = true;
             resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alpha' }
             resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alphaAlpha' }
             resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alphaAlphaAlpha' }
             // TODO change the whole game
+            for (i in upgrades) {
+                let toSkip = ["alphaUnlock","isDoneUnlock","upgradesUnlock","alphaAlphaUnlock","alpha2Unlock","alpha3Unlock","alpha4Unlock"];
+                if (upgrades[i].firstTimeBought && (!toSkip.includes(i) && !upgrades[i].tab == "upgradeFake")) {
+                    upgrades[i].lock();
+                    resetUpgrade(i);
+                }
+            }
+            resources['beta'].unlocked = false;
+            resources['gamma'].unlocked = false;
+            for (i in resources) {
+                resources[i].reset();
+            }
+            for (i in infusions) {
+                infusions[i].reset();
+            }
+            hideID("alphaAlphaSacButton");
+            hideClass("togBut");
+            hideClass("beta");
+            hideClass("gamma");
+            hideID("buttonUnreality");
+            hideID("buttonUpgrades");
+            hideID("buttonSkills");
+            hideID("buttonGroup");
         },
         text: {
             title: "unlock &alpha;&alpha;&alpha;&alpha;",
@@ -257,7 +279,7 @@ const OGUPGRADES = {
             lore: "how peculiar - it only grows when &alpha; and &alpha;&alpha; and &alpha;&alpha;&alpha; is full. it also is causing a major reality change. how cool."
         },
         tab: "tree",
-        upgradesToUnlock: {},
+        upgradesToUnlock: {"alphaTimeUpgradeFake":true, "alpha2TimeUpgradeFake":true, "alpha3TimeUpgradeFake":true, "alpha4TimeUpgradeFake":true},
     },
     // UPGRADES
     alphaTimeUpgrade: {
@@ -912,5 +934,138 @@ const OGUPGRADES = {
         },
         tab: "group",
         upgradesToUnlock:{},
+    },
+    // FAKE UPGRADES - ENDING ALPHA
+    alphaTimeUpgradeFake: {
+        id: "alphaTimeUpgradeFake",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let factor = 0.5 * this.amountBought + 1;
+            let factor2 = 0.2 * this.amountBought + 1;
+            resources['alpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': false };
+            resources['alphaAlpha'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': "alpha" };
+        },
+        text: {
+            title: "&alpha; time upgrade",
+            effect: "reduce the time it takes for the &alpha; and &alpha;&alpha; generator to fill",
+            lore: "oh wow this is a really good and fun upgrade that makes a truly enjoyable game"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {},
+    },
+    alpha2TimeUpgradeFake: {
+        id: "alpha2TimeUpgradeFake",
+        cost: ["alpha","alphaAlpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let factor = 0.5 * this.amountBought + 1;
+            let factor2 = 0.2 * this.amountBought + 1;
+            resources['alphaAlpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': "alpha" };
+            resources['alphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': "alphaAlpha" };
+        },
+        text: {
+            title: "&alpha;&alpha; time upgrade",
+            effect: "reduce the time it takes for the &alpha;&alpha; and &alpha;&alpha;&alpha; generator to fill",
+            lore: "oh wow this is a really exceptional upgrade that makes a truly enjoyable game, true branch like structure with a real touch of class"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {"alpha2UpgradeUpgradeFake":true},
+    },
+    alpha2UpgradeUpgradeFake: {
+        id: "alpha2UpgradeUpgradeFake",
+        cost: ["alpha","alphaAlpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let upgToInc = ["alphaTimeUpgradeFake", "alpha2TimeUpgradeFake"];
+            resetUpgradeList(upgToInc, true);
+        },
+        text: {
+            title: "&alpha;&alpha; upgrade upgrade",
+            effect: "increase the cap of time upgrades above",
+            lore: "i mean this is truly ingenious, adding an upgrade that upgrades upgrades, whatever could be next"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {},
+    },
+    alpha3TimeUpgradeFake: {
+        id: "alpha3TimeUpgradeFake",
+        cost: ["alpha","alphaAlpha","alphaAlphaAlpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let factor = 0.5 * this.amountBought + 1;
+            let factor2 = 0.2 * this.amountBought + 1;
+            resources['alphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': "alphaAlpha" };
+            resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': factor2, 'unspent': "alphaAlphaAlpha" };
+        },
+        text: {
+            title: "&alpha;&alpha;&alpha; time upgrade",
+            effect: "reduce the time it takes for the &alpha;&alpha;&alpha; and &alpha;&alpha;&alpha;&alpha; generator to fill",
+            lore: "surely this is the best upgrade ever devised by man"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {"alpha3UpgradeUpgradeFake":true},
+    },
+    alpha3UpgradeUpgradeFake: {
+        id: "alpha3UpgradeUpgradeFake",
+        cost: ["alpha","alphaAlpha","alphaAlphaAlpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let upgToInc = ["alphaTimeUpgradeFake", "alpha2TimeUpgradeFake", "alpha3TimeUpgradeFake", "alpha2UpgradeUpgradeFake"];
+            resetUpgradeList(upgToInc, true);
+        },
+        text: {
+            title: "&alpha;&alpha;&alpha; upgrade upgrade",
+            effect: "increase the cap of time upgrades above and upgrade upgrades above",
+            lore: "simply beautiful, this upgrade is bound to make you cry. tears of joy stream from your eyes, and the many many pores across your body"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {},
+    },
+    alpha4TimeUpgradeFake: {
+        id: "alpha4TimeUpgradeFake",
+        cost: ["alpha","alphaAlpha","alphaAlphaAlpha","alphaAlphaAlphaAlpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let factor = 1 * this.amountBought + 1;
+            resources['alphaAlphaAlphaAlpha'].timeUpgrades[this.id] = { 'factor': factor, 'unspent': "alphaAlphaAlpha" };
+        },
+        text: {
+            title: "&alpha;&alpha;&alpha;&alpha; time upgrade",
+            effect: "reduce the time it takes for the &alpha;&alpha;&alpha;&alpha; generator to fill",
+            lore: "god saw this upgrade and wept. joy. pure unadulterated joy"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {"alpha4UpgradeUpgradeFake":true},
+    },
+    alpha4UpgradeUpgradeFake: {
+        id: "alpha4UpgradeUpgradeFake",
+        cost: ["alpha","alphaAlpha","alphaAlphaAlpha"],
+        favourability: { 'alpha': 1 },
+        amountBought: 0,
+        amountCanBuy: 2,
+        functionality: function () {
+            let upgToInc = ["alphaTimeUpgradeFake", "alpha2TimeUpgradeFake", "alpha3TimeUpgradeFake", "alpha4TimeUpgradeFake", "alpha2UpgradeUpgradeFake", "alpha3UpgradeUpgradeFake"];
+            resetUpgradeList(upgToInc, true);
+        },
+        text: {
+            title: "&alpha;&alpha;&alpha;&alpha; upgrade upgrade",
+            effect: "increase the cap of time upgrades and upgrade upgrades above",
+            lore: "noone can believe this exists, you feel as if this is the secret to numbers, to all numbers"
+        },
+        tab: "upgradeFake",
+        upgradesToUnlock: {},
     },
 };

@@ -651,6 +651,7 @@ function loadBought() {
             upgrades[item].showPercentage();
         }
     }
+    if (upgrades["alpha4Unlock"].firstTimeBought) upgrades["alpha4Unlock"].functionality(); // go to ending alpha
 }
 
 function resetUpgrade(id) {
@@ -671,7 +672,7 @@ function resetUpgradeList(ids, increaseAmount = false) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    //cheating();
+    cheating();
     createResources();
     createUpgrade();
     addButtonListeners();
