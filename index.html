@@ -9,11 +9,20 @@
         <h1>numberless</h1>
     </div>
     <div id="toggleButtons" class="container">
+        <p class="toggleText sacTog hidden">sac:</p>
         <div>
-            <button id="alphaToggle" class="togBut hidden">&alpha;</button>
-            <button id="betaToggle" class="togBut hidden">&beta;</button>
-            <button id="gammaToggle" class="togBut hidden">&gamma;</button>
+            <button id="alphaSacToggle" class="togBut sacTog hidden">&alpha;</button>
+            <button id="betaSacToggle" class="togBut sacTog hidden">&beta;</button>
+            <button id="gammaSacToggle" class="togBut sacTog hidden">&gamma;</button>
             <button id="alphaAlphaSacButton" class="alphaAlphaSac hidden">&alpha;&alpha;</button>
+        </div>
+    </div>
+    <div id="boostToggleButtons" class="container">
+        <p class="toggleText boostTog hidden">boost:</p>
+        <div>
+            <button id="alphaBoostButtonExtra" class="togBut boostTog boost hidden">&alpha;</button>
+            <button id="betaBoostButtonExtra" class="togBut boostTog boost hidden">&beta;</button>
+            <button id="gammaBoostButtonExtra" class="togBut boostTog boost hidden">&gamma;</button>
         </div>
     </div>
     <div id="topTabs" class="tabs">
@@ -89,6 +98,13 @@
                     <div id="rhoBar" class="generatorBar rho">
                         <p class="generatorsText">&rho;</p>
                     </div>
+                </div>
+            </div>
+            <div class="container">
+                <div>
+                    <button id="alphaBoostButton" class="togBut unlockBoost boost hidden">&alpha;</button>
+                    <button id="betaBoostButton" class="togBut unlockBoost boost hidden">&beta;</button>
+                    <button id="gammaBoostButton" class="togBut unlockBoost boost hidden">&gamma;</button>
                 </div>
             </div>
         </div>
@@ -184,7 +200,10 @@
                 </div>
                 <div id="helpfulTree" class="tree">
                     <button id="untoggleUnlock" class="treeUpgrade upgradable">
-                        untoggle
+                        sacToggle
+                    </button>
+                    <button id="boostToggleUnlock" class="treeUpgrade upgradable">
+                        boostToggle
                     </button>
                 </div>
                 <div id="extendedAlphaTree" class="tree">
@@ -333,6 +352,17 @@
                     </button>
                     <button id="gammaUnspentSkill" class="betaSkill upgradable">
                         &gamma;Us
+                    </button>
+                </div>
+                <div id="boostButtonSkills" class="skills">
+                    <button id="boostPowerSkill" class="betaSkill upgradable">
+                        BPs
+                    </button>
+                    <button id="boostButtonSkill" class="betaSkill upgradable">
+                        Bs
+                    </button>
+                    <button id="boostTimeSkill" class="betaSkill upgradable">
+                        BTs
                     </button>
                 </div>
             </div>

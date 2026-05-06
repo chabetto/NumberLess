@@ -29,7 +29,8 @@ const ogPlayer = {
     update: 0.05,
     stopTime: false,
     favourability: { 'alpha': 0, 'beta': 0, 'gamma': 0 },
-    choices: {}
+    choices: {},
+    boostButtonCurrent: false,
 };
 
 // save
@@ -141,7 +142,7 @@ function switchOnSac(id) {
                     button.classList.remove("toggle");
                 }
             }
-            let togBut = document.querySelector(`#${res}Toggle`)
+            let togBut = document.querySelector(`#${res}SacToggle`)
             isOn ? togBut.classList.add("toggle") : togBut.classList.remove("toggle");
         }
     }
@@ -512,15 +513,29 @@ function incrementBars() {
     }
 }
 
-function untoggleButtons(id) {
+function untoggleButton(id) {
     let button = document.querySelector(`#${id}`);
     button.classList.remove("toggle")
+}
+
+function toggleButton(id) {
+    let button = document.querySelector(`#${id}`);
+    button.classList.add("toggle")
+}
+
+function untoggleButtons(CL) {
+    let buttonList = document.querySelectorAll(`.${CL}`);
+    buttonList.forEach((button) => {
+        untoggleButton(button.id);
+    });
+}
+
+function toggleSac(id) {
     for (i in player.NAMES) {
         let res = player.NAMES[i];
         if (id.includes(res)) {
             for (j in SACBUTTONS[res]) {
-                button = document.querySelector(`#${SACBUTTONS[res][j]}`);
-                button.classList.remove("toggle")
+                untoggleButton(SACBUTTONS[res][j]);
             }
         }
     }
@@ -534,6 +549,45 @@ function alphaAlphaSac() {
     }
 }
 
+let BOOSTBUTTON = {"positiveTimeFactor": 1.2, "negativeTimeFactor": 0.2, "positivePowerFactor": 1.2, "negativePowerFactor": 0.2};
+
+function toggleBoost(id) {
+    let toSwitch;
+    let old = player.boostButtonCurrent;
+    switch (id[0]) { // could use regex to slice up to first capital letter...
+        case "a":
+            toSwitch = "alpha";
+            break;
+        case "b":
+            toSwitch = "beta";
+            break;
+        case "g":
+            toSwitch = "gamma";
+            break;
+    }
+    let toBoost = (toSwitch != old);
+    toBoost ? player.boostButtonCurrent = toSwitch : player.boostButtonCurrent = false;
+    for (let i = 0; i < 3; i++) {
+        let reso = player.NAMES[i];
+        let [timeF, powerF] = [1,1];
+        if (toBoost) {
+            if (reso == toSwitch) {
+                timeF = BOOSTBUTTON["positiveTimeFactor"];
+                powerF = BOOSTBUTTON["positivePowerFactor"];
+            } else {
+                timeF = BOOSTBUTTON["negativeTimeFactor"];
+                powerF = BOOSTBUTTON["negativePowerFactor"];
+            }
+        }
+        resources[reso].timeUpgrades[reso + "TimeBoost"] = {"factor": timeF, "unspent": false};
+        resources[reso].powerUpgrades[reso + "PowerBoost"] = {"factor": powerF, "unspent": false};
+    }
+    if (toBoost) {
+        toggleButton(toSwitch + "BoostButton");
+        toggleButton(toSwitch + "BoostButtonExtra");
+    }
+}
+
 function buttonFunction(e) {
     let id = e.target.id;
     let classes = e.target.classList;
@@ -542,13 +596,18 @@ function buttonFunction(e) {
     } else if (classes.contains("sac")) {
         switchOnSac(id);
     } else if (classes.contains("togBut")) {
-        untoggleButtons(id);
+        if (id.includes('Sac')) {
+            untoggleButton(id);
+            toggleSac(id);
+        } else if (id.includes("Boost")) {
+            untoggleButtons("boost");
+            toggleBoost(id);
+        }
     } else if (id == "alphaAlphaSacButton") {
         alphaAlphaSac();
     } else {
         upgrades[id].buyOnce();
     };
-    // tabbing
 }
 
 function showTab(id) {
@@ -654,6 +713,12 @@ function loadBought() {
         }
     }
     if (upgrades["alpha4Unlock"].firstTimeBought) upgrades["alpha4Unlock"].functionality(); // go to ending alpha
+    if (upgrades["boostButtonSkill"].firstTimeBought && player.boostButtonCurrent != false) {
+        // issue is want to switch to CURRENT boost so have to set to no boost first ;)
+        let toSwitch = player.boostButtonCurrent;
+        player.boostButtonCurrent = false;
+        toggleBoost(toSwitch);
+    }
 }
 
 function resetUpgrade(id) {
@@ -665,9 +730,16 @@ function resetUpgrade(id) {
 
 function resetUpgradeList(ids, increaseAmount = false) {
     for (i in ids) {
-        upgID = ids[i];
+        let upgID = ids[i];
         if (increaseAmount) upgrades[upgID].amountCanBuy++;
         resetUpgrade(upgID);
+    }
+}
+
+function increaseUpgradeAmount(ids, increaseAmount = 1) {
+    for (i in ids) {
+        let upgID = ids[i];
+        upgrades[upgID].amountCanBuy += increaseAmount;
     }
 }
 

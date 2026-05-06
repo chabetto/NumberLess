@@ -94,8 +94,13 @@ h1 {
 }
 #toggleButtons {
     position: fixed;
-    top: 42px;
-    left: 500px;
+    top: 35px;
+    left: 510px;
+}
+#boostToggleButtons {
+    position: fixed;
+    top: 35px;
+    left: 270px;
 }
 #alphaBar {
     background-color: lightcoral;
@@ -182,4 +187,8 @@ h1 {
     #theGame {
         width: 960px;
     }
+}
+.toggleText {
+    padding:0px;
+    margin: 0px;
 }

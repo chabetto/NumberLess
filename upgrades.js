@@ -15,6 +15,7 @@ UPGRADEID: {
         },
         tab: "to add",
         upgradesToUnlock: {  },
+},
 
 NOTES:
 cost involves list of resources/infusions to consume for upgrade
@@ -181,15 +182,32 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            showClass("togBut");
+            showClass("sacTog");
         },
         text: {
-            title: "untoggle buttons",
+            title: "sacrifice untoggle buttons",
             effect: "unlock a couple of buttons to untoggle sacrificing in unreality",
             lore: "if you want something in reality, unreality has to stop."
         },
         tab: "tree",
         upgradesToUnlock: {},
+    },
+    boostToggleUnlock: {
+        id: "boostToggleUnlock",
+        cost: ["beta"],
+        favourability: { 'alpha': 0,'beta': 1,'gamma': 0 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showClass("boostTog");
+        },
+        text: {
+            title: "boost toggle buttons",
+            effect: "adds MOAR buttons to boost resources",
+            lore: "now with no added need to switch to the generators tab"
+        },
+        tab: "tree",
+        upgradesToUnlock: {  },
     },
     alphaAlphaUnlock: {
         id: "alphaAlphaUnlock",
@@ -352,7 +370,7 @@ const OGUPGRADES = {
             lore: "did we just do this? i am sure. the beta are sure also."
         },
         tab: "upgrade",
-        upgradesToUnlock:{},
+        upgradesToUnlock:{"boostButtonSkill": true},
     },
     alphaPowerUpgrade: {
         id: "alphaPowerUpgrade",
@@ -760,6 +778,57 @@ const OGUPGRADES = {
         },
         tab: "skills",
         upgradesToUnlock:{},
+    },
+    boostButtonSkill: {
+        id: "boostButtonSkill",
+        cost: ['beta','alphaBeta','betaGamma'],
+        favourability: { 'alpha': 1,'beta': 1,'gamma': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showClass("unlockBoost")
+        },
+        text: {
+            title: "boost button skill",
+            effect: "unlocks buttons that reduces time and increases power of one of &alpha;, &beta;, &gamma;. affects the others adversely.",
+            lore: "its pretty brutal at first..."
+        },
+        tab: "skill",
+        upgradesToUnlock: { "boostPowerSkill":true, "boostTimeSkill":true,"boostToggleUnlock":true },
+    },
+    boostPowerSkill: {
+        id: "boostPowerSkill",
+        cost: ['beta','alphaBeta'],
+        favourability: { 'alpha': 1,'beta': 1,'gamma': 0 },
+        amountBought: 0,
+        amountCanBuy: 7,
+        functionality: function () {
+            // to add
+        },
+        text: {
+            title: "to add",
+            effect: "to add",
+            lore: "to add"
+        },
+        tab: "skill",
+        upgradesToUnlock: {  },
+    },
+    boostTimeSkill: {
+        id: "boostTimeSkill",
+        cost: ['beta','betaGamma'],
+        favourability: { 'alpha': 0,'beta': 1,'gamma': 1 },
+        amountBought: 0,
+        amountCanBuy: 5,
+        functionality: function () {
+            // add functionality
+        },
+        text: {
+            title: "to add",
+            effect: "to add",
+            lore: "to add"
+        },
+        tab: "skill",
+        upgradesToUnlock: {  },
     },
     // GROUPS
     betaGammaTimeGroup: {
