@@ -762,7 +762,7 @@ function increaseUpgradeAmount(ids, increaseAmount = 1) {
 window.onload = function () {
     fromStart();
     loadPlayer();
-    cheating();
+    //cheating();
     createResources();
     createUpgrade();
     addButtonListeners();
