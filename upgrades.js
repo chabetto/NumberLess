@@ -218,6 +218,7 @@ const OGUPGRADES = {
         functionality: function () {
             showClass("alphaAlpha");
             showClass("alphaAlphaSac");
+            if (upgrades["boostButtonSkill"].firstTimeBought) upgrades["alphaAlphaBoostUpgrade"].unlock();
             player.UNLOCKED[3] = true;
             resources['alphaAlpha'].unlocked = true;
             resources['alphaAlpha'].timeUpgrades[this.id] = { 'factor': 100, 'unspent': 'alpha' }
@@ -269,7 +270,7 @@ const OGUPGRADES = {
             // TODO change the whole game - mostly hiding the correct things now ;)
             for (i in upgrades) {
                 let toSkip = ["alphaUnlock","isDoneUnlock","upgradesUnlock","alphaAlphaUnlock","alpha2Unlock","alpha3Unlock","alpha4Unlock"];
-                if ((upgrades[i].firstTimeBought && !upgrades[i].tab == "upgradeFake") && !toSkip.includes(i)) {
+                if ((upgrades[i].firstTimeBought && (!upgrades[i].tab == "upgradeFake")) && (!toSkip.includes(i))) {
                     upgrades[i].lock();
                     resetUpgrade(i);
                 }
@@ -282,8 +283,10 @@ const OGUPGRADES = {
             for (i in infusions) {
                 infusions[i].reset();
             }
+            if (player.boostButtonCurrent) toggleBoost(player.boostButtonCurrent);
             hideID("alphaAlphaSacButton");
             hideID("sacText")
+            hideID("boostText")
             hideClass("togBut");
             hideClass("beta");
             hideClass("gamma");
@@ -646,7 +649,42 @@ const OGUPGRADES = {
         text: {
             title: "boost button power upgrade",
             effect: "reduce the boost button's negative effect of sac power",
-            lore: ""
+            lore: "to add"
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {},
+    },
+    alphaAlphaBoostUpgrade: {
+        id: "alphaAlphaBoostUpgrade",
+        cost: ["alpha","beta","alphaAlpha", "alphaBeta"],
+        favourability: { 'alpha': 2, 'beta': 1, 'gamma': 0 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showID("alphaAlphaBoostButton");
+            toggleBoost(player.boostButtonCurrent, true);
+        },
+        text: {
+            title: "&alpha;&alpha; boost button upgrade",
+            effect: "unlocks the &alpha;&alpha; boost button",
+            lore: "to add"
+        },
+        tab: "upgrade",
+        upgradesToUnlock: {"alphaAlphaBoostToggleUpgrade":true},
+    },
+    alphaAlphaBoostToggleUpgrade: {
+        id: "alphaAlphaBoostToggleUpgrade",
+        cost: ["alpha"],
+        favourability: { 'alpha': 1, 'beta': 0, 'gamma': 0 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            showID("alphaAlphaBoostButtonExtra");
+        },
+        text: {
+            title: "&alpha;&alpha; boost button toggle",
+            effect: "unlocks the &alpha;&alpha; boost button toggle",
+            lore: "oooooh that's where it went"
         },
         tab: "upgrade",
         upgradesToUnlock: {},
@@ -800,7 +838,8 @@ const OGUPGRADES = {
         amountBought: 0,
         amountCanBuy: 1,
         functionality: function () {
-            showClass("unlockBoost")
+            showClass("unlockBoost");
+            if (upgrades["alphaAlphaUnlock"].firstTimeBought) upgrades["alphaAlphaBoostUpgrade"].unlock();
         },
         text: {
             title: "boost button skill",
@@ -826,7 +865,7 @@ const OGUPGRADES = {
             lore: "to add"
         },
         tab: "skill",
-        upgradesToUnlock: {  },
+        upgradesToUnlock: { "boostButtonPowerGroup": true },
     },
     boostTimeSkill: {
         id: "boostTimeSkill",
@@ -844,9 +883,11 @@ const OGUPGRADES = {
             lore: "to add"
         },
         tab: "skill",
-        upgradesToUnlock: { },
+        upgradesToUnlock: {"boostButtonTimePlusGroup": true, "boostButtonTimeMinusGroup":true },
     },
     // GROUPS
+
+    // TIME
     betaGammaTimeGroup: {
         id: "betaGammaTimeGroup",
         cost: ["betaGamma"],
@@ -934,6 +975,8 @@ const OGUPGRADES = {
         tab: "group",
         upgradesToUnlock:{ },
     },
+
+    // POWER
     betaGammaPowerGroup: {
         id: "betaGammaPowerGroup",
         cost: ["betaGamma"],
@@ -1020,6 +1063,88 @@ const OGUPGRADES = {
         tab: "group",
         upgradesToUnlock:{},
     },
+    
+    // BOOST BUTTON
+    boostButtonPowerGroup: {
+        id: "boostButtonPowerGroup",
+        cost: ["gamma", "alphaGamma"],
+        favourability: { 'alpha': -1, 'beta': 1, 'gamma': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            BOOSTUPGRADES.positivePowerFactor[this.id] = 1 + 0.5 * this.amountBought;
+            BOOSTUPGRADES.negativePowerFactor[this.id] = 1 - 0.4 * this.amountBought;
+            toggleBoost(player.boostButtonCurrent, true);
+        },
+        text: {
+            title: "boost button power group",
+            effect: "increase the power of boosted sac, decrease it for unboosted",
+            lore: "the &gamma;-group understands power is only to be made more powerful. it's basic logic"
+        },
+        tab: "group",
+        upgradesToUnlock:{},
+    },
+    boostButtonTimePlusGroup: {
+        id: "boostButtonTimePlusGroup",
+        cost: ["gamma", "betaGamma"],
+        favourability: { 'alpha': -1, 'beta': 1, 'gamma': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            BOOSTUPGRADES.positiveTimeFactor[this.id] = 1 + 0.5 * this.amountBought;
+            BOOSTUPGRADES.negativeTimeFactor[this.id] = 1 - 0.3 * this.amountBought;
+            toggleBoost(player.boostButtonCurrent, true);
+        },
+        text: {
+            title: "boost button time+ group",
+            effect: "increase the fill speed of boosted sac, decrease it for unboosted",
+            lore: "the &gamma;-group understands speed is better when increased. the faster the better"
+        },
+        tab: "group",
+        upgradesToUnlock:{"boostButtonTimeMinusGroup":false, "boostButtonPlusGroup": true},
+    },
+    boostButtonTimeMinusGroup: {
+        id: "boostButtonTimeMinusGroup",
+        cost: ["gamma", "betaGamma"],
+        favourability: { 'alpha': -1, 'beta': 1, 'gamma': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            BOOSTUPGRADES.positiveTimeFactor[this.id] = 1 - 0.1 * this.amountBought;
+            BOOSTUPGRADES.negativeTimeFactor[this.id] = 1 + 1 * this.amountBought;
+            toggleBoost(player.boostButtonCurrent, true);
+        },
+        text: {
+            title: "boost button time- group",
+            effect: "decrease the fill speed of boosted sac, increase it for unboosted",
+            lore: "when one is scared, they like to make the playing field more even..."
+        },
+        tab: "group",
+        upgradesToUnlock:{"boostButtonTimePlusGroup":false},
+    },
+    boostButtonPlusGroup: {
+        id: "boostButtonPlusGroup",
+        cost: ["gamma", "betaGamma"],
+        favourability: { 'alpha': -1, 'beta': 1, 'gamma': 1 },
+        amountBought: 0,
+        amountCanBuy: 1,
+        functionality: function () {
+            let upgToInc = ["boostButtonTimePlusGroup", "boostButtonPowerGroup"]
+            increaseUpgradeAmount(upgToInc);
+        },
+        text: {
+            title: "boost button group plus",
+            effect: "increase the limits of the adjacent groups",
+            lore: "well done for choosing correctly, now give a boost to the boost button, boost button'll boost more"
+        },
+        tab: "group",
+        upgradesToUnlock:{},
+    },
+    
+    
+    
+    
+    
     // FAKE UPGRADES - ENDING ALPHA
     alphaTimeUpgradeFake: {
         id: "alphaTimeUpgradeFake",

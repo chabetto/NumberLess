@@ -472,6 +472,7 @@ function addButtonHover() {
 
 function cheating() {
     player.TIMES = [0.1, 0.1, 0.1, 200, 1, 1, 1];
+    player.POWERS = [10,10,10,10]
 }
 
 function fromStart() {
@@ -570,7 +571,7 @@ function toggleBoost(id, same = false) {
     let old = player.boostButtonCurrent;
     switch (id[0]) { // could use regex to slice up to first capital letter...
         case "a":
-            toSwitch = "alpha";
+            (id[5] == 'A') ? toSwitch = "alphaAlpha" : toSwitch = "alpha";
             break;
         case "b":
             toSwitch = "beta";
@@ -582,7 +583,10 @@ function toggleBoost(id, same = false) {
     let toBoost = (toSwitch != old) || same;
     if (!same) toBoost ? player.boostButtonCurrent = toSwitch : player.boostButtonCurrent = false;
     calculateBoostFactors();
-    for (let i = 0; i < 3; i++) {
+    let upperLimit = 3;
+    // check if alphaAlpha boost button has been unlocked
+    if (upgrades.alphaAlphaBoostUpgrade.firstTimeBought) upperLimit = 4;
+    for (let i = 0; i < upperLimit; i++) {
         let reso = player.NAMES[i];
         let [timeF, powerF] = [1,1];
         if (toBoost) {
@@ -717,12 +721,13 @@ function showDescription(e) {
 }
 
 function loadBought() {
+    let skipping = ["boostButtonPlusGroup"]
     for (item in upgrades) {
         if (upgrades[item].unlocked) upgrades[item].unlock();
         // all 'upgrade upgrades' need to be skipped
         let toSkip = (item.toLowerCase().includes("upgradeupgrade"))
         if (upgrades[item].firstTimeBought) {
-            if (!toSkip) upgrades[item].functionality();
+            if (!toSkip || (!skipping.includes(item))) upgrades[item].functionality();
             upgrades[item].showPercentage();
         }
     }
@@ -749,13 +754,15 @@ function increaseUpgradeAmount(ids, increaseAmount = 1) {
     for (i in ids) {
         let upgID = ids[i];
         upgrades[upgID].amountCanBuy += increaseAmount;
+        upgrades[upgID].showPercentage();
+        addButtonClick(upgID);
     }
 }
 
 window.onload = function () {
     fromStart();
     loadPlayer();
-    //cheating();
+    cheating();
     createResources();
     createUpgrade();
     addButtonListeners();

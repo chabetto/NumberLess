@@ -87,3 +87,7 @@ need to consider how to do the upgrades so it loads properly
 added 4 upgrades and 2 skills (4 for boost button, 2 for alphabeta)
 fixed a couple bugs related to boost button
 changed layout slightly
+
+0.20
+alphaAlpha boost button UNLOCK
+4 brand spanking NEW groups
