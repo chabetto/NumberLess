@@ -8,17 +8,17 @@
     <div id="title">
         <h1>numberless</h1>
     </div>
-    <div id="toggleButtons" class="container">
-        <p class="toggleText sacTog hidden">sac:</p>
+    <div id="toggleButtons">
+        <p id="sacText" class="toggleText sacTog hidden">sac:</p>
         <div>
             <button id="alphaSacToggle" class="togBut sacTog hidden">&alpha;</button>
             <button id="betaSacToggle" class="togBut sacTog hidden">&beta;</button>
             <button id="gammaSacToggle" class="togBut sacTog hidden">&gamma;</button>
             <button id="alphaAlphaSacButton" class="alphaAlphaSac hidden">&alpha;&alpha;</button>
-        </div>
+        </div>  
     </div>
-    <div id="boostToggleButtons" class="container">
-        <p class="toggleText boostTog hidden">boost:</p>
+    <div id="boostToggleButtons">
+        <p id="boostText" class="toggleText boostTog hidden">boost:</p>
         <div>
             <button id="alphaBoostButtonExtra" class="togBut boostTog boost hidden">&alpha;</button>
             <button id="betaBoostButtonExtra" class="togBut boostTog boost hidden">&beta;</button>
@@ -175,7 +175,7 @@
                     </button>
                 </div>
                 <div id="alphaTree" class="tree">
-                    <button id="betaUnlock" class="treeUpgrade upgradable">
+                    <button id="betaUnlock" class="treeUpgrade alphaHide upgradable">
                         &beta;
                     </button>
                     <button id="upgradesUnlock" class="treeUpgrade upgradable">
@@ -183,26 +183,26 @@
                     </button>
                 </div>
                 <div id="betaTree" class="tree">
-                    <button id="gammaUnlock" class="treeUpgrade upgradable">
+                    <button id="gammaUnlock" class="treeUpgrade alphaHide upgradable">
                         &gamma;
                     </button>
-                    <button id="skillsUnlock" class="treeUpgrade upgradable">
+                    <button id="skillsUnlock" class="treeUpgrade alphaHide upgradable">
                         &beta;-skills
                     </button>
                 </div>
                 <div id="gammaTree" class="tree">
-                    <button id="groupUnlock" class="treeUpgrade upgradable">
+                    <button id="groupUnlock" class="treeUpgrade alphaHide upgradable">
                         &gamma;-group
                     </button>
-                    <button id="unrealityUnlock" class="treeUpgrade upgradable">
+                    <button id="unrealityUnlock" class="treeUpgrade alphaHide upgradable">
                         unreality
                     </button>
                 </div>
                 <div id="helpfulTree" class="tree">
-                    <button id="untoggleUnlock" class="treeUpgrade upgradable">
+                    <button id="untoggleUnlock" class="treeUpgrade alphaHide upgradable">
                         sacToggle
                     </button>
-                    <button id="boostToggleUnlock" class="treeUpgrade upgradable">
+                    <button id="boostToggleUnlock" class="treeUpgrade alphaHide upgradable">
                         boostToggle
                     </button>
                 </div>
@@ -277,7 +277,7 @@
                     <button id="upgradeUpgrade" class="alphaUpgrade upgradable">
                         Uu
                     </button>
-                    <button id="alphaBetaExpansionUpgrade" class="alphaUpgrade upgradable">
+                    <button id="alphaBetaExtraUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&beta;Eu
                     </button>
                     <button id="gammaPowerUpgrade" class="alphaUpgrade upgradable">
@@ -306,19 +306,21 @@
                         &alpha;&alpha;&alpha;Uu
                     </button>
                 </div>
+                <div id="boostButtonUpgrades" class="upgrades">
+                    <button id="boostTimeUpgrade" class="alphaUpgrade upgradable">
+                        BTu
+                    </button>
+                    <button id="boostPowerUpgrade" class="alphaUpgrade upgradable">
+                        BPu
+                    </button>
+                </div>
                 <div id="alphaBetaUpgrades" class="upgrades">
                     <button id="alphaBetaMutualUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&beta;Mu
                     </button>
-                    <button id="gammaDespansionUpgrade" class="alphaUpgrade upgradable">
-                        &gamma;Du
-                    </button>
                     <button id="alphaBetaUpgradeUpgrade" class="alphaUpgrade upgradable">
                         &alpha;&beta;Uu
-                    </button>
-                    <button id="alphaBetaTimeUpgrade" class="alphaUpgrade upgradable">
-                        &alpha;&beta;Tu
-                    </button>
+                    </button>  
                 </div>
                 <div id="alphaGammaUpgrades" class="upgrades">
                     <button id="alphaGammaUpgradeUpgrade" class="alphaUpgrade upgradable">

@@ -82,3 +82,8 @@ some saving errors (upgrade upgrades + ending alpha stuff)
 0.18
 added boost button and a helpful little upgrade
 need to consider how to do the upgrades so it loads properly
+
+0.19
+added 4 upgrades and 2 skills (4 for boost button, 2 for alphabeta)
+fixed a couple bugs related to boost button
+changed layout slightly

@@ -549,9 +549,23 @@ function alphaAlphaSac() {
     }
 }
 
-let BOOSTBUTTON = {"positiveTimeFactor": 1.2, "negativeTimeFactor": 0.2, "positivePowerFactor": 1.2, "negativePowerFactor": 0.2};
+let BOOSTBUTTON = {"positiveTimeFactor": 1.0, "negativeTimeFactor": 1.0, "positivePowerFactor": 1.0, "negativePowerFactor": 1.0};
+let BOOSTUPGRADES = {"positiveTimeFactor":{"base":1.2},"negativeTimeFactor":{"base":0.2},"positivePowerFactor":{"base":1.2},"negativePowerFactor":{"base":0.2}};
 
-function toggleBoost(id) {
+function calculateBoostFactors() {
+    for (let factor in BOOSTBUTTON) {
+        let num = 1;
+        for (let upg in BOOSTUPGRADES[factor]) {
+            num *= BOOSTUPGRADES[factor][upg];
+        }
+        BOOSTBUTTON[factor] = num;
+    }
+}
+
+// same is whether we need to update boost amounts without changing which resource is boosted
+function toggleBoost(id, same = false) {
+    // IMPORTANT - if nothing is boosted then don't boost!
+    if (same && !player.boostButtonCurrent) return;
     let toSwitch;
     let old = player.boostButtonCurrent;
     switch (id[0]) { // could use regex to slice up to first capital letter...
@@ -565,8 +579,9 @@ function toggleBoost(id) {
             toSwitch = "gamma";
             break;
     }
-    let toBoost = (toSwitch != old);
-    toBoost ? player.boostButtonCurrent = toSwitch : player.boostButtonCurrent = false;
+    let toBoost = (toSwitch != old) || same;
+    if (!same) toBoost ? player.boostButtonCurrent = toSwitch : player.boostButtonCurrent = false;
+    calculateBoostFactors();
     for (let i = 0; i < 3; i++) {
         let reso = player.NAMES[i];
         let [timeF, powerF] = [1,1];
@@ -582,7 +597,7 @@ function toggleBoost(id) {
         resources[reso].timeUpgrades[reso + "TimeBoost"] = {"factor": timeF, "unspent": false};
         resources[reso].powerUpgrades[reso + "PowerBoost"] = {"factor": powerF, "unspent": false};
     }
-    if (toBoost) {
+    if (toBoost || same) {
         toggleButton(toSwitch + "BoostButton");
         toggleButton(toSwitch + "BoostButtonExtra");
     }
@@ -702,7 +717,6 @@ function showDescription(e) {
 }
 
 function loadBought() {
-    // let toSkip = ["upgradeUpgrade", "alphaBetaUpgradeUpgrade", "alphaAlphaUpgradeUpgrade"]
     for (item in upgrades) {
         if (upgrades[item].unlocked) upgrades[item].unlock();
         // all 'upgrade upgrades' need to be skipped
@@ -713,12 +727,7 @@ function loadBought() {
         }
     }
     if (upgrades["alpha4Unlock"].firstTimeBought) upgrades["alpha4Unlock"].functionality(); // go to ending alpha
-    if (upgrades["boostButtonSkill"].firstTimeBought && player.boostButtonCurrent != false) {
-        // issue is want to switch to CURRENT boost so have to set to no boost first ;)
-        let toSwitch = player.boostButtonCurrent;
-        player.boostButtonCurrent = false;
-        toggleBoost(toSwitch);
-    }
+    if (upgrades["boostButtonSkill"].firstTimeBought && player.boostButtonCurrent != false) toggleBoost(player.boostButtonCurrent, true);
 }
 
 function resetUpgrade(id) {
